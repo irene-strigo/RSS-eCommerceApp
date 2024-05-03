@@ -15,7 +15,7 @@ const getConfig = (name = '') => path.join(__dirname, `./.env${name}`);
 dotenv.config({ path: [getConfig(), getConfig('.common')] });
 
 const config = {
-  entry: './src/index.ts',
+  entry: './src/index.tsx',
   output: {
     path: path.resolve(__dirname, 'dist'),
     clean: true,
