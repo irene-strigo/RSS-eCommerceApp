@@ -21,6 +21,7 @@ const config = {
     clean: true,
   },
   devServer: {
+    historyApiFallback: true,
     open: true,
     host: 'localhost',
   },

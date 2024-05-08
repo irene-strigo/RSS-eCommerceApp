@@ -1,6 +1,9 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { getProducts } from './services/Client';
+import { RouterProvider } from 'react-router-dom';
+import { router } from './router';
+
 import 'normalize.css';
 //import RegistrationPage from './pages/registr-page/registr-page';
 //import MainPage from './pages/main-page/main-page';
@@ -13,6 +16,7 @@ const App = () => {
   return (
     <div className="app-wrapper">
       <LoginPage></LoginPage>
+      <RouterProvider router={router} />
     </div>
   );
 };
