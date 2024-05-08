@@ -1,10 +1,10 @@
 .app-button {
   height: 20px;
   min-width: 40px;
-  border: 1px solid rgb(102, 157, 234);
-  border-radius: 7px;
+  border: 1px solid #ff6f59;
+  border-radius: 5px;
 }
 
 .app-button:hover {
-  background-color: rgb(199, 192, 248);
+  background-color: #fc9282;
 }

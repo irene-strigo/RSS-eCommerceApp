@@ -6,3 +6,12 @@
   align-items: center;
   padding: 10px;
 }
+
+.footer-link {
+  text-decoration: none;
+  color: #254441;
+}
+
+.footer-link:hover {
+  color: #426965;
+}
