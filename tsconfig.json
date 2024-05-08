@@ -1,6 +1,21 @@
 {
   "files": ["src/index.tsx"],
-  "include": [".eslintrc.js", "src/**/*.ts", "test/**/*.ts", "index.d.ts"],
+  "include": [
+    ".eslintrc.js",
+    "src/**/*.ts",
+    "test/**/*.ts",
+    "index.d.ts",
+    "src/components/header/header.tsx",
+    "src/components/header/header.tsx",
+    "src/components/button/button.tsx",
+    "src/components/footer/footer.tsx",
+    "src/components/input/input.tsx",
+    "src/pages/main-page/main-page.tsx",
+    "src/components/page-wrapper/page-wrapper.tsx",
+    "src/components/form/form.tsx",
+    "src/pages/login-page/login-page.tsx",
+    "src/pages/registr-page/registr-page.tsx"
+  ],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
     /* Projects */

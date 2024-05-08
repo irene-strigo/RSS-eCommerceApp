@@ -1,0 +1,8 @@
+.app-header {
+  background-color: blanchedalmond;
+  min-height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
