@@ -10,7 +10,7 @@ import Input from '../../components/input/input';
 
 const RegistrationPage = (): ReactElement => {
   return (
-    <div className="login-page">
+    <div className="registration-page">
       <Header></Header>
       <PageWrapper
         items={

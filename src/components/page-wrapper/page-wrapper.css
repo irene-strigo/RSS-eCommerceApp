@@ -1,7 +1,6 @@
 .page-wrapper {
-  margin: 0 auto;
-  height: 70vh;
   display: flex;
+  height: 73vh;
   flex-direction: column;
   justify-content: center;
   align-items: center;
