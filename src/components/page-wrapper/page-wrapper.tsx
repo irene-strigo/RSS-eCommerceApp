@@ -1,9 +1,12 @@
-import { ReactElement } from 'react';
+import { ReactNode } from 'react';
 import './page-wrapper.css';
 import React from 'react';
 
-const PageWrapper = (): ReactElement => {
-  return <div className="page-wrapper">PAGE CONTENT</div>;
+interface IPageWrapperProps {
+  items?: ReactNode;
+}
+const PageWrapper: React.FC<IPageWrapperProps> = ({ items }) => {
+  return <div className="page-wrapper">{items}</div>;
 };
 
 export default PageWrapper;

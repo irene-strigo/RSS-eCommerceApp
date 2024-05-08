@@ -10,7 +10,7 @@ const MainPage = (): ReactElement => {
   return (
     <div className="main-page">
       <Header></Header>
-      <PageWrapper></PageWrapper>
+      <PageWrapper items={undefined}></PageWrapper>
       <Footer></Footer>
     </div>
   );

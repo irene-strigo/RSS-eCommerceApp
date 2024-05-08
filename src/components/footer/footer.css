@@ -1,10 +1,11 @@
 .app-footer {
-  background-color: rgb(188, 186, 182);
+  background-color: blanchedalmond;
   min-height: 50px;
+  max-height: 100px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: 10px 20px;
 }
 
 .footer-link {

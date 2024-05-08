@@ -3,6 +3,10 @@
   min-width: 40px;
   border: 1px solid #ff6f59;
   border-radius: 5px;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background-color: #f8b4aa;
 }
 
 .app-button:hover {

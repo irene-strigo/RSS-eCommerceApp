@@ -6,7 +6,12 @@ import Button from '../button/button';
 const Header = (): ReactElement => {
   return (
     <header className="app-header">
-      <Button></Button>
+      <Button
+        label={'login'}
+        onClick={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+      ></Button>
       <a href="#">
         <svg xmlns="http://www.w3.org/2000/svg" height={70} width={70} viewBox="0 0 1024 1024">
           <path fill="#254441" d="M0 0v1024h1024V0H0Z" />
@@ -20,7 +25,12 @@ const Header = (): ReactElement => {
           />
         </svg>
       </a>
-      <Button></Button>
+      <Button
+        label={'registration'}
+        onClick={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+      ></Button>
     </header>
   );
 };
