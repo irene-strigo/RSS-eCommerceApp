@@ -1,8 +1,6 @@
-import { Link } from 'react-router-dom';
-
 import styled from 'styled-components';
 
-const Button = styled(Link)`
+const Button = styled.button`
   width: 100px;
   height: 50px;
   background-color: #000;
@@ -20,12 +18,12 @@ const Button = styled(Link)`
 `;
 
 type Props = {
-  link: string;
   label: string;
+  onSubmit: () => void;
 };
 
-const NavigationButton = ({ link, label }: Props) => {
-  return <Button to={link}>{label}</Button>;
+const NavigationButton = ({ label, onSubmit }: Props) => {
+  return <Button onSubmit={onSubmit}>{label}</Button>;
 };
 
 export default NavigationButton;

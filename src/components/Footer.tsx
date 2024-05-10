@@ -1,10 +1,39 @@
-import { ReactElement } from 'react';
-import './footer.css';
 import React from 'react';
 
-const Footer = (): ReactElement => {
+import styled from 'styled-components';
+
+const Wrapper = styled.footer`
+  background-color: blanchedalmond;
+  height: 10vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+`;
+
+const FooterLink = styled.a`
+  text-decoration: none;
+  color: #254441;
+
+  & hover {
+    color: #426965;
+  }
+`;
+
+const Footer = () => {
   return (
-    <footer className="app-footer">
+    <Wrapper>
+      <FooterLink href={'https://github.com/irene-strigo'}>Irene Strigo GitHub</FooterLink>
+      <FooterLink href={'https://rs.school/'}>Logo</FooterLink>
+      <FooterLink href={'https://github.com/HDziakava'}>Hanna Dziakava GitHub</FooterLink>
+    </Wrapper>
+  );
+};
+
+export default Footer;
+
+{
+  /* <footer className="app-footer">
       <a href="https://github.com/irene-strigo" className="footer-link">
         GitHub
       </a>
@@ -24,8 +53,5 @@ const Footer = (): ReactElement => {
       <a href="https://github.com/HDziakava" className="footer-link">
         GitHub
       </a>
-    </footer>
-  );
-};
-
-export default Footer;
+    </footer> */
+}

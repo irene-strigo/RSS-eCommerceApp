@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 
 import styled from 'styled-components';
 
@@ -15,17 +14,17 @@ const HeaderWrapper = styled.div`
 `;
 
 const Header = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    navigate('/main-page');
-  }, []);
+  const buttons = [
+    { id: 1, link: '/log-in-page', label: 'Log In' },
+    { id: 2, link: '/sign-up-page', label: 'Sign Up' },
+    { id: 3, link: '/main-page', label: 'Main Page' },
+  ];
 
   return (
     <HeaderWrapper>
-      <NavigationButton to={'/log-in-page'}>Log In</NavigationButton>
-      <NavigationButton to={'/sign-up-page'}>Sign Up</NavigationButton>
-      <NavigationButton to={'/main-page'}>Main Page</NavigationButton>
+      {buttons.map((button) => (
+        <NavigationButton key={button.id} link={button.link} label={button.label} />
+      ))}
     </HeaderWrapper>
   );
 };

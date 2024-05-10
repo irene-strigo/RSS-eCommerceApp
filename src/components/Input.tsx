@@ -1,20 +1,17 @@
 import React, { ChangeEvent } from 'react';
-import './input.css';
 
-interface IInputProps {
+type Props = {
   type: 'text' | 'number' | 'email' | 'password' | 'checkbox';
-  value: string | number;
   placeholder: string;
   name: string;
-  error: boolean;
   disabled?: boolean;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-}
-const Input: React.FC<IInputProps> = ({ type, value, placeholder, name, disabled, onChange }) => {
+};
+
+const Input = ({ type, placeholder, name, disabled = false, onChange }: Props) => {
   return (
     <input
-      className="app-input"
-      value={value}
+      value={''}
       name={name}
       disabled={disabled}
       placeholder={placeholder}
