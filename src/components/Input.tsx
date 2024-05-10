@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from 'react';
 
 type Props = {
-  type: 'text' | 'number' | 'email' | 'password' | 'checkbox';
+  type: 'text' | 'number' | 'email' | 'password' | 'checkbox' | 'date';
   placeholder: string;
   name: string;
   disabled?: boolean;

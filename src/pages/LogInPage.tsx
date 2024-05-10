@@ -9,25 +9,25 @@ const handleSubmit = () => {
 const LogInPage = () => {
   return (
     <>
-      <PageWrapper />
-      <Header />
-      <Form>
-        <Input
-          name={'login'}
-          placeholder={'Enter your login'}
-          type={'text'}
-          onChange={() => console.log('login')}
-        />
-        <Input
-          name={'password'}
-          placeholder={'Enter your password'}
-          type={'password'}
-          onChange={() => console.log('password')}
-        />
-        <Button onSubmit={handleSubmit} label={'Log In'} />
-      </Form>
-      <Footer />
-      <PageWrapper />
+      <PageWrapper>
+        <Header />
+        <Form>
+          <Input
+            name={'login'}
+            placeholder={'Enter your login'}
+            type={'text'}
+            onChange={() => console.log('login')}
+          />
+          <Input
+            name={'password'}
+            placeholder={'Enter your password'}
+            type={'password'}
+            onChange={() => console.log('password')}
+          />
+          <Button onSubmit={handleSubmit} label={'Log In'} />
+        </Form>
+        <Footer />
+      </PageWrapper>
     </>
   );
 };

@@ -1,12 +1,19 @@
 import React from 'react';
 
-import { Header } from '../components';
+import { Header, Footer, PageWrapper } from '../components';
+
+/*const handleSubmit = () => {
+  console.log('Submit');
+};*/
 
 const MainPage = () => {
   return (
     <>
-      <Header />
-      <div>Main Page</div>
+      <PageWrapper>
+        <Header />
+        <div>Main Page</div>
+        <Footer />
+      </PageWrapper>
     </>
   );
 };

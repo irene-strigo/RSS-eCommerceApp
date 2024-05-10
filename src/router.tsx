@@ -6,7 +6,7 @@ import { MainPage, RegistrationPage, ErrorPage, LogInPage } from './pages';
 
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/main-page',
     element: <MainPage />,
   },
   {
