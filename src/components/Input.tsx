@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 
 type Props = {
   type: 'text' | 'number' | 'email' | 'password' | 'checkbox' | 'date';
-  placeholder: string;
+  placeholder?: string;
   name: string;
   disabled?: boolean;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
