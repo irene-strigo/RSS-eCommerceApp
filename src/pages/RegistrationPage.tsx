@@ -49,7 +49,7 @@ const RegistrationPage = () => {
           </label>
           <fieldset>
             <legend>Delivery Address</legend>
-            <p>
+            <div>
               Country:{' '}
               <Input
                 name={'country'}
@@ -57,8 +57,8 @@ const RegistrationPage = () => {
                 type={'text'}
                 onChange={() => console.log('country')}
               />
-            </p>
-            <p>
+            </div>
+            <div>
               Post index:{' '}
               <Input
                 name={'index'}
@@ -66,8 +66,8 @@ const RegistrationPage = () => {
                 type={'text'}
                 onChange={() => console.log('index')}
               />
-            </p>
-            <p>
+            </div>
+            <div>
               City:{' '}
               <Input
                 name={'city'}
@@ -75,8 +75,8 @@ const RegistrationPage = () => {
                 type={'text'}
                 onChange={() => console.log('city')}
               />
-            </p>
-            <p>
+            </div>
+            <div>
               Street:{' '}
               <Input
                 name={'street'}
@@ -84,7 +84,7 @@ const RegistrationPage = () => {
                 type={'text'}
                 onChange={() => console.log('street')}
               />
-            </p>
+            </div>
           </fieldset>
           <label>
             Add different billing address:
@@ -102,7 +102,7 @@ const RegistrationPage = () => {
           <AddAddressDiv style={{ display: divVisibility }}>
             <fieldset>
               <legend>Billing Address</legend>
-              <p>
+              <div>
                 Country:{' '}
                 <Input
                   name={'country'}
@@ -110,8 +110,8 @@ const RegistrationPage = () => {
                   type={'text'}
                   onChange={() => console.log('country')}
                 />
-              </p>
-              <p>
+              </div>
+              <div>
                 Post index:{' '}
                 <Input
                   name={'index'}
@@ -119,8 +119,8 @@ const RegistrationPage = () => {
                   type={'text'}
                   onChange={() => console.log('index')}
                 />
-              </p>
-              <p>
+              </div>
+              <div>
                 City:{' '}
                 <Input
                   name={'city'}
@@ -128,8 +128,8 @@ const RegistrationPage = () => {
                   type={'text'}
                   onChange={() => console.log('city')}
                 />
-              </p>
-              <p>
+              </div>
+              <div>
                 Street:{' '}
                 <Input
                   name={'street'}
@@ -137,7 +137,7 @@ const RegistrationPage = () => {
                   type={'text'}
                   onChange={() => console.log('street')}
                 />
-              </p>
+              </div>
             </fieldset>
           </AddAddressDiv>
 
