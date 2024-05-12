@@ -1,17 +1,11 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 
-import { getProducts } from './services/Client';
+import { RouterProvider } from 'react-router-dom';
+import { router } from './router';
 
-import 'normalize.css';
-
-const App = () => {
-  // console.log(process.env.CTP_CLIENT_SECRET);
-  getProducts().then(console.log);
-
-  return <div>Hello React App</div>;
-};
+import './style.css';
 
 const container = document.getElementById('app');
 const root = createRoot(container!);
-root.render(<App />);
+root.render(<RouterProvider router={router} />);
