@@ -1,31 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { Header, Footer, PageWrapper, Form, Input, Button } from '../components';
-
-const handleSubmit = () => {
-  console.log('Submit');
-};
+import { Header, Footer, LogInData } from '../components';
+import { PageWrapper, Form, SubmitButton, ContentWrapper } from '../components/common';
 
 const LogInPage = () => {
+  const headerButtons = [
+    { id: 1, link: '/sign-up-page', label: 'Sign Up' },
+    { id: 2, link: '/', label: 'Main Page' },
+  ];
+
+  const [userData, setUserData] = useState({
+    login: '',
+    password: '',
+  });
+
+  console.log(userData);
+
   return (
     <>
       <PageWrapper>
-        <Header />
-        <Form>
-          <Input
-            name={'login'}
-            placeholder={'Enter your login'}
-            type={'text'}
-            onChange={() => console.log('login')}
-          />
-          <Input
-            name={'password'}
-            placeholder={'Enter your password'}
-            type={'password'}
-            onChange={() => console.log('password')}
-          />
-          <Button onSubmit={handleSubmit} label={'Log In'} />
-        </Form>
+        <Header buttons={headerButtons} />
+        <ContentWrapper>
+          <Form>
+            <LogInData userData={userData} setUserData={setUserData} />
+            <SubmitButton label={'Log In'} />
+          </Form>
+        </ContentWrapper>
         <Footer />
       </PageWrapper>
     </>

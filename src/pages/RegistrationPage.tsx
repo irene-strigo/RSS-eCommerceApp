@@ -1,148 +1,76 @@
-import React from 'react';
-import { useState } from 'react';
-import { Header, Footer, PageWrapper, Form, Input, Button } from '../components';
+import React, { useState } from 'react';
+
+import { Header, Footer, BillingAddress, DeliveryAddress, PersonalData } from '../components';
+import { PageWrapper, Form, Input, SubmitButton, ContentWrapper } from '../components/common';
+
 import styled from 'styled-components';
 
-const AddAddressDiv = styled.div``;
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
 
-const handleSubmit = () => {
-  console.log('Submit');
+  & input {
+    margin-right: 10px;
+  }
+`;
+
+const addressInitialData = {
+  country: '',
+  postIndex: '',
+  city: '',
+  street: '',
 };
 
 const RegistrationPage = () => {
-  const [divVisibility, setDivVisibility] = useState('none');
-  const changeDivVisibility = () => {
-    return divVisibility === 'none' ? setDivVisibility('block') : setDivVisibility('none');
+  const headerButtons = [
+    { id: 1, link: '/log-in-page', label: 'Log In' },
+    { id: 2, link: '/', label: 'Main Page' },
+  ];
+
+  const [billingData, setBillingData] = useState<null | typeof addressInitialData>(null);
+  const [userData, setUserData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    birthDay: '',
+    ...addressInitialData,
+  });
+
+  console.log(userData);
+
+  const handleChange = () => {
+    setBillingData(billingData ? null : addressInitialData);
   };
   return (
     <>
       <PageWrapper>
-        <Header />
-        <Form>
-          <Input
-            name={'email'}
-            placeholder={'Enter your email'}
-            type={'email'}
-            onChange={() => console.log('email')}
-          />
-          <Input
-            name={'password'}
-            placeholder={'Enter your password'}
-            type={'password'}
-            onChange={() => console.log('password')}
-          />
-          <Input
-            name={'firstName'}
-            placeholder={'Enter your first name'}
-            type={'text'}
-            onChange={() => console.log('first name')}
-          />
-          <Input
-            name={'lastName'}
-            placeholder={'Enter your last name'}
-            type={'text'}
-            onChange={() => console.log('last name')}
-          />
-          <label>
-            Enter your date of birth:
-            <Input name={'birthDate'} type={'date'} onChange={() => console.log('birth date')} />
-          </label>
-          <fieldset>
-            <legend>Delivery Address</legend>
-            <div>
-              Country:{' '}
-              <Input
-                name={'country'}
-                placeholder={'Enter your country'}
-                type={'text'}
-                onChange={() => console.log('country')}
-              />
-            </div>
-            <div>
-              Post index:{' '}
-              <Input
-                name={'index'}
-                placeholder={'Enter your post index'}
-                type={'text'}
-                onChange={() => console.log('index')}
-              />
-            </div>
-            <div>
-              City:{' '}
-              <Input
-                name={'city'}
-                placeholder={'Enter your city'}
-                type={'text'}
-                onChange={() => console.log('city')}
-              />
-            </div>
-            <div>
-              Street:{' '}
-              <Input
-                name={'street'}
-                placeholder={'Enter your street'}
-                type={'text'}
-                onChange={() => console.log('street')}
-              />
-            </div>
-          </fieldset>
-          <label>
-            Add different billing address:
-            <Input
-              name={'addBilling'}
-              type={'checkbox'}
-              onChange={() => {
-                {
-                  changeDivVisibility();
-                }
-                console.log('add different billing address');
-              }}
-            />
-          </label>
-          <AddAddressDiv style={{ display: divVisibility }}>
-            <fieldset>
-              <legend>Billing Address</legend>
-              <div>
-                Country:{' '}
+        <Header buttons={headerButtons} />
+        <ContentWrapper>
+          <Form>
+            <PersonalData userData={userData} setUserData={setUserData} />
+            <DeliveryAddress userData={userData} setUserData={setUserData} />
+            <Wrapper>
+              <label>
                 <Input
-                  name={'country'}
-                  placeholder={'Enter your country'}
-                  type={'text'}
-                  onChange={() => console.log('country')}
+                  checked={!!billingData}
+                  name={'addBilling'}
+                  type={'checkbox'}
+                  onChange={() => handleChange()}
                 />
-              </div>
-              <div>
-                Post index:{' '}
-                <Input
-                  name={'index'}
-                  placeholder={'Enter your post index'}
-                  type={'text'}
-                  onChange={() => console.log('index')}
-                />
-              </div>
-              <div>
-                City:{' '}
-                <Input
-                  name={'city'}
-                  placeholder={'Enter your city'}
-                  type={'text'}
-                  onChange={() => console.log('city')}
-                />
-              </div>
-              <div>
-                Street:{' '}
-                <Input
-                  name={'street'}
-                  placeholder={'Enter your street'}
-                  type={'text'}
-                  onChange={() => console.log('street')}
-                />
-              </div>
-            </fieldset>
-          </AddAddressDiv>
+              </label>
+              Add different billing address
+            </Wrapper>
+            {!billingData ? (
+              <></>
+            ) : (
+              <BillingAddress billingData={billingData} setBillingData={setBillingData} />
+            )}
 
-          <Button onSubmit={handleSubmit} label={'Sign Up'} />
-        </Form>
+            <SubmitButton label={'Sign Up'} />
+          </Form>
+        </ContentWrapper>
         <Footer />
       </PageWrapper>
     </>

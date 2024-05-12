@@ -2,29 +2,47 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { NavigationButton } from '../components';
+import { NavigationButton } from '../components/common';
 
 const HeaderWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: end;
   width: 100%;
-  padding: 10px;
+  height: 85px;
+  padding: 20px 40px;
+  background-color: #d8e1ff;
 `;
 
-const Header = () => {
-  const buttons = [
-    { id: 1, link: '/log-in-page', label: 'Log In' },
-    { id: 2, link: '/sign-up-page', label: 'Sign Up' },
-    { id: 3, link: '/main-page', label: 'Main Page' },
-  ];
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: end;
+  max-width: 350px;
+  min-width: 250px;
+  width: 100%;
+`;
 
+type Button = {
+  id: number;
+  link: string;
+  label: string;
+};
+
+type Props = {
+  buttons: Button[];
+};
+
+const Header = ({ buttons }: Props) => {
   return (
     <HeaderWrapper>
-      {buttons.map((button) => (
-        <NavigationButton key={button.id} link={button.link} label={button.label} />
-      ))}
+      <Wrapper>
+        {buttons.map((button) => (
+          <NavigationButton key={button.id} link={button.link} label={button.label} />
+        ))}
+      </Wrapper>
     </HeaderWrapper>
   );
 };
