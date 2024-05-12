@@ -2,11 +2,11 @@ import React from 'react';
 
 import { createBrowserRouter } from 'react-router-dom';
 
-import { MainPage, LogInPage, RegistrationPage, ErrorPage } from './pages';
+import { MainPage, RegistrationPage, ErrorPage, LogInPage } from './pages';
 
 export const router = createBrowserRouter([
   {
-    path: '/main-page',
+    path: '/',
     element: <MainPage />,
   },
   {

@@ -1,4 +1,4 @@
-export { default as LogInPage } from './login-page';
-export { default as MainPage } from './main-page';
-export { default as RegistrationPage } from './registration-page';
-export { default as ErrorPage } from './error-page';
+export { default as LogInPage } from './LogInPage';
+export { default as MainPage } from './MainPage';
+export { default as RegistrationPage } from './RegistrationPage';
+export { default as ErrorPage } from './ErrorPage';

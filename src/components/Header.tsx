@@ -1,31 +1,48 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 
 import styled from 'styled-components';
 
-import { NavigationButton } from '../components';
+import { NavigationButton } from '../components/common';
 
 const HeaderWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-
-  padding: 10px;
+  justify-content: end;
+  width: 100%;
+  height: 85px;
+  padding: 20px 40px;
+  background-color: #d8e1ff;
 `;
 
-const Header = () => {
-  const navigate = useNavigate();
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: end;
+  max-width: 350px;
+  min-width: 250px;
+  width: 100%;
+`;
 
-  useEffect(() => {
-    navigate('/main-page');
-  }, []);
+type Button = {
+  id: number;
+  link: string;
+  label: string;
+};
 
+type Props = {
+  buttons: Button[];
+};
+
+const Header = ({ buttons }: Props) => {
   return (
     <HeaderWrapper>
-      <NavigationButton to={'/log-in-page'}>Log In</NavigationButton>
-      <NavigationButton to={'/sign-up-page'}>Sign Up</NavigationButton>
-      <NavigationButton to={'/main-page'}>Main Page</NavigationButton>
+      <Wrapper>
+        {buttons.map((button) => (
+          <NavigationButton key={button.id} link={button.link} label={button.label} />
+        ))}
+      </Wrapper>
     </HeaderWrapper>
   );
 };
