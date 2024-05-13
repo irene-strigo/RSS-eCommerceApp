@@ -4,11 +4,13 @@ import styled from 'styled-components';
 type Props = {
   value?: string;
   checked?: boolean;
-  type: 'text' | 'number' | 'email' | 'password' | 'checkbox' | 'date';
+  type: 'text' | 'number' | 'email' | 'password' | 'checkbox' | 'date' | string;
   placeholder?: string;
   name: string;
   disabled?: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onError?: string;
 };
 
 const ErrorDiv = styled.div`
@@ -32,10 +34,19 @@ const InputElement = styled.input`
   }
 `;
 
-const Input = ({ value, type, placeholder, name, disabled = false, onChange }: Props) => {
+const Input = ({
+  value,
+  type,
+  placeholder,
+  name,
+  disabled = false,
+  onChange,
+  onBlur,
+  onError,
+}: Props) => {
   return (
     <>
-      <ErrorDiv></ErrorDiv>
+      <ErrorDiv>{onError}</ErrorDiv>
       <InputElement
         value={value}
         name={name}
@@ -43,6 +54,7 @@ const Input = ({ value, type, placeholder, name, disabled = false, onChange }: P
         placeholder={placeholder}
         type={type}
         onChange={onChange}
+        onBlur={onBlur}
       ></InputElement>
     </>
   );

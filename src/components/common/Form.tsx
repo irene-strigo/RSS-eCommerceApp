@@ -26,6 +26,7 @@ type Props = {
 const Form = ({ children }: Props) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     console.log('Form submitted');
   };
 

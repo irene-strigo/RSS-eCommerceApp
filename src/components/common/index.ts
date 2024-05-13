@@ -1,4 +1,4 @@
-export { default as SubmitButton } from './Button';
+export { default as SubmitButton } from './SubmitButton';
 export { default as NavigationButton } from './NavigationButton';
 export { default as Form } from './Form';
 export { default as Input } from './Input';
