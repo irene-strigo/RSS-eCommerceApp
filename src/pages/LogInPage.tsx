@@ -14,7 +14,8 @@ const LogInPage = () => {
     password: '',
   });
 
-  console.log(userData);
+  const [isValid, setIsValid] = useState(false);
+  console.log(userData, isValid);
 
   return (
     <>
@@ -22,8 +23,13 @@ const LogInPage = () => {
         <Header buttons={headerButtons} />
         <ContentWrapper>
           <Form>
-            <LogInData userData={userData} setUserData={setUserData} />
-            <SubmitButton label={'Log In'} />
+            <LogInData
+              userData={userData}
+              setUserData={setUserData}
+              isValid={isValid}
+              setIsValid={setIsValid}
+            />
+            <SubmitButton label={'Log In'} disabled={isValid ? false : true} />
           </Form>
         </ContentWrapper>
         <Footer />

@@ -14,14 +14,19 @@ const Button = styled.button`
     background-color: #f7f9ff;
     color: #2c5777;
   }
+  &:disabled {
+    background-color: gray;
+    color: black;
+  }
 `;
 
 type Props = {
   label: string;
+  disabled?: boolean;
 };
 
-const SubmitButton = ({ label }: Props) => {
-  return <Button>{label}</Button>;
+const SubmitButton = ({ label, disabled }: Props) => {
+  return <Button disabled={disabled}>{label}</Button>;
 };
 
 export default SubmitButton;

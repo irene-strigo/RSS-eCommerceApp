@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import Input from './common/Input';
 import ShowButton from './common/ShowButton';
 
@@ -10,19 +9,19 @@ type UserData = {
   login: string;
   password: string;
 };
-
 type Props = {
   userData: UserData;
   setUserData: (userData: UserData) => void;
+  isValid: boolean;
+  setIsValid: (isValid: boolean) => void;
 };
 
 type Errors = Partial<Record<keyof UserData, string>>;
 //type Touched = Partial<Record<keyof UserData, boolean>>
 
-const LogInData = ({ userData, setUserData }: Props) => {
+const LogInData = ({ userData, setUserData, isValid, setIsValid }: Props) => {
   const [errors, setErrors] = useState<Errors>({});
   const newErrors: Errors = {};
-
   const validate = (formInputs: UserData): Errors => {
     if (EMAIL_REGEXP.test(formInputs.login) === false && formInputs.login != '') {
       newErrors.login = 'Please enter a valid login.';
@@ -30,9 +29,16 @@ const LogInData = ({ userData, setUserData }: Props) => {
     if (PASSWORD_REGEXP.test(formInputs.password) === false && formInputs.password != '') {
       newErrors.password = 'Please enter a valid password.';
     }
+    if (
+      Object.entries(newErrors).length === 0 &&
+      formInputs.password != '' &&
+      formInputs.login != ''
+    ) {
+      setIsValid(true);
+    }
     return newErrors;
   };
-
+  console.log('form is valid', isValid);
   //const [touched, setTouched] = useState<Touched>({})
   //console.log(touched)
   const [inputType, setInputType] = useState('password');
