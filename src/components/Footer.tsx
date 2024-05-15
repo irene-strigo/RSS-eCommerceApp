@@ -16,7 +16,7 @@ const Wrapper = styled.footer`
 const FooterLink = styled.a`
   text-decoration: none;
   color: #974160;
-  font-size: 20px;
+  font-size: 13px;
 
   &:hover {
     color: #69ddff;

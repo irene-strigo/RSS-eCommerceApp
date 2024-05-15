@@ -4,7 +4,7 @@ import styled from 'styled-components';
 type Props = {
   value?: string;
   checked?: boolean;
-  type: 'text' | 'number' | 'email' | 'password' | 'checkbox' | 'date';
+  type: 'text' | 'number' | 'email' | 'password' | 'checkbox' | 'date' | 'submit';
   placeholder?: string;
   name: string;
   disabled?: boolean;
