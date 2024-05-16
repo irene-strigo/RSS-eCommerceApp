@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Header, Footer } from '../components';
 import { PageWrapper } from '../components/common';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -84,15 +84,24 @@ export default function LoginPage() {
     { id: 1, link: '/sign-up-page', label: 'Sign Up' },
     { id: 2, link: '/', label: 'Main Page' },
   ];
+
   const {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    setFocus,
+    formState: { errors, isValid, isDirty },
   } = useForm<Inputs>({ mode: 'onChange' });
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    console.log(data);
+  };
+
+  useEffect(() => {
+    setFocus('login');
+  }, []);
 
   console.log(watch('login')); // watch input value by passing the name of it
+
   const [inputType, setInputType] = useState('password');
   const [btnLabel, setBtnLabel] = useState('show password');
   const [btnDisabled, setBtnDisabled] = useState(true);
@@ -105,10 +114,7 @@ export default function LoginPage() {
       setBtnLabel('show password');
     }
   };
-  const isValid = () => {
-    return !errors.login && !errors.password;
-  };
-  console.log(isValid());
+
   return (
     <>
       <PageWrapper>
@@ -117,7 +123,7 @@ export default function LoginPage() {
           <fieldset>
             <legend>Enter your data</legend>
             <Form onSubmit={handleSubmit(onSubmit)}>
-              <label>Log In</label>
+              <label>Log In:</label>
               <InputElem
                 {...register('login', {
                   required: {
@@ -132,7 +138,7 @@ export default function LoginPage() {
                 })}
               />
               {errors.login && <ErrorsText>{errors.login.message}</ErrorsText>}
-              <label>Password</label>
+              <label>Password:</label>
               <ShowButton
                 label={btnLabel}
                 disabled={btnDisabled}
@@ -161,7 +167,7 @@ export default function LoginPage() {
                 })}
               />
               {errors.password && 'red' && <ErrorsText>{errors.password.message}</ErrorsText>}
-              <ButtonSubmit type={'submit'} disabled={!isValid()}>
+              <ButtonSubmit type={'submit'} disabled={isDirty && !isValid}>
                 Log In
               </ButtonSubmit>
             </Form>

@@ -73,6 +73,7 @@
     "handy-svg": "^1.0.8",
     "normalize.css": "^8.0.1",
     "react": "^18.3.1",
+    "react-datalist-field": "^20.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.51.4",
     "react-router-dom": "^6.23.0",

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { NavigationButton } from '../components/common';
 
-const HeaderWrapper = styled.div`
+const HeaderWrapper = styled.header`
   display: flex;
   flex-direction: row;
   align-items: center;
