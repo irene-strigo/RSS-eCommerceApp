@@ -14,7 +14,7 @@ const ErrorPage = () => {
   const headerButtons = [
     { id: 1, link: '/log-in-page', label: 'Log In' },
     { id: 2, link: '/sign-up-page', label: 'Sign Up' },
-    { id: 3, link: '/', label: 'Main Page' },
+    { id: 3, link: '/main', label: 'Main Page' },
   ];
 
   return (

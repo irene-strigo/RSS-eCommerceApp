@@ -38,11 +38,11 @@ const PersonalData = ({ userData, setUserData }: Props) => {
         onChange={(e) => setUserData({ ...userData, lastName: e.target.value })}
       />
       <Input
-        value={userData.birthDay}
+        value={userData.email}
         name={'email'}
         placeholder={'Enter your email'}
         type={'email'}
-        onChange={(e) => setUserData({ ...userData, birthDay: e.target.value })}
+        onChange={(e) => setUserData({ ...userData, email: e.target.value })}
       />
       <Input
         value={userData.password}

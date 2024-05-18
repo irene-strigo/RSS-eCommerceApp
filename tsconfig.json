@@ -7,7 +7,9 @@
     "index.d.ts",
     "src/router.tsx",
     "src/**/*.tsx",
-    "src/components"
+    "src/components",
+    "requests/**/*.tsx",
+    "requests/**/*.ts"
   ],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */

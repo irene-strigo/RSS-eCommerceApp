@@ -2,7 +2,8 @@ import styled from 'styled-components';
 
 export const ContentWrapper = styled.div`
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   height: 100%;
   background-color: #f7f9ff;
