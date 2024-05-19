@@ -1,105 +1,58 @@
-import React, { useState, useEffect } from 'react';
+import { Header, Footer } from '../components';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { MyCustomerDraft } from '@commercetools/platform-sdk';
+import { signInCustomer } from '../services/Client';
 import { useNavigate } from 'react-router-dom';
-
+import { ButtonSubmit, Container, Form, PageWrapper } from '../components/common/CommonStyles';
 import { useUser } from '../components/common/AuthContext';
+import { RegistrationData } from '../components/RegistrationData';
 
-import { Header, Footer, BillingAddress, DeliveryAddress, PersonalData } from '../components';
-import {
-  PageWrapper,
-  FormComponent,
-  Input,
-  SubmitButton,
-  ContentWrapper,
-} from '../components/common';
-
-import styled from 'styled-components';
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-
-  & input {
-    margin-right: 10px;
-  }
-`;
-
-const addressInitialData = {
-  country: '',
-  postIndex: '',
-  city: '',
-  street: '',
-};
-
-const RegistrationPage = () => {
-  const navigate = useNavigate();
+export default function RegistrationPage() {
   const authUser = useUser();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (authUser.userId) navigate('/main');
-  });
+  if (!authUser.checkingAuth && authUser.hasAuth) {
+    navigate('/main');
+  }
 
-  const headerButtons = [
-    { id: 1, link: '/log-in-page', label: 'Log In' },
-    { id: 2, link: '/main', label: 'Main Page' },
-  ];
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isDirty, isValid },
+  } = useForm<MyCustomerDraft>({ mode: 'onChange' });
 
-  const [billingData, setBillingData] = useState<null | typeof addressInitialData>(null);
-  const [userData, setUserData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    birthDay: '',
-    ...addressInitialData,
-  });
-
-  const handleChange = () => {
-    setBillingData(billingData ? null : addressInitialData);
+  const onSubmit: SubmitHandler<MyCustomerDraft> = async (data) => {
+    try {
+      const customer = await signInCustomer(data);
+      if (customer && customer.id) {
+        await authUser.refresh();
+        navigate('/sign-up-shipping-address');
+      }
+    } catch (err) {
+      alert('Что-то пошло не так, попробуйте еще раз чуть позже');
+    }
   };
+
+  if (authUser.checkingAuth) {
+    return <>Loading...</>;
+  }
 
   return (
     <>
       <PageWrapper>
-        <Header buttons={headerButtons} />
-        <ContentWrapper>
-          <FormComponent
-            onSubmit={() =>
-              authUser.signUp({
-                email: userData.email,
-                password: userData.password,
-                firstName: userData.firstName,
-                lastName: userData.lastName,
-              })
-            }
-            navigateTo={'/main'}
-          >
-            <PersonalData userData={userData} setUserData={setUserData} />
-            <DeliveryAddress userData={userData} setUserData={setUserData} />
-            <Wrapper>
-              <label>
-                <Input
-                  checked={!!billingData}
-                  name={'addBilling'}
-                  type={'checkbox'}
-                  onChange={() => handleChange()}
-                />
-              </label>
-              Add different billing address
-            </Wrapper>
-            {!billingData ? (
-              <></>
-            ) : (
-              <BillingAddress billingData={billingData} setBillingData={setBillingData} />
-            )}
-
-            <SubmitButton label={'Sign Up'} />
-          </FormComponent>
-        </ContentWrapper>
+        <Header />
+        <Container>
+          <Form onSubmit={handleSubmit(onSubmit)}>
+            <Container>
+              <RegistrationData register={register} errors={errors} />
+            </Container>
+            <ButtonSubmit type={'submit'} disabled={isDirty && !isValid}>
+              Sign Up
+            </ButtonSubmit>
+          </Form>
+        </Container>
         <Footer />
       </PageWrapper>
     </>
   );
-};
-
-export default RegistrationPage;
+}

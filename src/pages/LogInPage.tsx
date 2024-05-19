@@ -1,48 +1,56 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import { useUser } from '../components/common/AuthContext';
-
 import { Header, Footer, LogInData } from '../components';
-import { PageWrapper, FormComponent, SubmitButton, ContentWrapper } from '../components/common';
+import { ButtonSubmit, Container, Form, PageWrapper } from '../components/common/CommonStyles';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { MyCustomerSignin } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/customer';
+import { LogInCustomer } from '../services/Client';
 
 const LogInPage = () => {
   const navigate = useNavigate();
   const authUser = useUser();
 
   useEffect(() => {
-    if (authUser.userId) navigate('/main');
+    if (!authUser.checkingAuth && authUser.hasAuth) navigate('/main');
   });
 
-  const headerButtons = [
-    { id: 1, link: '/sign-up-page', label: 'Sign Up' },
-    { id: 2, link: '/main', label: 'Main Page' },
-  ];
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isDirty, isValid },
+  } = useForm<MyCustomerSignin>({ mode: 'onChange' });
 
-  const [userData, setUserData] = useState({
-    email: '',
-    password: '',
-  });
+  const onSubmit: SubmitHandler<MyCustomerSignin> = async (data) => {
+    try {
+      const customer = await LogInCustomer(data);
+      if (customer && customer.id) {
+        await authUser.refresh();
+        navigate('/');
+      }
+    } catch (err) {
+      alert('Что-то пошло не так, попробуйте еще раз чуть позже');
+    }
+  };
+
+  if (authUser.checkingAuth) {
+    return <>Loading...</>;
+  }
 
   return (
     <>
       <PageWrapper>
-        <Header buttons={headerButtons} />
-        <ContentWrapper>
-          <FormComponent
-            onSubmit={() =>
-              authUser.logIn({
-                email: userData.email,
-                password: userData.password,
-                anonymousCart: null,
-              })
-            }
-            navigateTo={'/main'}
-          >
-            <LogInData userData={userData} setUserData={setUserData} />
-            <SubmitButton label={'Log In'} />
-          </FormComponent>
-        </ContentWrapper>
+        <Header />
+        <Container>
+          <Form onSubmit={handleSubmit(onSubmit)}>
+            <Container>
+              <LogInData register={register} errors={errors} />
+            </Container>
+            <ButtonSubmit type={'submit'} disabled={isDirty && !isValid}>
+              Log in
+            </ButtonSubmit>
+          </Form>
+        </Container>
         <Footer />
       </PageWrapper>
     </>

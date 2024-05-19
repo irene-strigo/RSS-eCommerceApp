@@ -1,111 +1,66 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
-import GetAnonymousToken from '../../../requests/GetAnonymousToken';
-import { GetAccessAndRefreshToken, SignInCustomer, SignUpCustomer } from '../../../requests';
+import { GetMe } from '../../services/Client';
+import { Customer } from '@commercetools/platform-sdk';
 
 type Props = {
   children: React.ReactElement | React.ReactElement[];
 };
 
-type LogInProps = {
-  email: string;
-  password: string;
-  anonymousCart: {
-    id: string;
-    typeId: string;
-  } | null;
-};
-
-type SignInProps = {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-};
-
 type AuthContextProviderProps = {
-  userId: string | null;
-  logIn: ({ email, password, anonymousCart }: LogInProps) => Promise<unknown>;
-  signUp: ({ email, password, firstName, lastName }: SignInProps) => Promise<unknown>;
+  checkingAuth: boolean;
+  hasAuth: boolean;
+  customer: Customer | null;
   logOut: () => void;
-  setUserId: (id: string) => void;
+  refresh: () => Promise<void>;
 };
 
 const User = createContext<AuthContextProviderProps>({
-  userId: null,
-  logIn: () => Promise.reject(),
-  signUp: () => Promise.reject(),
-  logOut: () => {},
-  setUserId: () => '',
+  checkingAuth: true,
+  hasAuth: false,
+  customer: null,
+  logOut: () => Promise.reject(),
+  refresh: () => Promise.reject(),
 });
 
 const AuthContextProvider = ({ children }: Props) => {
-  const [isUserAuth, setIsUserAuth] = useState<string>(
-    JSON.parse(localStorage.getItem('customerId') || 'null'),
-  );
+  const [isCheckingAuth, setIsCheckingAuth] = useState<boolean>(true);
+  const [isUserAuth, setIsUserAuth] = useState<boolean>(false);
+  const [customer, setCustomer] = useState<Customer | null>(null);
 
-  if (!isUserAuth) GetAnonymousToken();
-
-  const handleLogIn = async ({ email, password, anonymousCart }: LogInProps) => {
-    let logIn = null;
+  const getMe = async () => {
+    setIsCheckingAuth(true);
+    setIsUserAuth(false);
     try {
-      logIn = await SignInCustomer({
-        email,
-        password,
-        anonymousCart,
-        setIsUserAuth,
-      });
-    } catch (error) {
-      throw new Error((error as Error)?.message || 'Unexpected error occurred');
+      const me = await GetMe();
+      if (me && me.id) {
+        setIsUserAuth(true);
+        setCustomer(me);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsCheckingAuth(false);
     }
-
-    const token = await GetAccessAndRefreshToken({
-      email,
-      password,
-    });
-
-    return {
-      logIn,
-      token,
-    };
   };
 
-  const handleSignUp = async ({ email, password, firstName, lastName }: SignInProps) => {
-    let signIn = null;
-    try {
-      signIn = await SignUpCustomer({
-        email,
-        password,
-        firstName,
-        lastName,
-        setIsUserAuth,
-      });
-    } catch (error) {
-      throw new Error((error as Error)?.message || 'Unexpected error occurred');
-    }
-
-    const token = await GetAccessAndRefreshToken({ email, password });
-
-    return {
-      signIn,
-      token,
-    };
+  const logout = async () => {
+    localStorage.removeItem('PersonalToken');
+    await getMe();
   };
 
-  const handleSignOut = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('customerId');
-  };
+  useEffect(() => {
+    getMe();
+  }, []);
 
   return (
     <User.Provider
       value={{
-        userId: isUserAuth,
-        logIn: handleLogIn,
-        signUp: handleSignUp,
-        logOut: handleSignOut,
-        setUserId: setIsUserAuth,
+        checkingAuth: isCheckingAuth,
+        hasAuth: isUserAuth,
+        customer: customer,
+        logOut: logout,
+        refresh: getMe,
       }}
     >
       {children}

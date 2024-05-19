@@ -5,10 +5,10 @@ type Props = {
     id: string;
     typeId: string;
   } | null;
-  setIsUserAuth: (id: string) => void;
+  // setIsUserAuth: (id: string) => void;
 };
 
-async function SignInCustomer({ email, password, anonymousCart, setIsUserAuth }: Props) {
+async function SignInCustomer({ email, password, anonymousCart }: Props) {
   const token = JSON.parse(localStorage.getItem('anonymousToken') || 'null');
 
   const headers = new Headers({
@@ -32,7 +32,7 @@ async function SignInCustomer({ email, password, anonymousCart, setIsUserAuth }:
   );
 
   const signUpResponse = await response.json();
-  setIsUserAuth(signUpResponse.customer.id);
+  // setIsUserAuth(signUpResponse.customer.id);
 
   if (signUpResponse.message) throw new Error(signUpResponse.message);
 
