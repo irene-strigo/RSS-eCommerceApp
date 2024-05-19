@@ -1,14 +1,6 @@
 import React from 'react';
-
-import styled from 'styled-components';
-
 import { Header, Footer } from '../components';
-import { PageWrapper, ContentWrapper } from '../components/common';
-
-const ErrorMessage = styled.div`
-  margin: auto;
-  font-size: 25px;
-`;
+import { ContentWrapper, ErrorMessage, PageWrapper } from './PagesStyles';
 
 const ErrorPage = () => {
   const headerButtons = [

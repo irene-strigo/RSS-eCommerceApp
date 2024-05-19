@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import { ErrorDiv, InputElement } from './CommonStyles';
 
 type Props = {
   value?: string;
@@ -10,27 +10,6 @@ type Props = {
   disabled?: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
-
-const ErrorDiv = styled.div`
-  color: red;
-  min-height: 20px;
-`;
-
-const InputElement = styled.input`
-  background-color: #fff;
-  border-radius: 3px;
-  border: 1px solid #7aa7c7;
-  color: #39739d;
-  font-size: 16px;
-  padding: 10px;
-  margin-bottom: 10px;
-  width: 100%;
-
-  &:focus {
-    outline: none;
-    border: 2px solid #39739d;
-  }
-`;
 
 const Input = ({ value, type, placeholder, name, disabled = false, onChange }: Props) => {
   return (

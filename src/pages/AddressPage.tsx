@@ -1,105 +1,20 @@
 import { Header, Footer } from '../components';
-import { PageWrapper } from '../components/common';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import styled from 'styled-components';
 import { useState } from 'react';
 import { _BaseAddress } from '@commercetools/platform-sdk';
 import { setCustomerAddress } from '../services/Client';
 import { COUNTRIES } from '../components/Countries';
 import { useNavigate } from 'react-router-dom';
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  max-width: 300px;
-  width: 100%;
-
-  & button {
-    margin-top: 30px;
-    width: 95px;
-  }
-
-  & fieldset {
-    width: 100%;
-    margin: 15px 0 15px;
-  }
-`;
-const InputElem = styled.input`
-  background-color: #fff;
-  border-radius: 3px;
-  border: 1px solid #7aa7c7;
-  color: #39739d;
-  font-size: 16px;
-  padding: 10px;
-  margin-bottom: 10px;
-  width: 100%;
-
-  &:focus {
-    outline: none;
-    border: 2px solid #39739d;
-  }
-`;
-
-const DefaultCheckboxLabel = styled.label`
-  font-size: 13px;
-  display: flex;
-  gap: 7px;
-`;
-
-const SelectElem = styled.select`
-  background-color: #fff;
-  border-radius: 3px;
-  border: 1px solid #7aa7c7;
-  color: #39739d;
-  font-size: 16px;
-  padding: 10px;
-  margin-bottom: 10px;
-  width: 100%;
-
-  &:focus {
-    outline: none;
-    border: 2px solid #39739d;
-  }
-`;
-
-const ButtonSubmit = styled.button`
-  background-color: #ada5f9;
-  border-radius: 3px;
-  border: 1px solid #ada5f9;
-  color: #511f31;
-  cursor: pointer;
-  padding: 10px 10px;
-  font-size: 18px;
-
-  &:hover,
-  :focus {
-    background-color: #f7f9ff;
-    color: #2c5777;
-  }
-  &:disabled {
-    background-color: #c0c0c0;
-    color: black;
-  }
-`;
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  background-color: #f7f9ff;
-  width: 100%;
-
-  padding: 20px;
-  font-size: 20px;
-`;
-
-const ErrorsText = styled.p`
-  color: red;
-  font-size: 13px;
-`;
+import {
+  ButtonSubmit,
+  Container,
+  DefaultCheckboxLabel,
+  ErrorsText,
+  Form,
+  InputElem,
+  PageWrapper,
+  SelectElem,
+} from './PagesStyles';
 
 export type AddressPageProps = {
   mode: 'Billing' | 'Shipping';
@@ -122,10 +37,7 @@ export default function AddressPage({ mode }: AddressPageProps) {
   const [addBillingAddress, setAddBillingAddress] = useState(false);
   const navigate = useNavigate();
 
-  console.log(mode);
-
   const onSubmit: SubmitHandler<_BaseAddress> = async (data) => {
-    console.log('draft', data);
     const customerId = localStorage.getItem('signUpCustomerId');
     const version = Number(localStorage.getItem('signUpCustomerVersion')) || 0;
     if (!customerId) {
@@ -133,7 +45,6 @@ export default function AddressPage({ mode }: AddressPageProps) {
     }
     const customer = await setCustomerAddress(customerId, version, mode, data, useAsDefaultAddress);
     if (customer && customer.id) {
-      console.log('customer', customer);
       localStorage.setItem('signUpCustomerVersion', String(customer.version));
       reset();
       if (mode === 'Shipping' && addBillingAddress) {

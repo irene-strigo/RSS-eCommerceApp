@@ -1,7 +1,6 @@
 import React from 'react';
-
 import { Header, Footer } from '../components';
-import { PageWrapper, ContentWrapper } from '../components/common';
+import { ContentWrapper, PageWrapper } from './PagesStyles';
 
 const MainPage = () => {
   const headerButtons = [
