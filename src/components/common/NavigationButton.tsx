@@ -9,7 +9,7 @@ const Button = styled(Link)`
   color: #511f31;
   cursor: pointer;
   padding: 10px 10px;
-  min-width: 95px;
+  min-width: 140px;
   text-align: center;
   margin-left: 20px;
   text-decoration: none;
@@ -25,10 +25,15 @@ const Button = styled(Link)`
 type Props = {
   link: string;
   label: string;
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 };
 
-const NavigationButton = ({ link, label }: Props) => {
-  return <Button to={link}>{label}</Button>;
+const NavigationButton = ({ link, label, onClick }: Props) => {
+  return (
+    <Button onClick={onClick} to={link}>
+      {label}
+    </Button>
+  );
 };
 
 export default NavigationButton;

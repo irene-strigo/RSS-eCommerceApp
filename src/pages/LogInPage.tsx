@@ -1,30 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { useUser } from '../components/common/AuthContext';
 
 import { Header, Footer, LogInData } from '../components';
-import { PageWrapper, Form, SubmitButton, ContentWrapper } from '../components/common';
+import { PageWrapper, FormComponent, SubmitButton, ContentWrapper } from '../components/common';
 
 const LogInPage = () => {
+  const navigate = useNavigate();
+  const authUser = useUser();
+
+  useEffect(() => {
+    if (authUser.userId) navigate('/main');
+  });
+
   const headerButtons = [
     { id: 1, link: '/sign-up-page', label: 'Sign Up' },
-    { id: 2, link: '/', label: 'Main Page' },
+    { id: 2, link: '/main', label: 'Main Page' },
   ];
 
   const [userData, setUserData] = useState({
-    login: '',
+    email: '',
     password: '',
   });
-
-  console.log(userData);
 
   return (
     <>
       <PageWrapper>
         <Header buttons={headerButtons} />
         <ContentWrapper>
-          <Form>
+          <FormComponent
+            onSubmit={() =>
+              authUser.logIn({
+                email: userData.email,
+                password: userData.password,
+                anonymousCart: null,
+              })
+            }
+            navigateTo={'/main'}
+          >
             <LogInData userData={userData} setUserData={setUserData} />
             <SubmitButton label={'Log In'} />
-          </Form>
+          </FormComponent>
         </ContentWrapper>
         <Footer />
       </PageWrapper>

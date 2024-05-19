@@ -1,7 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { useUser } from '../components/common/AuthContext';
 
 import { Header, Footer, BillingAddress, DeliveryAddress, PersonalData } from '../components';
-import { PageWrapper, Form, Input, SubmitButton, ContentWrapper } from '../components/common';
+import {
+  PageWrapper,
+  FormComponent,
+  Input,
+  SubmitButton,
+  ContentWrapper,
+} from '../components/common';
 
 import styled from 'styled-components';
 
@@ -23,9 +32,16 @@ const addressInitialData = {
 };
 
 const RegistrationPage = () => {
+  const navigate = useNavigate();
+  const authUser = useUser();
+
+  useEffect(() => {
+    if (authUser.userId) navigate('/main');
+  });
+
   const headerButtons = [
     { id: 1, link: '/log-in-page', label: 'Log In' },
-    { id: 2, link: '/', label: 'Main Page' },
+    { id: 2, link: '/main', label: 'Main Page' },
   ];
 
   const [billingData, setBillingData] = useState<null | typeof addressInitialData>(null);
@@ -38,17 +54,26 @@ const RegistrationPage = () => {
     ...addressInitialData,
   });
 
-  console.log(userData);
-
   const handleChange = () => {
     setBillingData(billingData ? null : addressInitialData);
   };
+
   return (
     <>
       <PageWrapper>
         <Header buttons={headerButtons} />
         <ContentWrapper>
-          <Form>
+          <FormComponent
+            onSubmit={() =>
+              authUser.signUp({
+                email: userData.email,
+                password: userData.password,
+                firstName: userData.firstName,
+                lastName: userData.lastName,
+              })
+            }
+            navigateTo={'/main'}
+          >
             <PersonalData userData={userData} setUserData={setUserData} />
             <DeliveryAddress userData={userData} setUserData={setUserData} />
             <Wrapper>
@@ -69,7 +94,7 @@ const RegistrationPage = () => {
             )}
 
             <SubmitButton label={'Sign Up'} />
-          </Form>
+          </FormComponent>
         </ContentWrapper>
         <Footer />
       </PageWrapper>

@@ -3,7 +3,7 @@ import React from 'react';
 import Input from './common/Input';
 
 type UserData = {
-  login: string;
+  email: string;
   password: string;
 };
 
@@ -17,11 +17,11 @@ const LogInData = ({ userData, setUserData }: Props) => {
     <fieldset>
       <legend>Enter your data</legend>
       <Input
-        value={userData.login}
+        value={userData.email}
         name={'login'}
         placeholder={'Enter your login'}
         type={'text'}
-        onChange={(e) => setUserData({ ...userData, login: e.target.value })}
+        onChange={(e) => setUserData({ ...userData, email: e.target.value })}
       />
       <Input
         value={userData.password}

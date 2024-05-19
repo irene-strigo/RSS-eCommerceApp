@@ -1,6 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
+
+import { useUser } from './common/AuthContext';
 
 import { NavigationButton } from '../components/common';
 
@@ -20,8 +23,6 @@ const Wrapper = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: end;
-  max-width: 350px;
-  min-width: 250px;
   width: 100%;
 `;
 
@@ -29,6 +30,7 @@ type Button = {
   id: number;
   link: string;
   label: string;
+  onClick?: () => void;
 };
 
 type Props = {
@@ -36,11 +38,34 @@ type Props = {
 };
 
 const Header = ({ buttons }: Props) => {
+  const authUser = useUser();
+
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    authUser.logOut();
+
+    authUser.setUserId('');
+    navigate('/main');
+  };
+
+  const headerButtons = authUser.userId
+    ? [
+        ...buttons,
+        { id: buttons.length + 1, link: '/main', label: 'Log Out', onClick: handleClick },
+      ]
+    : buttons;
+
   return (
     <HeaderWrapper>
       <Wrapper>
-        {buttons.map((button) => (
-          <NavigationButton key={button.id} link={button.link} label={button.label} />
+        {headerButtons.map((headerButton) => (
+          <NavigationButton
+            key={headerButton.id}
+            link={headerButton.link}
+            label={headerButton.label}
+            onClick={() => (headerButton.onClick ? headerButton.onClick() : null)}
+          />
         ))}
       </Wrapper>
     </HeaderWrapper>
