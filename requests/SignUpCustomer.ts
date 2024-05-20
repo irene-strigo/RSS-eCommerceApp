@@ -3,10 +3,10 @@ type Props = {
   password: string;
   firstName: string;
   lastName: string;
-  setIsUserAuth: (id: string) => void;
+  // setIsUserAuth: (id: string) => void;
 };
 
-async function SignUpCustomer({ email, password, firstName, lastName, setIsUserAuth }: Props) {
+async function SignUpCustomer({ email, password, firstName, lastName }: Props) {
   const token = JSON.parse(localStorage.getItem('anonymousToken') || 'null');
 
   const headers = new Headers({
@@ -30,7 +30,7 @@ async function SignUpCustomer({ email, password, firstName, lastName, setIsUserA
     },
   );
   const signUpResponse = await response.json();
-  setIsUserAuth(signUpResponse.customer.id);
+  // setIsUserAuth(signUpResponse.customer.id);
 
   if (signUpResponse.message) throw new Error(signUpResponse.message);
 

@@ -1,39 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import styled from 'styled-components';
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-width: 500px;
-  align-items: center;
-  justify-content: center;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  max-width: 300px;
-  width: 100%;
-
-  & button {
-    margin-top: 30px;
-    width: 95px;
-  }
-
-  & fieldset {
-    width: 100%;
-    margin: 15px 0 15px;
-  }
-`;
-
-const ErrorMessage = styled.div`
-  color: red;
-  min-height: 30px;
-`;
+import { ErrorMessage, Form, Wrapper } from './CommonStyles';
 
 type Props = {
   children: React.ReactElement | React.ReactElement[];

@@ -12,7 +12,9 @@ import {
   CartPage,
   AboutUsPage,
   EmptyPage,
+  AddressPage,
 } from './pages';
+import LogoutPage from './pages/LogoutPage';
 
 export const router = createBrowserRouter([
   {
@@ -32,6 +34,14 @@ export const router = createBrowserRouter([
     element: <RegistrationPage />,
   },
   {
+    path: '/sign-up-shipping-address',
+    element: <AddressPage mode="Shipping" />,
+  },
+  {
+    path: '/sign-up-billing-address',
+    element: <AddressPage mode="Billing" />,
+  },
+  {
     path: '/catalog',
     element: <CatalogPage />,
   },
@@ -46,6 +56,10 @@ export const router = createBrowserRouter([
   {
     path: '/about-us',
     element: <AboutUsPage />,
+  },
+  {
+    path: '/logout',
+    element: <LogoutPage />,
   },
   {
     path: '*',
