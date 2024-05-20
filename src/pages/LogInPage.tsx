@@ -31,20 +31,23 @@ const LogInPage = () => {
       }
     } catch (err) {
       setLogError('wrong login or password');
-      //alert('Что-то пошло не так, попробуйте еще раз чуть позже');
     }
   };
 
   if (authUser.checkingAuth) {
     return <>Loading...</>;
   }
-
   return (
     <>
       <PageWrapper>
         <Header />
         <Container>
-          <Form onSubmit={handleSubmit(onSubmit)}>
+          <Form
+            onSubmit={handleSubmit(onSubmit)}
+            onChange={() => {
+              setLogError('');
+            }}
+          >
             <Container>
               <LogInData register={register} errors={errors} />
               <CommentsDiv error={logError}></CommentsDiv>

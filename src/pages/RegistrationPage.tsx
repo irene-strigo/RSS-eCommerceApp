@@ -27,33 +27,37 @@ export default function RegistrationPage() {
     try {
       const customer = await signInCustomer(data);
       if (customer && customer.id) {
+        alert('Account succesfully created');
         await authUser.refresh();
         navigate('/sign-up-shipping-address');
       }
     } catch (err) {
-      setRegError('an address with this email already exists, please select another one');
-      //alert('Что-то пошло не так, попробуйте еще раз чуть позже');
+      setRegError('An account with such email already exists, please use another one or log in');
     }
   };
-
-  if (authUser.checkingAuth) {
-    return <>Loading...</>;
-  }
 
   return (
     <>
       <PageWrapper>
         <Header />
         <Container>
-          <Form onSubmit={handleSubmit(onSubmit)}>
-            <Container>
-              <RegistrationData register={register} errors={errors} />
-            </Container>
-            <CommentsDiv error={regError}></CommentsDiv>
-            <ButtonSubmit type={'submit'} disabled={isDirty && !isValid}>
-              Sign Up
-            </ButtonSubmit>
-          </Form>
+          {authUser.checkingAuth && <div>Loading...</div>}
+          {!authUser.checkingAuth && (
+            <Form
+              onSubmit={handleSubmit(onSubmit)}
+              onChange={() => {
+                setRegError('');
+              }}
+            >
+              <Container>
+                <RegistrationData register={register} errors={errors} />
+              </Container>
+              <CommentsDiv error={regError}></CommentsDiv>
+              <ButtonSubmit type={'submit'} disabled={isDirty && !isValid}>
+                Sign Up
+              </ButtonSubmit>
+            </Form>
+          )}
         </Container>
         <Footer />
       </PageWrapper>

@@ -21,7 +21,9 @@ export default function AddressPage({ mode }: AddressPageProps) {
     register,
     handleSubmit,
     getValues,
+    watch,
     reset,
+    trigger,
     formState: { errors, isDirty, isValid },
   } = useForm<_BaseAddress>({ mode: 'onChange' });
 
@@ -54,8 +56,10 @@ export default function AddressPage({ mode }: AddressPageProps) {
               <AddressData
                 mode={mode}
                 register={register}
+                trigger={trigger}
                 errors={errors}
                 getValues={getValues}
+                watch={watch}
                 setUseAsDefaultAddress={setUseAsDefaultAddress}
                 setAddBillingAddress={setAddBillingAddress}
               />

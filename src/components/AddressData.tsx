@@ -1,12 +1,20 @@
 import { DefaultCheckboxLabel, ErrorsText, InputElem, SelectElem } from './common/CommonStyles';
-import { FieldErrors, UseFormGetValues, UseFormRegister } from 'react-hook-form';
+import {
+  FieldErrors,
+  UseFormGetValues,
+  UseFormRegister,
+  UseFormTrigger,
+  UseFormWatch,
+} from 'react-hook-form';
 import { _BaseAddress } from '@commercetools/platform-sdk';
 import { COUNTRIES } from '../Countries';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 
 type Props = {
   register: UseFormRegister<_BaseAddress>;
+  trigger: UseFormTrigger<_BaseAddress>;
   getValues: UseFormGetValues<_BaseAddress>;
+  watch: UseFormWatch<_BaseAddress>;
   errors: FieldErrors<_BaseAddress>;
   mode: 'Billing' | 'Shipping';
   setUseAsDefaultAddress: Dispatch<SetStateAction<boolean>>;
@@ -15,12 +23,18 @@ type Props = {
 
 export const AddressData = ({
   register,
+  trigger,
   errors,
   getValues,
+  watch,
   mode,
   setUseAsDefaultAddress,
   setAddBillingAddress,
 }: Props) => {
+  useEffect(() => {
+    trigger('postalCode');
+  }, [watch('country')]);
+
   return (
     <fieldset>
       <legend>{mode} address</legend>
@@ -32,6 +46,7 @@ export const AddressData = ({
 
       <label>Country: </label>
       <SelectElem
+        defaultValue={COUNTRIES[0].code}
         {...register('country', {
           required: {
             value: true,
@@ -55,7 +70,7 @@ export const AddressData = ({
           },
           pattern: {
             value: new RegExp(
-              COUNTRIES.find((c) => c.code === getValues('country'))?.zipRegexp || '',
+              COUNTRIES.find((c) => c.code === getValues().country)?.zipRegexp || '',
               'gm',
             ),
             message: 'post index does not correspond to the selected country',
