@@ -6,11 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import { ButtonSubmit, Container, Form, PageWrapper } from '../components/common/CommonStyles';
 import { useUser } from '../components/common/AuthContext';
 import { RegistrationData } from '../components/RegistrationData';
+import CommentsDiv from '../components/common/CommentsDiv';
+import { useState } from 'react';
 
 export default function RegistrationPage() {
   const authUser = useUser();
   const navigate = useNavigate();
-
+  const [regError, setRegError] = useState('');
   if (!authUser.checkingAuth && authUser.hasAuth) {
     navigate('/main');
   }
@@ -29,7 +31,8 @@ export default function RegistrationPage() {
         navigate('/sign-up-shipping-address');
       }
     } catch (err) {
-      alert('Что-то пошло не так, попробуйте еще раз чуть позже');
+      setRegError('an address with this email already exists, please select another one');
+      //alert('Что-то пошло не так, попробуйте еще раз чуть позже');
     }
   };
 
@@ -46,6 +49,7 @@ export default function RegistrationPage() {
             <Container>
               <RegistrationData register={register} errors={errors} />
             </Container>
+            <CommentsDiv error={regError}></CommentsDiv>
             <ButtonSubmit type={'submit'} disabled={isDirty && !isValid}>
               Sign Up
             </ButtonSubmit>

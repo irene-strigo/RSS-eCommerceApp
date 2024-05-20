@@ -53,11 +53,11 @@ export const NavButton = styled(Link)`
   color: #511f31;
   cursor: pointer;
   padding: 10px 10px;
-  min-width: 95px;
   text-align: center;
   margin-left: 20px;
   text-decoration: none;
   font-size: 18px;
+  white-space: nowrap;
 
   &:hover,
   :focus {
@@ -97,6 +97,8 @@ export const SwitchButton = styled.button`
 export const ErrorDiv = styled.div`
   color: red;
   min-height: 20px;
+  display: flex;
+  text-align: center;
 `;
 
 export const InputElement = styled.input`
@@ -218,7 +220,7 @@ export const Container = styled.div`
 
   background-color: #f7f9ff;
   width: 100%;
-
+  height: 100%;
   padding: 20px;
   font-size: 20px;
 `;
