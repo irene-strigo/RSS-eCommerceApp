@@ -38,7 +38,6 @@ const LogInPage = () => {
   if (authUser.checkingAuth) {
     return <>Loading...</>;
   }
-
   return (
     <>
       <PageWrapper>

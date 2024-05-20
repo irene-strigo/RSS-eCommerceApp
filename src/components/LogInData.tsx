@@ -13,6 +13,7 @@ const LoginData = ({ register, errors }: Props) => {
   const [inputType, setInputType] = useState('password');
   const [btnLabel, setBtnLabel] = useState('show password');
   const [btnDisabled, setBtnDisabled] = useState(true);
+  const [serverErrorMsg, setServerErrorMsg] = useState('');
 
   const togglePassInput = () => {
     if (inputType === 'password') {
@@ -62,6 +63,8 @@ const LoginData = ({ register, errors }: Props) => {
           },
           onChange() {
             setBtnDisabled(false);
+            console.log(serverErrorMsg, 'logError');
+            setServerErrorMsg('');
           },
           pattern: {
             value: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,20}$/,
