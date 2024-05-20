@@ -4,7 +4,7 @@ import { NavigationButton } from '../components/common';
 import { HeaderWrapper, HeaderButtonsWrapper } from './common/CommonStyles';
 import { useUser } from './common/AuthContext';
 
-type Button = {
+export type Button = {
   id: number;
   link: string;
   label: string;

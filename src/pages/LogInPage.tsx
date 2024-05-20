@@ -31,7 +31,6 @@ const LogInPage = () => {
       }
     } catch (err) {
       setLogError('wrong login or password');
-      //alert('Что-то пошло не так, попробуйте еще раз чуть позже');
     }
   };
 
@@ -43,7 +42,12 @@ const LogInPage = () => {
       <PageWrapper>
         <Header />
         <Container>
-          <Form onSubmit={handleSubmit(onSubmit)}>
+          <Form
+            onSubmit={handleSubmit(onSubmit)}
+            onChange={() => {
+              setLogError('');
+            }}
+          >
             <Container>
               <LogInData register={register} errors={errors} />
               <CommentsDiv error={logError}></CommentsDiv>
