@@ -1,6 +1,16 @@
 {
   "files": ["src/index.tsx"],
-  "include": [".eslintrc.js", "src/**/*.ts", "test/**/*.ts", "index.d.ts"],
+  "include": [
+    ".eslintrc.js",
+    "src/**/*.ts",
+    "test/**/*.ts",
+    "index.d.ts",
+    "src/router.tsx",
+    "src/**/*.tsx",
+    "src/components",
+    "requests/**/*.tsx",
+    "requests/**/*.ts"
+  ],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
     /* Projects */
