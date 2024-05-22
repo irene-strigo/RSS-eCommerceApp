@@ -169,5 +169,8 @@ export const setCustomerAddress = async (
     })
     .execute()
     .then(({ body }) => body)
-    .catch(console.error);
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
 };

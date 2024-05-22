@@ -220,7 +220,7 @@ export const Container = styled.div`
 
   background-color: #f7f9ff;
   width: 100%;
-  height: 100%;
+
   padding: 20px;
   font-size: 20px;
 `;
@@ -254,4 +254,13 @@ export const SelectElem = styled.select`
     outline: none;
     border: 2px solid #39739d;
   }
+`;
+export const DataList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+`;
+export const FieldName = styled.span`
+  font-size: 20px;
+  color: #39739d;
 `;

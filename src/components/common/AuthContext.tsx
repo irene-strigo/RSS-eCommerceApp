@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-
 import { GetMe } from '../../services/Client';
 import { Customer } from '@commercetools/platform-sdk';
 
