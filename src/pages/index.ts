@@ -8,3 +8,4 @@ export { default as PersonalInformationPage } from './PersonalInformationPage';
 export { default as CatalogPage } from './CatalogPage';
 export { default as EmptyPage } from './EmptyPage';
 export { default as AddressPage } from './AddressPage';
+export { default as ProductPage } from './ProductPage';

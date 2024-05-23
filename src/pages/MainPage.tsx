@@ -12,6 +12,7 @@ const buttons: Button[] = [
   { id: 4, link: '/main', label: 'Main Page' },
   { id: 5, link: '/log-in-page', label: 'Log In' },
   { id: 6, link: '/sign-up-page', label: 'Sign Up' },
+  { id: 7, link: '/catalog', label: 'Catalog' },
 ];
 
 const MainPage = () => {

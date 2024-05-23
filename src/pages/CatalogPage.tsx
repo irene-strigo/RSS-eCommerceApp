@@ -2,12 +2,15 @@ import React from 'react';
 
 import { Header, Footer } from '../components';
 import { ContentWrapper, PageWrapper } from '../components/common/CommonStyles';
+import ProductPage from './ProductPage';
 
 const CatalogPage = () => {
   return (
     <PageWrapper>
       <Header />
-      <ContentWrapper>Catalog</ContentWrapper>
+      <ContentWrapper>
+        <ProductPage />
+      </ContentWrapper>
       <Footer />
     </PageWrapper>
   );
