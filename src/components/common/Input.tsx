@@ -4,7 +4,7 @@ import { ErrorDiv, InputElement } from './CommonStyles';
 type Props = {
   value?: string;
   checked?: boolean;
-  type: 'text' | 'number' | 'email' | 'password' | 'checkbox' | 'date';
+  type: 'text' | 'number' | 'email' | 'password' | 'checkbox' | 'date' | 'radio';
   placeholder?: string;
   name: string;
   disabled?: boolean;

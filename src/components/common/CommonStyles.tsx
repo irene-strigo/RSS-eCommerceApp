@@ -78,11 +78,13 @@ export const SwitchButton = styled.button`
   background-color: #ada5f9;
   border-radius: 3px;
   border: 1px solid #ada5f9;
+  max-width: 200px;
   color: #511f31;
   cursor: pointer;
   padding: 3px 3px;
   font-size: 10px;
   margin: 10px;
+  white-space: nowrap;
 
   &:hover,
   :focus {
@@ -96,7 +98,6 @@ export const SwitchButton = styled.button`
 `;
 export const ErrorDiv = styled.div`
   color: red;
-  min-height: 20px;
   display: flex;
   text-align: center;
 `;
@@ -108,7 +109,6 @@ export const InputElement = styled.input`
   color: #39739d;
   font-size: 16px;
   padding: 10px;
-  margin-bottom: 10px;
   width: 100%;
 
   &:focus {
@@ -217,7 +217,7 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
+  height: 100%;
   background-color: #f7f9ff;
   width: 100%;
 
@@ -237,7 +237,8 @@ export const ErrorMessage = styled.div`
 export const DefaultCheckboxLabel = styled.label`
   font-size: 13px;
   display: flex;
-  gap: 7px;
+  flex-direction: column;
+  white-space: nowrap;
 `;
 
 export const SelectElem = styled.select`
@@ -263,4 +264,50 @@ export const DataList = styled.div`
 export const FieldName = styled.span`
   font-size: 20px;
   color: #39739d;
+`;
+export const ModalWindowWrapper = styled.div`
+  margin: 0 auto;
+  max-width: 768px;
+  background-color: #b9ead3;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  justify-content: center;
+  gap: 20px;
+  z-index: 20;
+`;
+export const CloseModalBtn = styled.button`
+  background-color: #ada5f9;
+  width: 30px;
+  text-align: center;
+  border-radius: 3px;
+  border: 1px solid #ada5f9;
+  color: #39739d;
+  &:hover,
+  :focus {
+    background-color: #f7f9ff;
+    color: #2c5777;
+  }
+`;
+
+export const EditButtonsConainer = styled.div`
+  margin: 5px;
+  border: 1px solid #ada5f9;
+  display: flex;
+`;
+
+export const AddressContainer = styled.div`
+  border: 1px solid #ada5f9;
+  border-radius: 3px;
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const CheckboxesWrapper = styled.div`
+  margin: 5px;
+`;
+
+export const AddressFieldContainer = styled.p`
+  width: 50%;
+  padding: 10px;
 `;

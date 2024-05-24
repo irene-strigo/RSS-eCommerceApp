@@ -16,9 +16,15 @@ type Props = {
   getValues: UseFormGetValues<_BaseAddress>;
   watch: UseFormWatch<_BaseAddress>;
   errors: FieldErrors<_BaseAddress>;
-  mode: 'Billing' | 'Shipping';
-  setUseAsDefaultAddress: Dispatch<SetStateAction<boolean>>;
-  setAddBillingAddress: Dispatch<SetStateAction<boolean>>;
+  mode: 'Billing' | 'Shipping' | 'Edit';
+  setUseAsDefaultAddress?: Dispatch<SetStateAction<boolean>>;
+  setAddBillingAddress?: Dispatch<SetStateAction<boolean>>;
+  hideCheckboxes?: boolean;
+  country?: string;
+  postalCode?: string;
+  city?: string;
+  streetName?: string;
+  id?: string;
 };
 
 export const AddressData = ({
@@ -30,19 +36,29 @@ export const AddressData = ({
   mode,
   setUseAsDefaultAddress,
   setAddBillingAddress,
+  country,
+  postalCode,
+  city,
+  streetName,
+  id,
+  hideCheckboxes,
 }: Props) => {
   useEffect(() => {
     trigger('postalCode');
-  }, [watch('country')]);
+  }, [watch().country]);
 
   return (
     <fieldset>
       <legend>{mode} address</legend>
 
-      <DefaultCheckboxLabel>
-        <input type={'checkbox'} onChange={(e) => setUseAsDefaultAddress(e.target.checked)} />
-        Make it default
-      </DefaultCheckboxLabel>
+      {!hideCheckboxes && (
+        <DefaultCheckboxLabel>
+          <input type={'checkbox'} onChange={(e) => setUseAsDefaultAddress?.(e.target.checked)} />
+          Make it default
+        </DefaultCheckboxLabel>
+      )}
+
+      <InputElem type="hidden" value={id || ''} {...register('id')} />
 
       <label>Country: </label>
       <SelectElem
@@ -52,6 +68,7 @@ export const AddressData = ({
             value: true,
             message: 'this field is required',
           },
+          value: (country || COUNTRIES[0].code) as string,
         })}
       >
         {COUNTRIES.map((c) => (
@@ -75,6 +92,7 @@ export const AddressData = ({
             ),
             message: 'post index does not correspond to the selected country',
           },
+          value: (postalCode || '') as string,
         })}
       />
       {errors.postalCode && <ErrorsText>{errors.postalCode.message}</ErrorsText>}
@@ -89,25 +107,26 @@ export const AddressData = ({
             value: /^[^\d%\\&?,';:!-+!@#$^*)(]{1,50}$/gm,
             message: 'wrong city name',
           },
+          value: (city || '') as string,
         })}
       />
       {errors.city && <ErrorsText>{errors.city.message}</ErrorsText>}
 
       <label>Street:</label>
       <InputElem
-        type={'text'}
         {...register('streetName', {
           required: {
             value: true,
             message: 'this field is required',
           },
+          value: (streetName || '') as string,
         })}
       />
       {errors.streetName && <ErrorsText>{errors.streetName.message}</ErrorsText>}
 
-      {mode === 'Shipping' && (
+      {!hideCheckboxes && mode === 'Shipping' && (
         <DefaultCheckboxLabel>
-          <input type={'checkbox'} onChange={(e) => setAddBillingAddress(e.target.checked)} />
+          <input type={'checkbox'} onChange={(e) => setAddBillingAddress?.(e.target.checked)} />
           Add billing address
         </DefaultCheckboxLabel>
       )}

@@ -57,6 +57,33 @@ export const signInCustomer = async (draft: MyCustomerDraft): Promise<void | Cus
   return result.customer;
 };
 
+/*export const changeCustomerPersonalData = async (
+  customerId: string,
+  firstName: string,
+  lastName: string,
+  email: string,
+  dateOfBirth: string,
+  draft: MyCustomerDraft,
+): Promise<void | Customer> => {
+  const apiRoot = getApi();
+
+  const customer: Customer = await apiRoot
+    .customers()
+    .withId({ ID: customerId })
+    //.post(data)
+    .get()
+    .execute()
+    .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+
+  if (customer.firstName === firstName) {
+    console.log(customer.firstName);
+  }
+};*/
+
 export const setCustomerAddress = async (
   customerId: string,
   addressType: 'Shipping' | 'Billing',

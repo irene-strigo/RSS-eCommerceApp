@@ -26,6 +26,7 @@ export default function RegistrationPage() {
   const onSubmit: SubmitHandler<MyCustomerDraft> = async (data) => {
     try {
       const customer = await signInCustomer(data);
+      console.log(customer);
       if (customer && customer.id) {
         alert('Account succesfully created');
         await authUser.refresh();
