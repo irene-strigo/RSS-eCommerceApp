@@ -48,7 +48,10 @@ const LoginData = ({ register, errors }: Props) => {
         label={btnLabel}
         disabled={btnDisabled}
         type={'button'}
-        onClick={() => togglePassInput()}
+        onClick={(evt) => {
+          evt.preventDefault();
+          togglePassInput();
+        }}
       />
       <InputElem
         type={inputType}

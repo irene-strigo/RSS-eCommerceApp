@@ -188,13 +188,19 @@ export default function PersonalInformationPage() {
                 label={'Change personal data'}
                 type={'button'}
                 disabled={false}
-                onClick={() => setOpenPersonalModal(true)}
+                onClick={(evt) => {
+                  evt.preventDefault();
+                  setOpenPersonalModal(true);
+                }}
               />
               <ShowButton
                 label={'Change password'}
                 type={'button'}
                 disabled={false}
-                onClick={() => setOpenPasswordModal(true)}
+                onClick={(evt) => {
+                  evt.preventDefault();
+                  setOpenPasswordModal(true);
+                }}
               />
             </EditButtonsConainer>
           </div>
@@ -217,7 +223,10 @@ export default function PersonalInformationPage() {
                   <ShowButton
                     disabled={false}
                     label={'edit address'}
-                    onClick={() => processEditAddressMode(adrs.id)}
+                    onClick={(evt) => {
+                      evt.preventDefault();
+                      processEditAddressMode(adrs.id);
+                    }}
                     type={'button'}
                   />
                 </Address>
