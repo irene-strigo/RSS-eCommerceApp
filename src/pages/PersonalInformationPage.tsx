@@ -1,8 +1,6 @@
 import { Header, Footer } from '../components';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { MyCustomerChangePassword, MyCustomerDraft } from '@commercetools/platform-sdk';
-import { signInCustomer } from '../services/Client';
-import { useNavigate } from 'react-router-dom';
 import {
   AddressFieldContainer,
   ButtonSubmit,
@@ -25,10 +23,13 @@ import { _BaseAddress } from '@commercetools/platform-sdk';
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
 import { ChangePasswordData } from '../components/ChangePasswordData';
+import { changeCustomerPassword, updateCustomerPersonalData } from '../services/Client';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function PersonalInformationPage() {
   const authUser = useUser();
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const [regError, setRegError] = useState('');
   const [editAddress, setEditAddress] = useState<_BaseAddress>({} as _BaseAddress);
 
@@ -44,6 +45,7 @@ export default function PersonalInformationPage() {
     trigger: addressTrigger,
     formState: { errors: addressErrors },
   } = useForm<_BaseAddress>({ mode: 'onChange' });
+
   const processEditAddressMode = (addressId?: string) => {
     const ea = addressId
       ? authUser?.customer?.addresses.find((a) => a.id === addressId) || ({} as _BaseAddress)
@@ -64,22 +66,45 @@ export default function PersonalInformationPage() {
     handleSubmit: passwordHandleSubmit,
     formState: { errors: passwordErrors },
   } = useForm<MyCustomerChangePassword>({ mode: 'onChange' });
+  const changePasswordMessage = () => {
+    toast.success('Password was changed', {
+      position: 'top-center',
+    });
+  };
+  const changePersonalDataMessage = () => {
+    toast.success('Personal Information was changed', {
+      position: 'top-center',
+    });
+  };
+  const onPasswordSubmit: SubmitHandler<MyCustomerChangePassword> = async (data) => {
+    try {
+      if (!authUser.customer?.id) {
+        return;
+      }
 
-  const onPasswordSubmit: SubmitHandler<MyCustomerChangePassword> = async () => {};
+      const changePassword = await changeCustomerPassword(data);
+      authUser.refresh(changePassword);
+      setOpenPasswordModal(false);
+      changePasswordMessage();
+    } catch (err) {
+      setRegError('wrong current password');
+    }
+  };
 
   const onAddressSubmit: SubmitHandler<_BaseAddress> = async () => {};
 
   const onSubmit: SubmitHandler<MyCustomerDraft> = async (data) => {
     try {
-      const customer = await signInCustomer(data);
-      console.log('customer', customer);
-
-      if (customer && customer.id) {
-        await authUser.refresh();
-        navigate('/sign-up-shipping-address');
+      if (!authUser.customer?.id) {
+        return;
       }
+
+      const updatedCustomer = await updateCustomerPersonalData(authUser.customer.id, data);
+      authUser.refresh(updatedCustomer);
+      setOpenPersonalModal(false);
+      changePersonalDataMessage();
     } catch (err) {
-      setRegError('An account with such email already exists, please use another one or log in');
+      setRegError('impossible update customer');
     }
   };
 
@@ -108,25 +133,9 @@ export default function PersonalInformationPage() {
                   {' '}
                   <FieldName>Email:</FieldName> {authUser.customer.email}
                 </p>
+                <ToastContainer />
               </DataList>
             )}
-
-            <Modal open={openPasswordModal} onClose={() => setOpenPasswordModal(false)} center>
-              <Form
-                onSubmit={passwordHandleSubmit(onPasswordSubmit)}
-                onChange={() => {
-                  setRegError('');
-                }}
-              >
-                <Container>
-                  <ChangePasswordData register={passwordRegister} errors={passwordErrors} />
-                </Container>
-                <CommentsDiv error={regError}></CommentsDiv>
-                <ButtonSubmit type={'submit'} disabled={isDirty && !isValid}>
-                  Save
-                </ButtonSubmit>
-              </Form>
-            </Modal>
             <Modal open={openPersonalModal} onClose={() => setOpenPersonalModal(false)} center>
               <Form
                 onSubmit={handleSubmit(onSubmit)}
@@ -144,6 +153,28 @@ export default function PersonalInformationPage() {
                     email={authUser.customer?.email}
                     dateOfBirth={authUser.customer?.dateOfBirth}
                   />
+                </Container>
+                <CommentsDiv error={regError}></CommentsDiv>
+                <ButtonSubmit type={'submit'} disabled={isDirty && !isValid}>
+                  Save
+                </ButtonSubmit>
+              </Form>
+            </Modal>
+            <Modal
+              open={openPasswordModal}
+              onClose={() => {
+                setOpenPasswordModal(false);
+              }}
+              center
+            >
+              <Form
+                onSubmit={passwordHandleSubmit(onPasswordSubmit)}
+                onChange={() => {
+                  setRegError('');
+                }}
+              >
+                <Container>
+                  <ChangePasswordData register={passwordRegister} errors={passwordErrors} />
                 </Container>
                 <CommentsDiv error={regError}></CommentsDiv>
                 <ButtonSubmit type={'submit'} disabled={isDirty && !isValid}>

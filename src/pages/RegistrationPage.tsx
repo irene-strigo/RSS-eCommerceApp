@@ -8,6 +8,8 @@ import { useUser } from '../components/common/AuthContext';
 import { RegistrationData } from '../components/RegistrationData';
 import CommentsDiv from '../components/common/CommentsDiv';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function RegistrationPage() {
   const authUser = useUser();
@@ -23,12 +25,17 @@ export default function RegistrationPage() {
     formState: { errors, isDirty, isValid },
   } = useForm<MyCustomerDraft>({ mode: 'onChange' });
 
+  const successCreateCustomerMessage = () => {
+    toast.success('Account succesfully created', {
+      position: 'top-center',
+    });
+  };
   const onSubmit: SubmitHandler<MyCustomerDraft> = async (data) => {
     try {
       const customer = await signInCustomer(data);
       console.log(customer);
       if (customer && customer.id) {
-        alert('Account succesfully created');
+        successCreateCustomerMessage();
         await authUser.refresh();
         navigate('/sign-up-shipping-address');
       }

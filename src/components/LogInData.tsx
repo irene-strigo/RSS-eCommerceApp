@@ -63,7 +63,7 @@ const LoginData = ({ register, errors }: Props) => {
           },
           onChange() {
             setBtnDisabled(false);
-            console.log(serverErrorMsg, 'logError');
+            console.log(serverErrorMsg);
             setServerErrorMsg('');
           },
           pattern: {

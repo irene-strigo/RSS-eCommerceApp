@@ -11,7 +11,7 @@ type AuthContextProviderProps = {
   hasAuth: boolean;
   customer: Customer | null;
   logOut: () => void;
-  refresh: () => Promise<void>;
+  refresh: (customer?: Customer) => Promise<void>;
 };
 
 const User = createContext<AuthContextProviderProps>({
@@ -27,7 +27,13 @@ const AuthContextProvider = ({ children }: Props) => {
   const [isUserAuth, setIsUserAuth] = useState<boolean>(false);
   const [customer, setCustomer] = useState<Customer | null>(null);
 
-  const getMe = async () => {
+  const getMe = async (cust?: Customer) => {
+    if (cust && cust.id) {
+      setIsUserAuth(true);
+      setCustomer(cust);
+      return;
+    }
+
     setIsCheckingAuth(true);
     setIsUserAuth(false);
     try {

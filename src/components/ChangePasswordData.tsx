@@ -31,7 +31,7 @@ export const ChangePasswordData = ({ register, errors }: Props) => {
       <label>Old password:</label>
 
       <InputElem
-        type={inputType}
+        type={'password'}
         {...register('currentPassword', {
           required: {
             value: true,

@@ -1,7 +1,11 @@
 import { getApi } from './ClientBuilder';
 import { _BaseAddress, Customer, CustomerSignInResult } from '@commercetools/platform-sdk';
 import { MyCustomerDraft } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/me';
-import { MyCustomerSignin } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/customer';
+import {
+  CustomerUpdateAction,
+  MyCustomerChangePassword,
+  MyCustomerSignin,
+} from '@commercetools/platform-sdk/dist/declarations/src/generated/models/customer';
 
 export const getProducts = () => {
   return getApi()
@@ -19,6 +23,23 @@ export const GetMe = async (): Promise<void | Customer> => {
     .execute()
     .then(({ body }) => body)
     .catch(console.error);
+};
+
+const getCustomerById = async (customerId: string): Promise<Customer> => {
+  const apiRoot = getApi();
+
+  const customer: Customer = await apiRoot
+    .customers()
+    .withId({ ID: customerId })
+    .get()
+    .execute()
+    .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+
+  return customer;
 };
 
 export const LogInCustomer = async (customerSignin: MyCustomerSignin): Promise<void | Customer> => {
@@ -57,32 +78,90 @@ export const signInCustomer = async (draft: MyCustomerDraft): Promise<void | Cus
   return result.customer;
 };
 
-/*export const changeCustomerPersonalData = async (
+export const updateCustomerPersonalData = async (
   customerId: string,
-  firstName: string,
-  lastName: string,
-  email: string,
-  dateOfBirth: string,
-  draft: MyCustomerDraft,
-): Promise<void | Customer> => {
+  customerDraft: MyCustomerDraft,
+): Promise<Customer> => {
+  const customer: Customer = await getCustomerById(customerId);
+
   const apiRoot = getApi();
 
-  const customer: Customer = await apiRoot
+  const actions: CustomerUpdateAction[] = [];
+
+  if (customerDraft.firstName && customerDraft.firstName !== customer.firstName) {
+    actions.push({
+      action: 'setFirstName',
+      firstName: customerDraft.firstName,
+    });
+  }
+
+  if (customerDraft.lastName && customerDraft.lastName !== customer.lastName) {
+    actions.push({
+      action: 'setLastName',
+      lastName: customerDraft.lastName,
+    });
+  }
+
+  if (customerDraft.email && customerDraft.email !== customer.email) {
+    actions.push({
+      action: 'changeEmail',
+      email: customerDraft.email,
+    });
+  }
+
+  if (customerDraft.dateOfBirth && customerDraft.dateOfBirth !== customer.dateOfBirth) {
+    actions.push({
+      action: 'setDateOfBirth',
+      dateOfBirth: customerDraft.dateOfBirth,
+    });
+  }
+
+  if (!actions.length) {
+    return customer;
+  }
+
+  return apiRoot
     .customers()
     .withId({ ID: customerId })
-    //.post(data)
-    .get()
+    .post({
+      body: {
+        version: customer.version,
+        actions,
+      },
+    })
     .execute()
     .then(({ body }) => body)
     .catch((err) => {
       console.error(err);
       throw err;
     });
+};
 
-  if (customer.firstName === firstName) {
-    console.log(customer.firstName);
+export const changeCustomerPassword = async (
+  passwordForm: MyCustomerChangePassword,
+): Promise<Customer> => {
+  const customer = await GetMe();
+  if (!customer) {
+    throw new Error('customer not logged in');
   }
-};*/
+  const apiRoot = getApi();
+
+  return apiRoot
+    .me()
+    .password()
+    .post({
+      body: {
+        ...passwordForm,
+        version: customer.version,
+      },
+    })
+    .execute()
+    .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
 
 export const setCustomerAddress = async (
   customerId: string,
@@ -90,18 +169,9 @@ export const setCustomerAddress = async (
   address: _BaseAddress,
   setAsDefault: boolean = false,
 ): Promise<void | Customer> => {
-  const apiRoot = getApi();
+  let customer: Customer = await getCustomerById(customerId);
 
-  let customer: Customer = await apiRoot
-    .customers()
-    .withId({ ID: customerId })
-    .get()
-    .execute()
-    .then(({ body }) => body)
-    .catch((err) => {
-      console.error(err);
-      throw err;
-    });
+  const apiRoot = getApi();
 
   const existingAddress = customer.addresses.find(
     (a) =>
