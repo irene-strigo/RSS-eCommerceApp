@@ -11,7 +11,15 @@ type Props = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const Input = ({ value, type, placeholder, name, disabled = false, onChange }: Props) => {
+const Input = ({
+  value,
+  type,
+  placeholder,
+  name,
+  checked = false,
+  disabled = false,
+  onChange,
+}: Props) => {
   return (
     <>
       <ErrorDiv></ErrorDiv>
@@ -21,6 +29,7 @@ const Input = ({ value, type, placeholder, name, disabled = false, onChange }: P
         disabled={disabled}
         placeholder={placeholder}
         type={type}
+        checked={checked}
         onChange={onChange}
       ></InputElement>
     </>

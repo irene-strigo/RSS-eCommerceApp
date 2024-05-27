@@ -2,7 +2,6 @@ import { Header, Footer } from '../components';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { MyCustomerChangePassword, MyCustomerDraft } from '@commercetools/platform-sdk';
 import {
-  AddressFieldContainer,
   ButtonSubmit,
   Container,
   DataList,
@@ -23,16 +22,30 @@ import { _BaseAddress } from '@commercetools/platform-sdk';
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
 import { ChangePasswordData } from '../components/ChangePasswordData';
-import { changeCustomerPassword, updateCustomerPersonalData } from '../services/Client';
+import {
+  UpdateCustomerAddressPropertiesAction,
+  addCustomerAddress,
+  changeCustomerAddress,
+  changeCustomerPassword,
+  deleteCustomerAddress,
+  updateCustomerAddressProperties,
+  updateCustomerPersonalData,
+} from '../services/Client';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+const emptyAddress: _BaseAddress = {
+  id: '',
+  country: '',
+  city: '',
+  postalCode: '',
+  streetName: '',
+};
+
 export default function PersonalInformationPage() {
   const authUser = useUser();
-  //const navigate = useNavigate();
   const [regError, setRegError] = useState('');
   const [editAddress, setEditAddress] = useState<_BaseAddress>({} as _BaseAddress);
-
   const [openPersonalModal, setOpenPersonalModal] = useState(false);
   const [openPasswordModal, setOpenPasswordModal] = useState(false);
   const [openAddressModal, setOpenAddressModal] = useState(false);
@@ -46,10 +59,11 @@ export default function PersonalInformationPage() {
     formState: { errors: addressErrors },
   } = useForm<_BaseAddress>({ mode: 'onChange' });
 
-  const processEditAddressMode = (addressId?: string) => {
+  const onAddressEditClick = (addressId?: string) => {
     const ea = addressId
-      ? authUser?.customer?.addresses.find((a) => a.id === addressId) || ({} as _BaseAddress)
-      : ({} as _BaseAddress);
+      ? authUser?.customer?.addresses.find((a) => a.id === addressId) || emptyAddress
+      : emptyAddress;
+    console.log('edit address button');
     addressReset();
     setEditAddress({ ...ea });
     setOpenAddressModal(true);
@@ -66,16 +80,41 @@ export default function PersonalInformationPage() {
     handleSubmit: passwordHandleSubmit,
     formState: { errors: passwordErrors },
   } = useForm<MyCustomerChangePassword>({ mode: 'onChange' });
+
+  const showToast = (message: string) => {
+    toast.success(message, {
+      position: 'top-center',
+    });
+  };
+
   const changePasswordMessage = () => {
-    toast.success('Password was changed', {
+    toast.success('Password changed', {
+      position: 'top-center',
+    });
+  };
+
+  const changeAddressPropertyMessage = () => {
+    toast.success('Address property changed', {
+      position: 'top-center',
+    });
+  };
+
+  const changeAddressPropertyErrorMessage = () => {
+    toast.error('Impossible to change address, please try later', {
+      position: 'top-center',
+    });
+  };
+  const deleteAddressMessage = () => {
+    toast.success('Address removed', {
       position: 'top-center',
     });
   };
   const changePersonalDataMessage = () => {
-    toast.success('Personal Information was changed', {
+    toast.success('Personal Information changed', {
       position: 'top-center',
     });
   };
+
   const onPasswordSubmit: SubmitHandler<MyCustomerChangePassword> = async (data) => {
     try {
       if (!authUser.customer?.id) {
@@ -91,14 +130,31 @@ export default function PersonalInformationPage() {
     }
   };
 
-  const onAddressSubmit: SubmitHandler<_BaseAddress> = async () => {};
+  const onAddressSubmit: SubmitHandler<_BaseAddress> = async (data) => {
+    try {
+      if (!authUser.customer?.id) {
+        return;
+      }
+
+      const isNew = !data.id;
+
+      const customer = isNew
+        ? await addCustomerAddress(authUser.customer?.id, data)
+        : await changeCustomerAddress(authUser.customer?.id, data);
+      authUser.refresh(customer);
+      setOpenAddressModal(false);
+      const message = isNew ? 'Address added' : 'Address updated';
+      showToast(message);
+    } catch (err) {
+      setRegError('unable to add address');
+    }
+  };
 
   const onSubmit: SubmitHandler<MyCustomerDraft> = async (data) => {
     try {
       if (!authUser.customer?.id) {
         return;
       }
-
       const updatedCustomer = await updateCustomerPersonalData(authUser.customer.id, data);
       authUser.refresh(updatedCustomer);
       setOpenPersonalModal(false);
@@ -107,6 +163,108 @@ export default function PersonalInformationPage() {
       setRegError('impossible update customer');
     }
   };
+
+  async function onAddressPropertyChange(
+    addressId: string,
+    action: UpdateCustomerAddressPropertiesAction,
+    errorMessage = '',
+  ) {
+    if (!authUser?.customer?.id || !addressId) {
+      return;
+    }
+    try {
+      const customerId = authUser.customer.id;
+      const customer = await updateCustomerAddressProperties(customerId, addressId, action);
+      authUser.refresh(customer);
+      changeAddressPropertyMessage();
+    } catch (err) {
+      console.log(errorMessage);
+      changeAddressPropertyErrorMessage();
+    }
+  }
+
+  async function onAddressDelete(addressId: string) {
+    if (!authUser?.customer?.id || !addressId) {
+      return;
+    }
+    try {
+      const customerId = authUser.customer.id;
+      const customer = await deleteCustomerAddress(customerId, addressId);
+      authUser.refresh(customer);
+      deleteAddressMessage();
+    } catch (err) {
+      console.log(err);
+      changeAddressPropertyErrorMessage();
+    }
+  }
+
+  async function onAddressBillingChange(addressId?: string) {
+    if (!addressId) {
+      return;
+    }
+
+    const isRemove = !!authUser.customer?.billingAddressIds?.includes(addressId);
+
+    const action = isRemove ? 'removeBillingAddressId' : 'addBillingAddressId';
+
+    const errorMessage = isRemove
+      ? 'failed to remove billing address'
+      : 'failed to add billing address';
+
+    return onAddressPropertyChange(addressId, action, errorMessage);
+  }
+
+  async function onAddressShippingChange(addressId?: string) {
+    if (!addressId) {
+      return;
+    }
+
+    const isRemove = !!authUser.customer?.shippingAddressIds?.includes(addressId);
+
+    const action = isRemove ? 'removeShippingAddressId' : 'addShippingAddressId';
+
+    const errorMessage = isRemove
+      ? 'failed to remove shipping address'
+      : 'failed to add shipping address';
+
+    return onAddressPropertyChange(addressId, action, errorMessage);
+  }
+
+  async function onAddressDefaultBillingChange(addressId?: string) {
+    if (!addressId) {
+      return;
+    }
+
+    return onAddressPropertyChange(
+      addressId,
+      'setDefaultBillingAddress',
+      'failed to set default billing address',
+    );
+  }
+
+  async function onAddressDefaultShippingChange(addressId?: string) {
+    if (!addressId) {
+      return;
+    }
+
+    return onAddressPropertyChange(
+      addressId,
+      'setDefaultShippingAddress',
+      'failed to set default shipping address',
+    );
+  }
+
+  async function onAddressDeleteClick(addressId?: string) {
+    if (!addressId) {
+      return;
+    }
+    console.log('onDeleteClick', addressId);
+    return onAddressDelete(addressId);
+  }
+
+  if (!authUser?.customer) {
+    return <></>;
+  }
 
   return (
     <>
@@ -208,30 +366,27 @@ export default function PersonalInformationPage() {
           <div>
             <DataList>
               <h5>Addressess:</h5>
-              {authUser?.customer?.addresses.map((adrs, idx) => (
+
+              {authUser.customer.addresses.map((adrs) => (
                 <Address
                   key={`address_${adrs.id}`}
-                  onClick={() => console.log('action')}
-                  label={'label'}
-                  type={'checkbox'}
-                  disabled={false}
-                  onChange={() => console.log('checkbox action')}
-                >
-                  <AddressFieldContainer>
-                    {idx + 1}: {adrs.country} {adrs.city} {adrs.postalCode} {adrs.streetName}
-                  </AddressFieldContainer>
-                  <ShowButton
-                    disabled={false}
-                    label={'edit address'}
-                    onClick={(evt) => {
-                      evt.preventDefault();
-                      processEditAddressMode(adrs.id);
-                    }}
-                    type={'button'}
-                  />
-                </Address>
+                  address={adrs}
+                  idx={0}
+                  isBilling={authUser.customer?.billingAddressIds?.includes(adrs.id || '') || false}
+                  isShipping={
+                    authUser.customer?.shippingAddressIds?.includes(adrs.id || '') || false
+                  }
+                  isDefaultBilling={authUser.customer?.defaultBillingAddressId === adrs.id}
+                  isDefaultShipping={authUser.customer?.defaultShippingAddressId === adrs.id}
+                  onEditClick={onAddressEditClick}
+                  onBillingChange={onAddressBillingChange}
+                  onShippingChange={onAddressShippingChange}
+                  onDefaultBillingChange={onAddressDefaultBillingChange}
+                  onDefaultShippingChange={onAddressDefaultShippingChange}
+                  onDeleteClick={onAddressDeleteClick}
+                ></Address>
               ))}
-              <SwitchButton onClick={() => setOpenAddressModal(true)}>Add new address</SwitchButton>
+              <SwitchButton onClick={() => onAddressEditClick()}>Add new address</SwitchButton>
             </DataList>
 
             <Modal open={openAddressModal} onClose={() => setOpenAddressModal(false)} center>

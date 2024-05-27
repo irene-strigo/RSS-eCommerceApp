@@ -2,6 +2,15 @@ import { getApi } from './ClientBuilder';
 import { _BaseAddress, Customer, CustomerSignInResult } from '@commercetools/platform-sdk';
 import { MyCustomerDraft } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/me';
 import {
+  /*CustomerAddAddressAction,
+  CustomerAddBillingAddressIdAction,
+  CustomerAddShippingAddressIdAction,
+  CustomerChangeAddressAction,
+  CustomerRemoveAddressAction,
+  CustomerRemoveBillingAddressIdAction,
+  CustomerRemoveShippingAddressIdAction,
+  CustomerSetDefaultBillingAddressAction,
+  CustomerSetDefaultShippingAddressAction,*/
   CustomerUpdateAction,
   MyCustomerChangePassword,
   MyCustomerSignin,
@@ -260,6 +269,128 @@ export const setCustomerAddress = async (
           {
             action: `setDefault${addressType}Address`,
             addressId,
+          },
+        ],
+      },
+    })
+    .execute()
+    .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export type UpdateCustomerAddressPropertiesAction =
+  | 'addBillingAddressId'
+  | 'addShippingAddressId'
+  | 'removeBillingAddressId'
+  | 'removeShippingAddressId'
+  | 'setDefaultBillingAddress'
+  | 'setDefaultShippingAddress';
+
+export const updateCustomerAddressProperties = async (
+  customerId: string,
+  addressId: string,
+  action: UpdateCustomerAddressPropertiesAction,
+): Promise<Customer> => {
+  const customer: Customer = await getCustomerById(customerId);
+
+  return getApi()
+    .customers()
+    .withId({ ID: customerId })
+    .post({
+      body: {
+        version: customer.version,
+        actions: [
+          {
+            action,
+            addressId,
+          },
+        ],
+      },
+    })
+    .execute()
+    .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export const deleteCustomerAddress = async (
+  customerId: string,
+  addressId: string,
+): Promise<Customer> => {
+  const customer: Customer = await getCustomerById(customerId);
+
+  return getApi()
+    .customers()
+    .withId({ ID: customerId })
+    .post({
+      body: {
+        version: customer.version,
+        actions: [
+          {
+            action: 'removeAddress',
+            addressId,
+          },
+        ],
+      },
+    })
+    .execute()
+    .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export const addCustomerAddress = async (
+  customerId: string,
+  address: _BaseAddress,
+): Promise<Customer> => {
+  const customer: Customer = await getCustomerById(customerId);
+
+  return getApi()
+    .customers()
+    .withId({ ID: customerId })
+    .post({
+      body: {
+        version: customer.version,
+        actions: [
+          {
+            action: 'addAddress',
+            address,
+          },
+        ],
+      },
+    })
+    .execute()
+    .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export const changeCustomerAddress = async (
+  customerId: string,
+  address: _BaseAddress,
+): Promise<Customer> => {
+  const customer: Customer = await getCustomerById(customerId);
+
+  return getApi()
+    .customers()
+    .withId({ ID: customerId })
+    .post({
+      body: {
+        version: customer.version,
+        actions: [
+          {
+            action: 'changeAddress',
+            addressId: address.id,
+            address,
           },
         ],
       },
