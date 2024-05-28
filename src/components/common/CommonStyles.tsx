@@ -24,7 +24,7 @@ export const ContentWrapper = styled.div`
   background-color: #f7f9ff;
   width: 100%;
   overflow-x: auto;
-  padding: 20px;
+  padding: 70px;
   font-size: 20px;
 `;
 export const Wrapper = styled.form`
