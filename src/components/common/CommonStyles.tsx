@@ -307,6 +307,12 @@ export const CheckboxesWrapper = styled.div`
 export const AddressFieldContainer = styled.p`
   width: 50%;
   white-space: nowrap;
+  font-size: clamp(1rem, 1vw, 1.5rem);
   padding: 10px;
   max-height: 45px;
+  @media screen and (max-width: 900px) {
+    font-size: clamp(1rem, 1vw, 1.5rem);
+    max-height: unset;
+    white-space: wrap;
+  }
 `;
