@@ -11,17 +11,17 @@ type Props = {
 
 const LoginData = ({ register, errors }: Props) => {
   const [inputType, setInputType] = useState('password');
-  const [btnLabel, setBtnLabel] = useState('show password');
+  const [btnLabel, setBtnLabel] = useState('show');
   const [btnDisabled, setBtnDisabled] = useState(true);
   const [serverErrorMsg, setServerErrorMsg] = useState('');
 
   const togglePassInput = () => {
     if (inputType === 'password') {
       setInputType('text');
-      setBtnLabel('hide password');
+      setBtnLabel('hide');
     } else {
       setInputType('password');
-      setBtnLabel('show password');
+      setBtnLabel('show');
     }
   };
 

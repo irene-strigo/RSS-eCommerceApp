@@ -4,6 +4,7 @@ import { MyCustomerChangePassword, MyCustomerDraft } from '@commercetools/platfo
 import {
   ButtonSubmit,
   Container,
+  ContentWrapper,
   DataList,
   EditButtonsConainer,
   FieldName,
@@ -63,7 +64,6 @@ export default function PersonalInformationPage() {
     const ea = addressId
       ? authUser?.customer?.addresses.find((a) => a.id === addressId) || emptyAddress
       : emptyAddress;
-    console.log('edit address button');
     addressReset();
     setEditAddress({ ...ea });
     setOpenAddressModal(true);
@@ -86,35 +86,11 @@ export default function PersonalInformationPage() {
       position: 'top-center',
     });
   };
-
-  const changePasswordMessage = () => {
-    toast.success('Password changed', {
+  const showToastError = (message: string) => {
+    toast.error(message, {
       position: 'top-center',
     });
   };
-
-  const changeAddressPropertyMessage = () => {
-    toast.success('Address property changed', {
-      position: 'top-center',
-    });
-  };
-
-  const changeAddressPropertyErrorMessage = () => {
-    toast.error('Impossible to change address, please try later', {
-      position: 'top-center',
-    });
-  };
-  const deleteAddressMessage = () => {
-    toast.success('Address removed', {
-      position: 'top-center',
-    });
-  };
-  const changePersonalDataMessage = () => {
-    toast.success('Personal Information changed', {
-      position: 'top-center',
-    });
-  };
-
   const onPasswordSubmit: SubmitHandler<MyCustomerChangePassword> = async (data) => {
     try {
       if (!authUser.customer?.id) {
@@ -124,7 +100,7 @@ export default function PersonalInformationPage() {
       const changePassword = await changeCustomerPassword(data);
       authUser.refresh(changePassword);
       setOpenPasswordModal(false);
-      changePasswordMessage();
+      showToast('Password changed');
     } catch (err) {
       setRegError('wrong current password');
     }
@@ -158,7 +134,7 @@ export default function PersonalInformationPage() {
       const updatedCustomer = await updateCustomerPersonalData(authUser.customer.id, data);
       authUser.refresh(updatedCustomer);
       setOpenPersonalModal(false);
-      changePersonalDataMessage();
+      showToast('Personal information changed');
     } catch (err) {
       setRegError('impossible update customer');
     }
@@ -176,10 +152,10 @@ export default function PersonalInformationPage() {
       const customerId = authUser.customer.id;
       const customer = await updateCustomerAddressProperties(customerId, addressId, action);
       authUser.refresh(customer);
-      changeAddressPropertyMessage();
+      showToast('Address property changed');
     } catch (err) {
       console.log(errorMessage);
-      changeAddressPropertyErrorMessage();
+      showToastError(errorMessage);
     }
   }
 
@@ -191,10 +167,10 @@ export default function PersonalInformationPage() {
       const customerId = authUser.customer.id;
       const customer = await deleteCustomerAddress(customerId, addressId);
       authUser.refresh(customer);
-      deleteAddressMessage();
+      showToast('Address removed');
     } catch (err) {
       console.log(err);
-      changeAddressPropertyErrorMessage();
+      showToast('Impossible to change address, please try later');
     }
   }
 
@@ -258,7 +234,6 @@ export default function PersonalInformationPage() {
     if (!addressId) {
       return;
     }
-    console.log('onDeleteClick', addressId);
     return onAddressDelete(addressId);
   }
 
@@ -270,157 +245,160 @@ export default function PersonalInformationPage() {
     <>
       <PageWrapper>
         <Header />
-        <Container>
-          <div>
-            {!authUser.checkingAuth && authUser.hasAuth && authUser.customer && (
+        <ContentWrapper>
+          <Container>
+            <div>
+              {!authUser.checkingAuth && authUser.hasAuth && authUser.customer && (
+                <DataList>
+                  <h5>Personal Information:</h5>
+                  <p>
+                    {' '}
+                    <FieldName>First Name:</FieldName> {authUser.customer.firstName}
+                  </p>
+                  <p>
+                    {' '}
+                    <FieldName>Last Name:</FieldName> {authUser.customer.lastName}
+                  </p>
+                  <p>
+                    {' '}
+                    <FieldName>Birth Date:</FieldName> {authUser.customer.dateOfBirth}
+                  </p>
+                  <p>
+                    {' '}
+                    <FieldName>Email:</FieldName> {authUser.customer.email}
+                  </p>
+                  <ToastContainer />
+                </DataList>
+              )}
+              <Modal open={openPersonalModal} onClose={() => setOpenPersonalModal(false)} center>
+                <Form
+                  onSubmit={handleSubmit(onSubmit)}
+                  onChange={() => {
+                    setRegError('');
+                  }}
+                >
+                  <Container>
+                    <RegistrationData
+                      register={register}
+                      errors={errors}
+                      hidePasswordField={true}
+                      firstName={authUser.customer?.firstName}
+                      lastName={authUser.customer?.lastName}
+                      email={authUser.customer?.email}
+                      dateOfBirth={authUser.customer?.dateOfBirth}
+                    />
+                  </Container>
+                  <CommentsDiv error={regError}></CommentsDiv>
+                  <ButtonSubmit type={'submit'} disabled={isDirty && !isValid}>
+                    Save
+                  </ButtonSubmit>
+                </Form>
+              </Modal>
+              <Modal
+                open={openPasswordModal}
+                onClose={() => {
+                  setOpenPasswordModal(false);
+                }}
+                center
+              >
+                <Form
+                  onSubmit={passwordHandleSubmit(onPasswordSubmit)}
+                  onChange={() => {
+                    setRegError('');
+                  }}
+                >
+                  <Container>
+                    <ChangePasswordData register={passwordRegister} errors={passwordErrors} />
+                  </Container>
+                  <CommentsDiv error={regError}></CommentsDiv>
+                  <ButtonSubmit type={'submit'} disabled={isDirty && !isValid}>
+                    Save
+                  </ButtonSubmit>
+                </Form>
+              </Modal>
+
+              <EditButtonsConainer>
+                <ShowButton
+                  label={'Change personal data'}
+                  type={'button'}
+                  disabled={false}
+                  onClick={(evt) => {
+                    evt.preventDefault();
+                    setOpenPersonalModal(true);
+                  }}
+                />
+                <ShowButton
+                  label={'Change password'}
+                  type={'button'}
+                  disabled={false}
+                  onClick={(evt) => {
+                    evt.preventDefault();
+                    setOpenPasswordModal(true);
+                  }}
+                />
+              </EditButtonsConainer>
+            </div>
+
+            <div>
               <DataList>
-                <h5>Personal Information:</h5>
-                <p>
-                  {' '}
-                  <FieldName>First Name:</FieldName> {authUser.customer.firstName}
-                </p>
-                <p>
-                  {' '}
-                  <FieldName>Last Name:</FieldName> {authUser.customer.lastName}
-                </p>
-                <p>
-                  {' '}
-                  <FieldName>Birth Date:</FieldName> {authUser.customer.dateOfBirth}
-                </p>
-                <p>
-                  {' '}
-                  <FieldName>Email:</FieldName> {authUser.customer.email}
-                </p>
-                <ToastContainer />
+                <h5>Addressess:</h5>
+
+                {authUser.customer.addresses.map((adrs) => (
+                  <Address
+                    key={`address_${adrs.id}`}
+                    address={adrs}
+                    idx={0}
+                    isBilling={
+                      authUser.customer?.billingAddressIds?.includes(adrs.id || '') || false
+                    }
+                    isShipping={
+                      authUser.customer?.shippingAddressIds?.includes(adrs.id || '') || false
+                    }
+                    isDefaultBilling={authUser.customer?.defaultBillingAddressId === adrs.id}
+                    isDefaultShipping={authUser.customer?.defaultShippingAddressId === adrs.id}
+                    onEditClick={onAddressEditClick}
+                    onBillingChange={onAddressBillingChange}
+                    onShippingChange={onAddressShippingChange}
+                    onDefaultBillingChange={onAddressDefaultBillingChange}
+                    onDefaultShippingChange={onAddressDefaultShippingChange}
+                    onDeleteClick={onAddressDeleteClick}
+                  ></Address>
+                ))}
+                <SwitchButton onClick={() => onAddressEditClick()}>Add new address</SwitchButton>
               </DataList>
-            )}
-            <Modal open={openPersonalModal} onClose={() => setOpenPersonalModal(false)} center>
-              <Form
-                onSubmit={handleSubmit(onSubmit)}
-                onChange={() => {
-                  setRegError('');
-                }}
-              >
-                <Container>
-                  <RegistrationData
-                    register={register}
-                    errors={errors}
-                    hidePasswordField={true}
-                    firstName={authUser.customer?.firstName}
-                    lastName={authUser.customer?.lastName}
-                    email={authUser.customer?.email}
-                    dateOfBirth={authUser.customer?.dateOfBirth}
-                  />
-                </Container>
-                <CommentsDiv error={regError}></CommentsDiv>
-                <ButtonSubmit type={'submit'} disabled={isDirty && !isValid}>
-                  Save
-                </ButtonSubmit>
-              </Form>
-            </Modal>
-            <Modal
-              open={openPasswordModal}
-              onClose={() => {
-                setOpenPasswordModal(false);
-              }}
-              center
-            >
-              <Form
-                onSubmit={passwordHandleSubmit(onPasswordSubmit)}
-                onChange={() => {
-                  setRegError('');
-                }}
-              >
-                <Container>
-                  <ChangePasswordData register={passwordRegister} errors={passwordErrors} />
-                </Container>
-                <CommentsDiv error={regError}></CommentsDiv>
-                <ButtonSubmit type={'submit'} disabled={isDirty && !isValid}>
-                  Save
-                </ButtonSubmit>
-              </Form>
-            </Modal>
 
-            <EditButtonsConainer>
-              <ShowButton
-                label={'Change personal data'}
-                type={'button'}
-                disabled={false}
-                onClick={(evt) => {
-                  evt.preventDefault();
-                  setOpenPersonalModal(true);
-                }}
-              />
-              <ShowButton
-                label={'Change password'}
-                type={'button'}
-                disabled={false}
-                onClick={(evt) => {
-                  evt.preventDefault();
-                  setOpenPasswordModal(true);
-                }}
-              />
-            </EditButtonsConainer>
-          </div>
-
-          <div>
-            <DataList>
-              <h5>Addressess:</h5>
-
-              {authUser.customer.addresses.map((adrs) => (
-                <Address
-                  key={`address_${adrs.id}`}
-                  address={adrs}
-                  idx={0}
-                  isBilling={authUser.customer?.billingAddressIds?.includes(adrs.id || '') || false}
-                  isShipping={
-                    authUser.customer?.shippingAddressIds?.includes(adrs.id || '') || false
-                  }
-                  isDefaultBilling={authUser.customer?.defaultBillingAddressId === adrs.id}
-                  isDefaultShipping={authUser.customer?.defaultShippingAddressId === adrs.id}
-                  onEditClick={onAddressEditClick}
-                  onBillingChange={onAddressBillingChange}
-                  onShippingChange={onAddressShippingChange}
-                  onDefaultBillingChange={onAddressDefaultBillingChange}
-                  onDefaultShippingChange={onAddressDefaultShippingChange}
-                  onDeleteClick={onAddressDeleteClick}
-                ></Address>
-              ))}
-              <SwitchButton onClick={() => onAddressEditClick()}>Add new address</SwitchButton>
-            </DataList>
-
-            <Modal open={openAddressModal} onClose={() => setOpenAddressModal(false)} center>
-              <Form
-                onSubmit={addressHandleSubmit(onAddressSubmit)}
-                onChange={() => {
-                  setRegError('');
-                }}
-              >
-                <Container>
-                  <AddressData
-                    mode="Edit"
-                    register={addressRegister}
-                    trigger={addressTrigger}
-                    errors={addressErrors}
-                    getValues={addressGetValues}
-                    watch={addressWatch}
-                    hideCheckboxes={true}
-                    country={editAddress.country}
-                    postalCode={editAddress.postalCode}
-                    city={editAddress.city}
-                    streetName={editAddress.streetName}
-                    id={editAddress.id}
-                  />
-                </Container>
-                <CommentsDiv error={regError}></CommentsDiv>
-                <ButtonSubmit type={'submit'} disabled={isDirty && !isValid}>
-                  Save
-                </ButtonSubmit>
-              </Form>
-            </Modal>
-          </div>
-        </Container>
-
+              <Modal open={openAddressModal} onClose={() => setOpenAddressModal(false)} center>
+                <Form
+                  onSubmit={addressHandleSubmit(onAddressSubmit)}
+                  onChange={() => {
+                    setRegError('');
+                  }}
+                >
+                  <Container>
+                    <AddressData
+                      mode="Edit"
+                      register={addressRegister}
+                      trigger={addressTrigger}
+                      errors={addressErrors}
+                      getValues={addressGetValues}
+                      watch={addressWatch}
+                      hideCheckboxes={true}
+                      country={editAddress.country}
+                      postalCode={editAddress.postalCode}
+                      city={editAddress.city}
+                      streetName={editAddress.streetName}
+                      id={editAddress.id}
+                    />
+                  </Container>
+                  <CommentsDiv error={regError}></CommentsDiv>
+                  <ButtonSubmit type={'submit'} disabled={isDirty && !isValid}>
+                    Save
+                  </ButtonSubmit>
+                </Form>
+              </Modal>
+            </div>
+          </Container>
+        </ContentWrapper>
         <Footer />
       </PageWrapper>
     </>

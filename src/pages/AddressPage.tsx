@@ -5,7 +5,13 @@ import { _BaseAddress } from '@commercetools/platform-sdk';
 import { setCustomerAddress } from '../services/Client';
 
 import { useNavigate } from 'react-router-dom';
-import { ButtonSubmit, Container, Form, PageWrapper } from '../components/common/CommonStyles';
+import {
+  ButtonSubmit,
+  Container,
+  ContentWrapper,
+  Form,
+  PageWrapper,
+} from '../components/common/CommonStyles';
 import { useUser } from '../components/common/AuthContext';
 import { AddressData } from '../components/AddressData';
 
@@ -43,6 +49,7 @@ export default function AddressPage({ mode }: AddressPageProps) {
 
     await setCustomerAddress(authUser.customer.id, 'Billing', data, true);
     reset();
+    await authUser.refresh();
     navigate(`/`);
   };
 
@@ -50,25 +57,27 @@ export default function AddressPage({ mode }: AddressPageProps) {
     <>
       <PageWrapper>
         <Header />
-        <Container>
-          <Form onSubmit={handleSubmit(onSubmit)}>
-            <Container>
-              <AddressData
-                mode={mode}
-                register={register}
-                trigger={trigger}
-                errors={errors}
-                getValues={getValues}
-                watch={watch}
-                setUseAsDefaultAddress={setUseAsDefaultAddress}
-                setAddBillingAddress={setAddBillingAddress}
-              />
-            </Container>
-            <ButtonSubmit type={'submit'} disabled={isDirty && !isValid}>
-              Sign Up
-            </ButtonSubmit>
-          </Form>
-        </Container>
+        <ContentWrapper>
+          <Container>
+            <Form onSubmit={handleSubmit(onSubmit)}>
+              <Container>
+                <AddressData
+                  mode={mode}
+                  register={register}
+                  trigger={trigger}
+                  errors={errors}
+                  getValues={getValues}
+                  watch={watch}
+                  setUseAsDefaultAddress={setUseAsDefaultAddress}
+                  setAddBillingAddress={setAddBillingAddress}
+                />
+              </Container>
+              <ButtonSubmit type={'submit'} disabled={isDirty && !isValid}>
+                Sign Up
+              </ButtonSubmit>
+            </Form>
+          </Container>
+        </ContentWrapper>
         <Footer />
       </PageWrapper>
     </>

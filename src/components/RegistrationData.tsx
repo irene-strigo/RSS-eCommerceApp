@@ -24,16 +24,16 @@ export const RegistrationData = ({
   dateOfBirth,
 }: Props) => {
   const [inputType, setInputType] = useState('password');
-  const [btnLabel, setBtnLabel] = useState('show password');
+  const [btnLabel, setBtnLabel] = useState('show');
   const [btnDisabled, setBtnDisabled] = useState(true);
 
   const togglePassInput = () => {
     if (inputType === 'password') {
       setInputType('text');
-      setBtnLabel('hide password');
+      setBtnLabel('hide ');
     } else {
       setInputType('password');
-      setBtnLabel('show password');
+      setBtnLabel('show');
     }
   };
 

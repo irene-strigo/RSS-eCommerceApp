@@ -73,7 +73,7 @@ const Address = (props: Props) => {
       <AddressFieldContainer>{addressString}</AddressFieldContainer>
       <ShowButton
         disabled={false}
-        label={'edit address'}
+        label={'edit'}
         onClick={(evt) => {
           evt.preventDefault();
           props.onEditClick(address.id);

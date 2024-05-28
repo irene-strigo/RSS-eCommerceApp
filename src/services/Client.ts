@@ -2,15 +2,6 @@ import { getApi } from './ClientBuilder';
 import { _BaseAddress, Customer, CustomerSignInResult } from '@commercetools/platform-sdk';
 import { MyCustomerDraft } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/me';
 import {
-  /*CustomerAddAddressAction,
-  CustomerAddBillingAddressIdAction,
-  CustomerAddShippingAddressIdAction,
-  CustomerChangeAddressAction,
-  CustomerRemoveAddressAction,
-  CustomerRemoveBillingAddressIdAction,
-  CustomerRemoveShippingAddressIdAction,
-  CustomerSetDefaultBillingAddressAction,
-  CustomerSetDefaultShippingAddressAction,*/
   CustomerUpdateAction,
   MyCustomerChangePassword,
   MyCustomerSignin,
