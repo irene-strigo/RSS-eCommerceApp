@@ -5,26 +5,30 @@ import styled from 'styled-components';
 const Wrapper = styled.div<{
   $fontSize: string;
   $fontWeight: number;
+  $color: string;
+  $textDecor: string;
 }>`
-  ${({ $fontWeight, $fontSize }) => `
+  ${({ $fontWeight, $fontSize, $color, $textDecor }) => `
       font-weight: ${$fontWeight};
       font-size: ${$fontSize};
+      color: ${$color};
+      text-decoration: ${$textDecor};
     `}
   margin: 10px 0 10px;
-
-  display: flex;
-  align-items: center;
+  text-align: center;
 `;
 
 type Props = {
   children: string | React.ReactElement;
   fontSize: string;
   fontWeight: number;
+  color: string;
+  textDecor: string;
 };
 
-const Label = ({ children, fontSize, fontWeight }: Props) => {
+const Label = ({ children, fontSize, fontWeight, color, textDecor }: Props) => {
   return (
-    <Wrapper $fontSize={fontSize} $fontWeight={fontWeight}>
+    <Wrapper $fontSize={fontSize} $fontWeight={fontWeight} $color={color} $textDecor={textDecor}>
       {children}
     </Wrapper>
   );
