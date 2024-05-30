@@ -8,7 +8,7 @@ export const Button = styled.button`
   color: #511f31;
   cursor: pointer;
   padding: 10px 10px;
-  font-size: 18px;
+  font-size: clamp(1rem, 1vw, 1.5rem);
 
   &:hover,
   :focus {
@@ -20,12 +20,13 @@ export const ContentWrapper = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  height: 100%;
   background-color: #f7f9ff;
   width: 100%;
-  overflow-x: auto;
+ product-page
   padding: 70px;
-  font-size: 20px;
+  height: 80vh;
+  overflow-x: auto;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
 `;
 export const Wrapper = styled.form`
   display: flex;
@@ -56,7 +57,7 @@ export const NavButton = styled(Link)`
   text-align: center;
   margin-left: 20px;
   text-decoration: none;
-  font-size: 18px;
+  font-size: clamp(1rem, 1vw, 1.5rem);
   white-space: nowrap;
 
   &:hover,
@@ -64,11 +65,15 @@ export const NavButton = styled(Link)`
     background-color: #f7f9ff;
     color: #2c5777;
   }
+  @media screen and (max-width: 900px) {
+    margin: 5px;
+    font-size: clamp(0.7rem, 1vw, 1.5rem);
+  }
 `;
 
 export const PageWrapper = styled.div`
   display: flex;
-  height: 100vh;
+  height: 100%;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
@@ -78,11 +83,12 @@ export const SwitchButton = styled.button`
   background-color: #ada5f9;
   border-radius: 3px;
   border: 1px solid #ada5f9;
+  max-width: 300px;
   color: #511f31;
   cursor: pointer;
   padding: 3px 3px;
-  font-size: 10px;
   margin: 10px;
+  white-space: nowrap;
 
   &:hover,
   :focus {
@@ -96,7 +102,6 @@ export const SwitchButton = styled.button`
 `;
 export const ErrorDiv = styled.div`
   color: red;
-  min-height: 20px;
   display: flex;
   text-align: center;
 `;
@@ -106,9 +111,8 @@ export const InputElement = styled.input`
   border-radius: 3px;
   border: 1px solid #7aa7c7;
   color: #39739d;
-  font-size: 16px;
+  font-size: clamp(1rem, 1vw, 1.5rem);
   padding: 10px;
-  margin-bottom: 10px;
   width: 100%;
 
   &:focus {
@@ -123,9 +127,11 @@ export const HeaderWrapper = styled.header`
   align-items: center;
   justify-content: end;
   width: 100%;
-  height: 85px;
   padding: 20px 40px;
   background-color: #d8e1ff;
+  @media screen and (max-width: 900px) {
+    justify-content: center;
+  }
 `;
 
 export const HeaderButtonsWrapper = styled.div`
@@ -136,6 +142,10 @@ export const HeaderButtonsWrapper = styled.div`
   max-width: 350px;
   min-width: 250px;
   width: 100%;
+  @media screen and (max-width: 900px) {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 `;
 export const FooterWrapper = styled.footer`
   display: flex;
@@ -151,10 +161,13 @@ export const FooterWrapper = styled.footer`
 export const FooterLink = styled.a`
   text-decoration: none;
   color: #974160;
-  font-size: 13px;
+  font-size: clamp(1rem, 0.7vw, 1.5rem);
 
   &:hover {
     color: #69ddff;
+  }
+  @media screen and (max-width: 900px) {
+    font-size: clamp(0.7rem, 1vw, 1.5rem);
   }
 `;
 
@@ -163,12 +176,11 @@ export const Form = styled.form`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-width: 300px;
+  max-width: 400px;
   width: 100%;
 
   & button {
-    margin-top: 30px;
-    width: 95px;
+    white-space: nowrap;
   }
 
   & fieldset {
@@ -181,7 +193,7 @@ export const InputElem = styled.input`
   border-radius: 3px;
   border: 1px solid #7aa7c7;
   color: #39739d;
-  font-size: 16px;
+  font-size: clamp(1rem, 1vw, 1.5rem);
   padding: 10px;
   margin-bottom: 10px;
   width: 100%;
@@ -199,7 +211,7 @@ export const ButtonSubmit = styled.button`
   color: #511f31;
   cursor: pointer;
   padding: 10px 10px;
-  font-size: 18px;
+  font-size: clamp(1rem, 1vw, 1.5rem);
 
   &:hover,
   :focus {
@@ -216,28 +228,31 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-
   background-color: #f7f9ff;
   width: 100%;
   height: 100%;
   padding: 20px;
-  font-size: 20px;
+  font-size: clamp(1rem, 3vw, 1.5rem);
+
+  @media screen and (max-width: 400px) {
+    font-size: clamp(1rem, 4vw, 5rem);
+  }
 `;
 
 export const ErrorsText = styled.p`
   color: red;
-  font-size: 13px;
+  font-size: clamp(1rem, 1vw, 1.5rem);
 `;
 
 export const ErrorMessage = styled.div`
   margin: auto;
-  font-size: 25px;
+  font-size: clamp(1rem, 2vw, 1.5rem);
 `;
 export const DefaultCheckboxLabel = styled.label`
-  font-size: 13px;
+  font-size: clamp(1rem, 1vw, 1.5rem);
   display: flex;
-  gap: 7px;
+  flex-direction: column;
+  white-space: nowrap;
 `;
 
 export const SelectElem = styled.select`
@@ -245,7 +260,7 @@ export const SelectElem = styled.select`
   border-radius: 3px;
   border: 1px solid #7aa7c7;
   color: #39739d;
-  font-size: 16px;
+  font-size: clamp(1rem, 1vw, 1.5rem);
   padding: 10px;
   margin-bottom: 10px;
   width: 100%;
@@ -253,5 +268,52 @@ export const SelectElem = styled.select`
   &:focus {
     outline: none;
     border: 2px solid #39739d;
+  }
+`;
+export const DataList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+`;
+export const FieldName = styled.span`
+  color: #39739d;
+`;
+
+export const EditButtonsConainer = styled.div`
+  margin: 5px;
+  border: 1px solid #ada5f9;
+  display: flex;
+`;
+
+export const AddressContainer = styled.div`
+  border: 1px solid #ada5f9;
+  border-radius: 3px;
+  display: flex;
+  justify-content: space-between;
+
+  @media screen and (max-width: 900px) {
+    flex-direction: column;
+  }
+`;
+
+export const CheckboxesWrapper = styled.div`
+  margin: 5px;
+  display: flex;
+  justify-content: center;
+  @media (max-width: 768px) {
+    border: 1px solid gray;
+  }
+`;
+
+export const AddressFieldContainer = styled.p`
+  width: 50%;
+  white-space: nowrap;
+  font-size: clamp(1rem, 1vw, 1.5rem);
+  padding: 10px;
+  max-height: 45px;
+  @media screen and (max-width: 900px) {
+    font-size: clamp(1rem, 1vw, 1.5rem);
+    max-height: unset;
+    white-space: wrap;
   }
 `;

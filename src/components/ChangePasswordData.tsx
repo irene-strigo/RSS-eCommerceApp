@@ -2,48 +2,56 @@ import { ErrorsText, InputElem } from './common/CommonStyles';
 import ShowButton from './common/SwitchButton';
 import { useState } from 'react';
 import { FieldErrors, UseFormRegister } from 'react-hook-form';
-import { MyCustomerDraft } from '@commercetools/platform-sdk';
+import { MyCustomerChangePassword } from '@commercetools/platform-sdk';
 
 type Props = {
-  register: UseFormRegister<MyCustomerDraft>;
-  errors: FieldErrors<MyCustomerDraft>;
+  register: UseFormRegister<MyCustomerChangePassword>;
+  errors: FieldErrors<MyCustomerChangePassword>;
 };
 
-const LoginData = ({ register, errors }: Props) => {
+export const ChangePasswordData = ({ register, errors }: Props) => {
   const [inputType, setInputType] = useState('password');
-  const [btnLabel, setBtnLabel] = useState('show');
+  const [btnLabel, setBtnLabel] = useState('show password');
   const [btnDisabled, setBtnDisabled] = useState(true);
-  const [serverErrorMsg, setServerErrorMsg] = useState('');
 
   const togglePassInput = () => {
     if (inputType === 'password') {
       setInputType('text');
-      setBtnLabel('hide');
+      setBtnLabel('hide password');
     } else {
       setInputType('password');
-      setBtnLabel('show');
+      setBtnLabel('show password');
     }
   };
 
   return (
     <fieldset>
-      <legend>Enter your data</legend>
-      <label>Login:</label>
+      <legend>Change password:</legend>
+
+      <label>Old password:</label>
+
       <InputElem
-        {...register('email', {
+        type={'password'}
+        {...register('currentPassword', {
           required: {
             value: true,
             message: 'this field is required',
           },
+          minLength: {
+            value: 8,
+            message: 'password must be at least 8 characters long',
+          },
+
           pattern: {
-            value:
-              /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu,
-            message: 'enter your valid email address',
+            value: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,20}$/,
+            message:
+              'password must contain lowercase and uppercase letter, number and special character',
           },
         })}
       />
-      {errors.email && <ErrorsText>{errors.email.message}</ErrorsText>}
-      <label>Password:</label>
+      {errors.currentPassword && <ErrorsText>{errors.currentPassword.message}</ErrorsText>}
+
+      <label>New password:</label>
       <ShowButton
         label={btnLabel}
         disabled={btnDisabled}
@@ -55,7 +63,7 @@ const LoginData = ({ register, errors }: Props) => {
       />
       <InputElem
         type={inputType}
-        {...register('password', {
+        {...register('newPassword', {
           required: {
             value: true,
             message: 'this field is required',
@@ -66,8 +74,6 @@ const LoginData = ({ register, errors }: Props) => {
           },
           onChange() {
             setBtnDisabled(false);
-            console.log(serverErrorMsg);
-            setServerErrorMsg('');
           },
           pattern: {
             value: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,20}$/,
@@ -76,9 +82,7 @@ const LoginData = ({ register, errors }: Props) => {
           },
         })}
       />
-      {errors.password && <ErrorsText>{errors.password.message}</ErrorsText>}
+      {errors.newPassword && <ErrorsText>{errors.newPassword.message}</ErrorsText>}
     </fieldset>
   );
 };
-
-export default LoginData;
