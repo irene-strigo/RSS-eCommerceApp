@@ -13,6 +13,7 @@ import {
   AboutUsPage,
   EmptyPage,
   AddressPage,
+  ProductPage,
 } from './pages';
 import LogoutPage from './pages/LogoutPage';
 
@@ -44,6 +45,10 @@ export const router = createBrowserRouter([
   {
     path: '/catalog',
     element: <CatalogPage />,
+  },
+  {
+    path: '/catalog/item/:id',
+    element: <ProductPage />,
   },
   {
     path: '/personal-information',

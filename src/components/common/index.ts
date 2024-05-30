@@ -3,3 +3,8 @@ export { default as NavigationButton } from './NavigationButton';
 export { default as FormComponent } from './Form';
 export { default as Input } from './Input';
 export { default as AuthContextProvider } from './AuthContext';
+export { default as Label } from './Label';
+export { default as Slider } from './Slider';
+export { default as Prices } from './Price';
+export { Grid } from './Grid';
+export { ProductCardWrapper } from './ProductCardWrapper';

@@ -22,8 +22,9 @@ export const ContentWrapper = styled.div`
   justify-content: center;
   background-color: #f7f9ff;
   width: 100%;
+ product-page
+  padding: 70px;
   height: 80vh;
-  padding: 20px;
   overflow-x: auto;
   font-size: clamp(1rem, 2.5vw, 1.5rem);
 `;
