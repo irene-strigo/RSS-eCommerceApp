@@ -1,82 +1,37 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
-import styled from 'styled-components';
+import { GetProduct } from '../../requests';
 
 import { Product } from '@commercetools/platform-sdk';
 
-import { Label, Prices } from '../components/common';
-import { SubmitButton, Slider } from '../components/common';
+import { Header, Footer } from '../components';
+import { ProductCard } from '../components';
+import { ContentWrapper, PageWrapper } from '../components/common/CommonStyles';
 
-const ProductCartWrapper = styled.div`
-  padding: 20px;
-  background-color: #fff;
-  color: #000;
-  position: relative;
-  min-height: 520px;
+const ProductPage = () => {
+  const [product, setProduct] = useState<Product | null>(null);
+  const { id } = useParams();
+  const token = JSON.parse(
+    localStorage.getItem('PersonalToken') || localStorage.getItem('anonymousToken') || 'null',
+  );
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  const tokenToUse = typeof token === 'string' ? token : token.token;
 
-  & img {
-    width: 200px;
-    margin-bottom: 20px;
-    cursor: pointer;
-    transform: scale(1);
-    transition: 0.3s;
-  }
-
-  & :nth-child(2) {
-    cursor: pointer;
-  }
-
-  & button {
-    position: absolute;
-    bottom: 20px;
-  }
-
-  &:hover {
-    background-color: #d8e1ff;
-    transition: 0.3s;
-
-    & img {
-      transform: scale(1.05);
-    }
-  }
-`;
-
-type Props = {
-  productData: Product;
-};
-
-const ProductPage = ({ productData }: Props) => {
-  const productDataToUse = productData.masterData.current;
-  const { name, masterVariant } = productDataToUse;
-
-  const pricesArray = masterVariant.prices || [];
-  const imagesArray = masterVariant.images || [];
-
-  const currentAmount = pricesArray[pricesArray.length - 1].value.centAmount;
-  const amountBefore = pricesArray[pricesArray.length - 2].value.centAmount;
-  const currencyCode = pricesArray[pricesArray.length - 1].value.currencyCode;
+  useEffect(() => {
+    GetProduct({ token: tokenToUse, id }).then((data) => {
+      if (data) setProduct(data);
+    });
+  }, []);
 
   return (
-    <ProductCartWrapper>
-      {imagesArray.length === 1 ? (
-        <img src={imagesArray[0].url} />
-      ) : (
-        <Slider photos={imagesArray} />
-      )}
-      <Label fontSize={'25px'} fontWeight={600} color={'#000'} textDecor={'none'}>
-        {name.en}
-      </Label>
-      <Prices
-        currentAmount={currentAmount}
-        amountBefore={amountBefore}
-        currencyCode={currencyCode}
-      />
-      <SubmitButton label={'Add to cart'} />
-    </ProductCartWrapper>
+    <PageWrapper>
+      <Header />
+      <ContentWrapper>
+        {product && <ProductCard isCatDisplay={false} productData={product} />}
+      </ContentWrapper>
+      <Footer />
+    </PageWrapper>
   );
 };
 

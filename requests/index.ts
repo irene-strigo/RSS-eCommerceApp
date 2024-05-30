@@ -4,3 +4,4 @@ export { default as GetAccessAndRefreshToken } from './GetAccessAndRefreshToken'
 export { default as SignUpCustomer } from './SignUpCustomer';
 export { default as GetClient } from './GetClient';
 export { default as SignInCustomer } from './SignInCustomer';
+export { default as GetProduct } from './GetProduct';

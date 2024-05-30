@@ -7,3 +7,4 @@ export { default as Label } from './Label';
 export { default as Slider } from './Slider';
 export { default as Prices } from './Price';
 export { Grid } from './Grid';
+export { ProductCardWrapper } from './ProductCardWrapper';

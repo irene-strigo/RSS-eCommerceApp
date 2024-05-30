@@ -29,13 +29,13 @@ const Prices = ({ currentAmount, amountBefore, currencyCode }: Props) => {
 
   return (
     <PricesWrapper>
-      {currentAmount > amountBefore ? (
+      {currentAmount < amountBefore ? (
         <>
           <Label fontSize={'20px'} fontWeight={600} color={'#000'} textDecor={'line-through'}>
-            {priceConverter(currentAmount, '')}
+            {priceConverter(amountBefore, '')}
           </Label>
           <Label fontSize={'20px'} fontWeight={600} color={'#f56d6d'} textDecor={'none'}>
-            {priceConverter(amountBefore, currencyCode)}
+            {priceConverter(currentAmount, currencyCode)}
           </Label>
         </>
       ) : (
