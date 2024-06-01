@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 
+import { SliderContainer } from './Slider';
+
 export const ProductCardWrapper = styled.div`
   padding: 20px;
   background-color: #fff;
   color: #000;
   position: relative;
-  min-height: 700px;
+  min-height: 620px;
   max-width: 400px;
   width: 100%;
 
@@ -17,6 +19,9 @@ export const ProductCardWrapper = styled.div`
     width: 200px;
     margin-bottom: 20px;
     cursor: pointer;
+  }
+
+  & ${SliderContainer} {
     transform: scale(1);
     transition: 0.3s;
   }
@@ -34,7 +39,7 @@ export const ProductCardWrapper = styled.div`
     background-color: #d8e1ff;
     transition: 0.3s;
 
-    & img {
+    & ${SliderContainer} {
       transform: scale(1.05);
     }
   }

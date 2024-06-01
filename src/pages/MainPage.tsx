@@ -1,25 +1,8 @@
 import React from 'react';
 import { Header, Footer } from '../components';
-import {
-  Container,
-  ContentWrapper,
-  HeaderButtonsWrapper,
-  PageWrapper,
-} from '../components/common/CommonStyles';
-import { Button } from '../components/Header';
-import { NavigationButton } from '../components/common';
+import { Container, ContentWrapper, PageWrapper } from '../components/common/CommonStyles';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-const buttons: Button[] = [
-  { id: 1, link: '/personal-information', label: 'Personal info' },
-  { id: 2, link: '/about-us', label: 'About Us' },
-  { id: 3, link: '/cart', label: 'Your cart' },
-  { id: 4, link: '/main', label: 'Main Page' },
-  { id: 5, link: '/log-in-page', label: 'Log In' },
-  { id: 6, link: '/sign-up-page', label: 'Sign Up' },
-  { id: 7, link: '/catalog', label: 'Catalog' },
-];
 
 const MainPage = () => {
   return (
@@ -28,11 +11,6 @@ const MainPage = () => {
       <ContentWrapper>
         <Container>Main page</Container>
         <ToastContainer />
-        <HeaderButtonsWrapper>
-          {buttons.map((button) => (
-            <NavigationButton key={button.id} link={button.link} label={button.label} />
-          ))}
-        </HeaderButtonsWrapper>
       </ContentWrapper>
       <Footer />
     </PageWrapper>

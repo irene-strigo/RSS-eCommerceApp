@@ -19,7 +19,8 @@ const Header = () => {
         { id: 2, link: '/about-us', label: 'About Us' },
         { id: 3, link: '/cart', label: 'Your cart' },
         { id: 4, link: '/main', label: 'Main Page' },
-        { id: 5, link: '/logout', label: 'Logout' },
+        { id: 5, link: '/catalog', label: 'Catalog' },
+        { id: 6, link: '/logout', label: 'Logout' },
       ]
     : [
         { id: 1, link: '/log-in-page', label: 'Log In' },
@@ -27,6 +28,7 @@ const Header = () => {
         { id: 3, link: '/about-us', label: 'About Us' },
         { id: 4, link: '/cart', label: 'Your cart' },
         { id: 5, link: '/main', label: 'Main Page' },
+        { id: 6, link: '/catalog', label: 'Catalog' },
       ];
 
   return (

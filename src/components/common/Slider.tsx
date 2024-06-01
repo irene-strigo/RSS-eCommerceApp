@@ -1,53 +1,57 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
-`;
-
-const SliderContainer = styled.div`
-  position: relative;
   justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
-  width: 100%;
-
-  // width: 62%;
-
-  overflow: hidden;
 `;
 
-const PhotoContainer = styled.div`
+export const SliderContainer = styled.div<{
+  $totalPhotos: number;
+}>`
+  position: relative;
+  margin-bottom: 20px;
+  overflow: hidden;
+
+  width: ${({ $totalPhotos }) => `calc(100% / ${$totalPhotos} - 10px);`};
+`;
+
+const PhotoContainer = styled.div<{
+  $newValue: number;
+}>`
+  transform: ${({ $newValue }) =>
+    $newValue === 0
+      ? `translateX(calc(-${$newValue * 100}% ));`
+      : `translateX(calc(-${$newValue * 100}% - 10px))`};
+
   position: relative;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   width: 100%;
   transition: 0.3s;
-  transform: translateX(0);
 `;
 
 const ArrowLeft = styled.div`
   display: inline-block;
   border: solid #000;
   border-width: 0 1px 1px 0;
-  padding: 3px;
+  padding: 5px;
   transform: rotate(135deg);
   cursor: pointer;
-  margin-top: 20px;
+  position: relative;
+  z-index: 10;
 `;
 
 const ArrowRight = styled.div`
   display: inline-block;
   border: solid #000;
   border-width: 0 1px 1px 0;
-  padding: 3px;
+  padding: 5px;
   transform: rotate(-45deg);
   cursor: pointer;
-  margin-top: 20px;
 `;
 
 type Props = {
@@ -55,31 +59,35 @@ type Props = {
 };
 
 const Slider = ({ photos }: Props) => {
-  // const [currSlide, setCurrSlide] = useState(0);
+  const [newValue, setNewValue] = useState(0);
 
-  // const moveToSlide = (slideIndex: number) => {
-  //   if (slideIndex < 0 || slideIndex > 4) return;
+  const handleLeftClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (newValue === 0) return;
+    console.log('daa');
 
-  //     const widthToSlide = img.offsetWidth + parseInt(getComputedStyle(img).marginRight);
-  //     const translate = `translateX(calc(-${slideIndex * widthToSlide}px))`;
-  //     picsWraper.style.transform = translate;
-  //     arrowPrev.style.cursor = slideIndex === 0 ? 'default' : 'pointer';
-  //     arrowNext.style.cursor = slideIndex === 4 ? 'default' : 'pointer';
+    setNewValue(newValue - 1);
+  };
 
-  //   setCurrSlide(slideIndex);
-  // };
+  const handleRightClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (newValue === photos.length - 1) return;
+    console.log('df');
+
+    setNewValue(newValue + 1);
+  };
 
   return (
     <Wrapper>
-      <ArrowLeft />
-      <SliderContainer>
-        <PhotoContainer>
+      <ArrowLeft onClick={handleLeftClick} />
+      <SliderContainer $totalPhotos={photos.length}>
+        <PhotoContainer $newValue={newValue}>
           {photos.map((photo) => (
             <img key={photo.url} src={photo.url} />
           ))}
         </PhotoContainer>
       </SliderContainer>
-      <ArrowRight />
+      <ArrowRight onClick={handleRightClick} />
     </Wrapper>
   );
 };

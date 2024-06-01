@@ -12,8 +12,8 @@ type Props = {
 
 const ProductCard = ({ isCatDisplay, productData, onClick }: Props) => {
   const productDataToUse = productData.masterData.current;
-  const { name, masterVariant } = productDataToUse;
-  const description = 'Product description text';
+  const { name, masterVariant, metaDescription } = productDataToUse;
+  const description = metaDescription?.en || '';
 
   const pricesArray = masterVariant.prices || [];
   const imagesArray = masterVariant.images || [];

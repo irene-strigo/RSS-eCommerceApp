@@ -24,7 +24,7 @@ export const ContentWrapper = styled.div`
   width: 100%;
  product-page
   padding: 70px;
-  height: 80vh;
+  height: 100%;
   overflow-x: auto;
   font-size: clamp(1rem, 2.5vw, 1.5rem);
 `;
@@ -73,7 +73,7 @@ export const NavButton = styled(Link)`
 
 export const PageWrapper = styled.div`
   display: flex;
-  height: 100%;
+  height: 100vh;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
