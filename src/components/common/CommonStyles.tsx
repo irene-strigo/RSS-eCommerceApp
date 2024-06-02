@@ -317,3 +317,13 @@ export const AddressFieldContainer = styled.p`
     white-space: wrap;
   }
 `;
+export const AsideBlock = styled.div`
+  margin: 10px;
+  z-index: 10;
+`;
+
+export const FiltersFieldset = styled.fieldset`
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+`;

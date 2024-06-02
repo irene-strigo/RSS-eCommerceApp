@@ -6,8 +6,9 @@ import { Product } from '@commercetools/platform-sdk';
 import { getProducts } from '../services/Client';
 
 import { Header, Footer, ProductCard } from '../components';
-import { ContentWrapper, PageWrapper } from '../components/common/CommonStyles';
+import { AsideBlock, ContentWrapper, PageWrapper } from '../components/common/CommonStyles';
 import { Grid } from '../components/common';
+import CatalogFilters from '../components/CatalogFilters';
 
 const CatalogPage = () => {
   const [products, setProducts] = useState<Product[]>();
@@ -27,6 +28,10 @@ const CatalogPage = () => {
     <PageWrapper>
       <Header />
       <ContentWrapper>
+        <AsideBlock>
+          {' '}
+          <CatalogFilters />
+        </AsideBlock>
         <Grid>
           {products?.map((product) => (
             <ProductCard
