@@ -6,14 +6,79 @@ import {
   MyCustomerChangePassword,
   MyCustomerSignin,
 } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/customer';
+import { QueryParam } from '@commercetools/platform-sdk/dist/declarations/src/generated/shared/utils/common-types';
 
-export const getProducts = () => {
+export type GetProdcutsParams = {
+  fuzzy?: boolean;
+  fuzzyLevel?: number;
+  markMatchingVariants?: boolean;
+  filter?: string | string[];
+  'filter.facets'?: string | string[];
+  'filter.query'?: string | string[];
+  facet?: string | string[];
+  sort?: string | string[];
+  limit?: number;
+  offset?: number;
+  withTotal?: boolean;
+  staged?: boolean;
+  priceCurrency?: string;
+  priceCountry?: string;
+  priceCustomerGroup?: string;
+  priceChannel?: string;
+  localeProjection?: string | string[];
+  storeProjection?: string;
+  expand?: string | string[];
+  [key: string]: QueryParam;
+};
+
+export type GetProductsMethodArgs = {
+  queryArgs?: GetProdcutsParams;
+  headers?: {
+    [key: string]: string | string[];
+  };
+};
+
+export const getProducts = (params?: GetProdcutsParams) => {
+  const methodArgs: GetProductsMethodArgs = {};
+  if (params) {
+    methodArgs.queryArgs = params;
+  }
+
   return getApi()
-    .products()
+    .productProjections()
+    .search()
+    .get(methodArgs)
+    .execute()
+    .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export const getProductById = (id: string) => {
+  return getApi()
+    .productProjections()
+    .withId({ ID: id })
     .get()
     .execute()
     .then(({ body }) => body)
-    .catch(console.error);
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export const getCategories = () => {
+  return getApi()
+    .categories()
+    .get()
+    .execute()
+    .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
 };
 
 export const GetMe = async (): Promise<void | Customer> => {

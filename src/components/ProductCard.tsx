@@ -1,18 +1,17 @@
 import React from 'react';
 
-import { Product } from '@commercetools/platform-sdk';
+import { ProductProjection } from '@commercetools/platform-sdk';
 
 import { Label, Prices, SubmitButton, Slider, ProductCardWrapper } from './common';
 
 type Props = {
   isCatDisplay: boolean;
-  productData: Product;
+  productData: ProductProjection;
   onClick?: () => void;
 };
 
 const ProductCard = ({ isCatDisplay, productData, onClick }: Props) => {
-  const productDataToUse = productData.masterData.current;
-  const { name, masterVariant, metaDescription } = productDataToUse;
+  const { name, masterVariant, metaDescription } = productData;
   const description = metaDescription?.en || '';
 
   const pricesArray = masterVariant.prices || [];
@@ -25,7 +24,7 @@ const ProductCard = ({ isCatDisplay, productData, onClick }: Props) => {
   return (
     <ProductCardWrapper onClick={onClick}>
       {imagesArray.length === 1 ? (
-        <img src={imagesArray[0].url} />
+        <img alt="{name.en}" src={imagesArray[0].url} />
       ) : (
         <Slider photos={imagesArray} />
       )}
