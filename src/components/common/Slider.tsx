@@ -10,13 +10,12 @@ const Wrapper = styled.div`
 `;
 
 export const SliderContainer = styled.div<{
-  $totalPhotos: number;
+  $width: string;
 }>`
   position: relative;
   margin-bottom: 20px;
   overflow: hidden;
-  width: 200px;
-  // width: ${({ $totalPhotos }) => `calc(100% / ${$totalPhotos} - 10px);`};
+  width: ${({ $width }) => `${$width}`};
 `;
 
 const PhotoContainer = styled.div<{
@@ -63,9 +62,10 @@ const ArrowRight = styled.div`
 type Props = {
   photos: { url: string }[];
   setIsModal?: (isModal: boolean) => void;
+  modalWidth?: string;
 };
 
-const Slider = ({ photos, setIsModal }: Props) => {
+const Slider = ({ photos, setIsModal, modalWidth = '200px' }: Props) => {
   const [newValue, setNewValue] = useState(0);
 
   const handleLeftClick = (e: React.MouseEvent) => {
@@ -89,7 +89,7 @@ const Slider = ({ photos, setIsModal }: Props) => {
   return (
     <Wrapper>
       <ArrowLeft onClick={handleLeftClick} />
-      <SliderContainer $totalPhotos={photos.length}>
+      <SliderContainer $width={modalWidth}>
         <PhotoContainer $newValue={newValue}>
           {photos.map((photo) => (
             <img key={photo.url} src={photo.url} onClick={handleClick} />

@@ -15,7 +15,7 @@ const ModalSlider = ({ productData }: Props) => {
       {imagesArray.length === 1 ? (
         <img src={imagesArray[0].url} />
       ) : (
-        <Slider photos={imagesArray} />
+        <Slider photos={imagesArray} modalWidth={'300px'} />
       )}
     </>
   );
