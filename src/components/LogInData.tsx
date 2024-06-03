@@ -1,5 +1,4 @@
-import { ErrorsText, InputElem } from './common/CommonStyles';
-import ShowButton from './common/SwitchButton';
+import { ErrorsText, InputElem, ToggleButton } from './common/CommonStyles';
 import { useState } from 'react';
 import { FieldErrors, UseFormRegister } from 'react-hook-form';
 import { MyCustomerDraft } from '@commercetools/platform-sdk';
@@ -44,15 +43,16 @@ const LoginData = ({ register, errors }: Props) => {
       />
       {errors.email && <ErrorsText>{errors.email.message}</ErrorsText>}
       <label>Password:</label>
-      <ShowButton
-        label={btnLabel}
+      <ToggleButton
         disabled={btnDisabled}
         type={'button'}
         onClick={(evt) => {
           evt.preventDefault();
           togglePassInput();
         }}
-      />
+      >
+        {btnLabel}
+      </ToggleButton>
       <InputElem
         type={inputType}
         {...register('password', {

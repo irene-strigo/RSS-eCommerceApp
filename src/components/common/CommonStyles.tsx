@@ -79,7 +79,27 @@ export const PageWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
 `;
+export const ToggleButton = styled.button`
+  background-color: #ada5f9;
+  border-radius: 3px;
+  border: 1px solid #ada5f9;
+  max-width: 300px;
+  color: #511f31;
+  cursor: pointer;
+  padding: 3px 3px;
+  margin: 10px;
+  white-space: nowrap;
 
+  &:hover,
+  :focus {
+    background-color: #f7f9ff;
+    color: #2c5777;
+  }
+  &:disabled {
+    background-color: #c0c0c0;
+    color: black;
+  }
+`;
 export const SwitchButton = styled.button`
   background-color: #ada5f9;
   border-radius: 3px;
