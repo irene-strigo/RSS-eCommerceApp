@@ -10,7 +10,6 @@ export const ProductCardWrapper = styled.div`
   min-height: 620px;
   max-width: 320px;
   width: 100%;
-
   display: flex;
   flex-direction: column;
   align-items: center;
