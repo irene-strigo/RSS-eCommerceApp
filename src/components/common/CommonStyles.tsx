@@ -198,7 +198,8 @@ export const Form = styled.form`
   align-items: center;
   justify-content: center;
   max-width: 400px;
-  width: 100%;
+  width: 20em;
+  font-size: clamp(1rem, 1vw, 1.5rem);
 
   & button {
     white-space: nowrap;
@@ -340,7 +341,16 @@ export const AddressFieldContainer = styled.p`
 `;
 
 export const FiltersFieldset = styled.fieldset`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+`;
+export const SortersDiv = styled.div`
+  display: contents;
+`;
+
+export const ProductSearchInput = styled.input`
+  min-height: 30px;
+  min-width: 200px;
+  margin: 10px 0 10px;
 `;

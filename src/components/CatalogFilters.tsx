@@ -1,51 +1,17 @@
-import { FiltersFieldset, SelectElem } from './common/CommonStyles';
+import { FiltersFieldset, ProductSearchInput, SelectElem, SortersDiv } from './common/CommonStyles';
 import ShowButton from './common/SwitchButton';
 import Form from './common/Form';
 import { getCategories } from '../services/Client';
 import { useEffect, useState } from 'react';
 import { Category } from '@commercetools/platform-sdk';
 import { Filters, PriceFilter } from '../pages/CatalogPage';
-import styled from 'styled-components';
-
-const Wrapper = styled.div`
-  margin-top: 10px;
-
-  & label {
-    margin-left: 10px;
-  }
-`;
-
-const SelectorsWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 250px;
-`;
-
-const SortSearchWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 50px;
-
-  & :first-child {
-    margin-bottom: 30px;
-  }
-`;
-const SortWrapper = styled.div`
-  & label {
-    margin-right: 10px;
-  }
-
-  & input {
-    margin: 5px;
-  }
-`;
 
 const decode = ((textarea) => (text: string) => {
   textarea.innerHTML = text;
   return textarea.value;
 })(document.createElement('textarea'));
-const colors = ['All', 'red', 'blue', 'green', 'black', 'white'];
-const sizes = ['All', 'XS', 'S', 'M', 'L', 'XL'];
+const colors = ['all', 'red', 'blue', 'green', 'black', 'white'];
+const sizes = ['all', 'XS', 'S', 'M', 'L', 'XL'];
 
 type PriceFilterControls = Record<keyof PriceFilter, string>;
 
@@ -88,55 +54,44 @@ const CatalogFilters = ({
 
   return (
     <Form onSubmit={onSubmit}>
-      <SelectorsWrapper>
-        <label>Goods:</label>
-        <SelectElem
-          value={currentFilters.filterCategory}
-          onChange={(evt) => setFilterCategory(evt.currentTarget.value)}
-        >
-          <option value="">All</option>
-          {categories.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name.en}
-            </option>
-          ))}
-        </SelectElem>
-        <label>Color:</label>
-        <SelectElem
-          value={currentFilters.color}
-          onChange={(evt) => setColor(evt.currentTarget.value)}
-        >
-          {colors.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </SelectElem>
-        <label>Size:</label>
-        <SelectElem
-          value={currentFilters.size}
-          onChange={(evt) => setSize(evt.currentTarget.value)}
-        >
-          {sizes.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </SelectElem>
-      </SelectorsWrapper>
+      <label>Goods:</label>
+      <SelectElem
+        value={currentFilters.filterCategory}
+        onChange={(evt) => setFilterCategory(evt.currentTarget.value)}
+      >
+        <option value="">all</option>
+        {categories.map((c) => (
+          <option value={c.id}>{c.name.en}</option>
+        ))}
+      </SelectElem>
+      <label>Color:</label>
+      <SelectElem
+        value={currentFilters.color}
+        onChange={(evt) => setColor(evt.currentTarget.value)}
+      >
+        {colors.map((c) => (
+          <option value={c}>{c}</option>
+        ))}
+      </SelectElem>
+      <label>Size:</label>
+      <SelectElem value={currentFilters.size} onChange={(evt) => setSize(evt.currentTarget.value)}>
+        {sizes.map((c) => (
+          <option value={c}>{c}</option>
+        ))}
+      </SelectElem>
       <FiltersFieldset>
         <legend>Price</legend>
         {Object.entries(priceFilterControls).map(([filter, label]: [keyof PriceFilter, string]) => {
           return (
-            <Wrapper key={label}>
+            <>
+              <label>{label}</label>
               <input
                 type="checkbox"
                 checked={currentFilters.filterPrice[filter]}
                 onChange={(evt) => setPrice(filter, evt.currentTarget.checked)}
               />
-              <label>{label}</label>
               <br />
-            </Wrapper>
+            </>
           );
         })}
       </FiltersFieldset>
@@ -149,27 +104,22 @@ const CatalogFilters = ({
           resetFilters();
         }}
       />
-      <SortSearchWrapper>
-        <input
-          type="text"
-          placeholder="product search"
-          value={currentFilters.search}
-          onChange={(evt) => setSearch(evt.currentTarget.value)}
-        ></input>
-        <SortWrapper>
-          <label>sort by price</label>
-          <input type="button" value={decode('&#9650')} onClick={() => setSort('price', 'asc')} />
-          <input type="button" value={decode('&#9660')} onClick={() => setSort('price', 'desc')} />
-          <br />
-          <label>sort by name</label>
-          <input type="button" value={decode('&#9650')} onClick={() => setSort('name.en', 'asc')} />
-          <input
-            type="button"
-            value={decode('&#9660')}
-            onClick={() => setSort('name.en', 'desc')}
-          />
-        </SortWrapper>
-      </SortSearchWrapper>
+
+      <ProductSearchInput
+        type="text"
+        placeholder="product search"
+        value={currentFilters.search}
+        onChange={(evt) => setSearch(evt.currentTarget.value)}
+      ></ProductSearchInput>
+      <SortersDiv>
+        <label>sort by price</label>
+        <input type="button" value={decode('&#9650')} onClick={() => setSort('price', 'asc')} />
+        <input type="button" value={decode('&#9660')} onClick={() => setSort('price', 'desc')} />
+        <br />
+        <label>sort by name</label>
+        <input type="button" value={decode('&#9650')} onClick={() => setSort('name.en', 'asc')} />
+        <input type="button" value={decode('&#9660')} onClick={() => setSort('name.en', 'desc')} />
+      </SortersDiv>
     </Form>
   );
 };
