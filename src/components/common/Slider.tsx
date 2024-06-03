@@ -6,6 +6,7 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
 `;
 
 export const SliderContainer = styled.div<{
@@ -14,8 +15,8 @@ export const SliderContainer = styled.div<{
   position: relative;
   margin-bottom: 20px;
   overflow: hidden;
-
-  width: ${({ $totalPhotos }) => `calc(100% / ${$totalPhotos} - 10px);`};
+  width: 200px;
+  // width: ${({ $totalPhotos }) => `calc(100% / ${$totalPhotos} - 10px);`};
 `;
 
 const PhotoContainer = styled.div<{
@@ -32,6 +33,11 @@ const PhotoContainer = styled.div<{
   justify-content: flex-start;
   width: 100%;
   transition: 0.3s;
+
+  & img {
+    margin-right: 10px;
+    width: 100%;
+  }
 `;
 
 const ArrowLeft = styled.div`

@@ -1,14 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import styled from 'styled-components';
+
 import { ProductProjection } from '@commercetools/platform-sdk';
+
+import 'react-responsive-modal/styles.css';
+import { Modal } from 'react-responsive-modal';
 
 import { GetProdcutsParams, getProducts } from '../services/Client';
 
 import { Header, Footer, ProductCard } from '../components';
-import { AsideBlock, ContentWrapper, PageWrapper } from '../components/common/CommonStyles';
+import { ContentWrapper, PageWrapper } from '../components/common/CommonStyles';
 import { Grid } from '../components/common';
 import CatalogFilters from '../components/CatalogFilters';
+
+const FiltersDiv = styled.div`
+  color: #511f31;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: 10px;
+
+  &:hover {
+    border-color: #511f31;
+  }
+`;
 
 export type PriceFilter = Record<string, boolean>;
 
@@ -38,6 +54,8 @@ const defaultFilter: Filters = {
 };
 
 const CatalogPage = () => {
+  const [isModal, setIsModal] = useState(false);
+
   const [products, setProducts] = useState<ProductProjection[]>();
   const navigate = useNavigate();
 
@@ -120,9 +138,9 @@ const CatalogPage = () => {
   return (
     <PageWrapper>
       <Header />
-      <ContentWrapper $alignItems={'flex-start'}>
-        <AsideBlock>
-          {' '}
+      <ContentWrapper $alignItems={'center'}>
+        <FiltersDiv onClick={() => setIsModal(true)}>Filters</FiltersDiv>
+        <Modal open={isModal} onClose={() => setIsModal(false)} center>
           <CatalogFilters
             currentFilters={filter}
             setSort={setSort}
@@ -133,7 +151,7 @@ const CatalogPage = () => {
             setSize={setSize}
             setColor={setColor}
           />
-        </AsideBlock>
+        </Modal>
         <Grid>
           {products?.map((product) => (
             <ProductCard

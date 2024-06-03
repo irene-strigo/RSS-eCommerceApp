@@ -26,10 +26,6 @@ export const ProductCardWrapper = styled.div`
     transition: 0.3s;
   }
 
-  & :nth-child(2) {
-    cursor: pointer;
-  }
-
   & button {
     position: absolute;
     bottom: 20px;

@@ -20,8 +20,8 @@ export const ContentWrapper = styled.div<{
   $alignItems: string;
 }>`
   display: flex;
+  flex-direction: column;
   align-items: ${({ $alignItems }) => $alignItems};
-  justify-content: center;
   background-color: #f7f9ff;
   width: 100%;
   padding: 70px 0px;
@@ -29,7 +29,7 @@ export const ContentWrapper = styled.div<{
   overflow-x: auto;
   font-size: clamp(1rem, 2.5vw, 1.5rem);
 `;
-export const Wrapper = styled.form`
+export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -318,13 +318,9 @@ export const AddressFieldContainer = styled.p`
     white-space: wrap;
   }
 `;
-export const AsideBlock = styled.div`
-  margin: 10px;
-  z-index: 10;
-`;
 
 export const FiltersFieldset = styled.fieldset`
-  display: flex;
-  flex-direction: column;
-  text-align: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
 `;

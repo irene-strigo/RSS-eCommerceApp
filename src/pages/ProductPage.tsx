@@ -2,10 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ProductProjection } from '@commercetools/platform-sdk';
 
+import { getProductById } from '../services/Client';
+
+import 'react-responsive-modal/styles.css';
+import { Modal } from 'react-responsive-modal';
+
 import { Header, Footer } from '../components';
 import { ProductCard } from '../components';
 import { ContentWrapper, PageWrapper } from '../components/common/CommonStyles';
-import { getProductById } from '../services/Client';
 import { ModalSlider } from '../components/common';
 
 const ProductPage = () => {
@@ -19,6 +23,10 @@ const ProductPage = () => {
     });
   }, []);
 
+  const onCloseModal = () => {
+    setIsModal(false);
+  };
+
   return (
     <PageWrapper>
       <Header />
@@ -27,7 +35,11 @@ const ProductPage = () => {
           <ProductCard isCatDisplay={false} productData={product} setIsModal={setIsModal} />
         )}
       </ContentWrapper>
-      {isModal && product && <ModalSlider productData={product} setIsModal={setIsModal} />}
+      {product && (
+        <Modal open={isModal} onClose={onCloseModal} center>
+          <ModalSlider productData={product} />
+        </Modal>
+      )}
       <Footer />
     </PageWrapper>
   );
