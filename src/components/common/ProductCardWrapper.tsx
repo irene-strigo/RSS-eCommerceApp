@@ -8,7 +8,7 @@ export const ProductCardWrapper = styled.div`
   color: #000;
   position: relative;
   min-height: 620px;
-  max-width: 400px;
+  max-width: 320px;
   width: 100%;
 
   display: flex;

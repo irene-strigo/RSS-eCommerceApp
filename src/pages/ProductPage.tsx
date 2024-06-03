@@ -6,9 +6,11 @@ import { Header, Footer } from '../components';
 import { ProductCard } from '../components';
 import { ContentWrapper, PageWrapper } from '../components/common/CommonStyles';
 import { getProductById } from '../services/Client';
+import { ModalSlider } from '../components/common';
 
 const ProductPage = () => {
   const [product, setProduct] = useState<ProductProjection | null>(null);
+  const [isModal, setIsModal] = useState(false);
   const { id } = useParams<string>();
 
   useEffect(() => {
@@ -20,9 +22,12 @@ const ProductPage = () => {
   return (
     <PageWrapper>
       <Header />
-      <ContentWrapper>
-        {product && <ProductCard isCatDisplay={false} productData={product} />}
+      <ContentWrapper $alignItems={'center'}>
+        {product && (
+          <ProductCard isCatDisplay={false} productData={product} setIsModal={setIsModal} />
+        )}
       </ContentWrapper>
+      {isModal && product && <ModalSlider productData={product} setIsModal={setIsModal} />}
       <Footer />
     </PageWrapper>
   );

@@ -16,14 +16,15 @@ export const Button = styled.button`
     color: #2c5777;
   }
 `;
-export const ContentWrapper = styled.div`
+export const ContentWrapper = styled.div<{
+  $alignItems: string;
+}>`
   display: flex;
-  align-items: flex-start;
+  align-items: ${({ $alignItems }) => $alignItems};
   justify-content: center;
   background-color: #f7f9ff;
   width: 100%;
- product-page
-  padding: 70px;
+  padding: 70px 0px;
   height: 100%;
   overflow-x: auto;
   font-size: clamp(1rem, 2.5vw, 1.5rem);

@@ -57,7 +57,7 @@ export default function AddressPage({ mode }: AddressPageProps) {
     <>
       <PageWrapper>
         <Header />
-        <ContentWrapper>
+        <ContentWrapper $alignItems={'flex-start'}>
           <Container>
             <Form onSubmit={handleSubmit(onSubmit)}>
               <Container>

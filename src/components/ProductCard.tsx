@@ -5,12 +5,13 @@ import { ProductProjection } from '@commercetools/platform-sdk';
 import { Label, Prices, SubmitButton, Slider, ProductCardWrapper } from './common';
 
 type Props = {
+  setIsModal?: (isModal: boolean) => void;
   isCatDisplay: boolean;
   productData: ProductProjection;
   onClick?: () => void;
 };
 
-const ProductCard = ({ isCatDisplay, productData, onClick }: Props) => {
+const ProductCard = ({ setIsModal, isCatDisplay, productData, onClick }: Props) => {
   const { name, masterVariant, metaDescription } = productData;
   const description = metaDescription?.en || '';
 
@@ -26,7 +27,7 @@ const ProductCard = ({ isCatDisplay, productData, onClick }: Props) => {
       {imagesArray.length === 1 ? (
         <img alt="{name.en}" src={imagesArray[0].url} />
       ) : (
-        <Slider photos={imagesArray} />
+        <Slider photos={imagesArray} setIsModal={setIsModal} />
       )}
       <Label fontSize={'25px'} fontWeight={600} color={'#000'} textDecor={'none'}>
         {name.en}

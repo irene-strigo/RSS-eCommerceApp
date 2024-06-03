@@ -5,7 +5,7 @@ const CartPage = () => {
   return (
     <PageWrapper>
       <Header />
-      <ContentWrapper>Your cart</ContentWrapper>
+      <ContentWrapper $alignItems={'flex-start'}>Your cart</ContentWrapper>
       <Footer />
     </PageWrapper>
   );

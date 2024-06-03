@@ -56,15 +56,15 @@ const ArrowRight = styled.div`
 
 type Props = {
   photos: { url: string }[];
+  setIsModal?: (isModal: boolean) => void;
 };
 
-const Slider = ({ photos }: Props) => {
+const Slider = ({ photos, setIsModal }: Props) => {
   const [newValue, setNewValue] = useState(0);
 
   const handleLeftClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (newValue === 0) return;
-    console.log('daa');
 
     setNewValue(newValue - 1);
   };
@@ -72,9 +72,12 @@ const Slider = ({ photos }: Props) => {
   const handleRightClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (newValue === photos.length - 1) return;
-    console.log('df');
 
     setNewValue(newValue + 1);
+  };
+
+  const handleClick = () => {
+    if (setIsModal) setIsModal(true);
   };
 
   return (
@@ -83,7 +86,7 @@ const Slider = ({ photos }: Props) => {
       <SliderContainer $totalPhotos={photos.length}>
         <PhotoContainer $newValue={newValue}>
           {photos.map((photo) => (
-            <img key={photo.url} src={photo.url} />
+            <img key={photo.url} src={photo.url} onClick={handleClick} />
           ))}
         </PhotoContainer>
       </SliderContainer>

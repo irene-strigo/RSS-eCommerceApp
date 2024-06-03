@@ -47,7 +47,7 @@ const LogInPage = () => {
     <>
       <PageWrapper>
         <Header />
-        <ContentWrapper>
+        <ContentWrapper $alignItems={'flex-start'}>
           <Container>
             <Form
               onSubmit={handleSubmit(onSubmit)}

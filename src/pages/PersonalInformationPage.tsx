@@ -245,7 +245,7 @@ export default function PersonalInformationPage() {
     <>
       <PageWrapper>
         <Header />
-        <ContentWrapper>
+        <ContentWrapper $alignItems={'flex-start'}>
           <Container>
             <div>
               {!authUser.checkingAuth && authUser.hasAuth && authUser.customer && (

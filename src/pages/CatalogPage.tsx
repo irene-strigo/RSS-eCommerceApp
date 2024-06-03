@@ -120,7 +120,7 @@ const CatalogPage = () => {
   return (
     <PageWrapper>
       <Header />
-      <ContentWrapper>
+      <ContentWrapper $alignItems={'flex-start'}>
         <AsideBlock>
           {' '}
           <CatalogFilters

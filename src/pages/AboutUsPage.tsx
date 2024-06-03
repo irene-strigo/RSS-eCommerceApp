@@ -7,7 +7,7 @@ const AboutUsPage = () => {
   return (
     <PageWrapper>
       <Header />
-      <ContentWrapper>About US</ContentWrapper>
+      <ContentWrapper $alignItems={'flex-start'}>About US</ContentWrapper>
       <Footer />
     </PageWrapper>
   );

@@ -8,7 +8,7 @@ const MainPage = () => {
   return (
     <PageWrapper>
       <Header />
-      <ContentWrapper>
+      <ContentWrapper $alignItems={'flex-start'}>
         <Container>Main page</Container>
         <ToastContainer />
       </ContentWrapper>
