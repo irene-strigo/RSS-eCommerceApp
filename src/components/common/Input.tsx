@@ -4,14 +4,22 @@ import { ErrorDiv, InputElement } from './CommonStyles';
 type Props = {
   value?: string;
   checked?: boolean;
-  type: 'text' | 'number' | 'email' | 'password' | 'checkbox' | 'date';
+  type: 'text' | 'number' | 'email' | 'password' | 'checkbox' | 'date' | 'radio';
   placeholder?: string;
   name: string;
   disabled?: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const Input = ({ value, type, placeholder, name, disabled = false, onChange }: Props) => {
+const Input = ({
+  value,
+  type,
+  placeholder,
+  name,
+  checked = false,
+  disabled = false,
+  onChange,
+}: Props) => {
   return (
     <>
       <ErrorDiv></ErrorDiv>
@@ -21,6 +29,7 @@ const Input = ({ value, type, placeholder, name, disabled = false, onChange }: P
         disabled={disabled}
         placeholder={placeholder}
         type={type}
+        checked={checked}
         onChange={onChange}
       ></InputElement>
     </>

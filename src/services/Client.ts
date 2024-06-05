@@ -1,15 +1,84 @@
 import { getApi } from './ClientBuilder';
 import { _BaseAddress, Customer, CustomerSignInResult } from '@commercetools/platform-sdk';
 import { MyCustomerDraft } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/me';
-import { MyCustomerSignin } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/customer';
+import {
+  CustomerUpdateAction,
+  MyCustomerChangePassword,
+  MyCustomerSignin,
+} from '@commercetools/platform-sdk/dist/declarations/src/generated/models/customer';
+import { QueryParam } from '@commercetools/platform-sdk/dist/declarations/src/generated/shared/utils/common-types';
 
-export const getProducts = () => {
+export type GetProdcutsParams = {
+  fuzzy?: boolean;
+  fuzzyLevel?: number;
+  markMatchingVariants?: boolean;
+  filter?: string | string[];
+  'filter.facets'?: string | string[];
+  'filter.query'?: string | string[];
+  facet?: string | string[];
+  sort?: string | string[];
+  limit?: number;
+  offset?: number;
+  withTotal?: boolean;
+  staged?: boolean;
+  priceCurrency?: string;
+  priceCountry?: string;
+  priceCustomerGroup?: string;
+  priceChannel?: string;
+  localeProjection?: string | string[];
+  storeProjection?: string;
+  expand?: string | string[];
+  [key: string]: QueryParam;
+};
+
+export type GetProductsMethodArgs = {
+  queryArgs?: GetProdcutsParams;
+  headers?: {
+    [key: string]: string | string[];
+  };
+};
+
+export const getProducts = (params?: GetProdcutsParams) => {
+  const methodArgs: GetProductsMethodArgs = {};
+  if (params) {
+    methodArgs.queryArgs = params;
+  }
+
   return getApi()
-    .products()
+    .productProjections()
+    .search()
+    .get(methodArgs)
+    .execute()
+    .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export const getProductById = (id: string) => {
+  return getApi()
+    .productProjections()
+    .withId({ ID: id })
     .get()
     .execute()
     .then(({ body }) => body)
-    .catch(console.error);
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export const getCategories = () => {
+  return getApi()
+    .categories()
+    .get()
+    .execute()
+    .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
 };
 
 export const GetMe = async (): Promise<void | Customer> => {
@@ -19,6 +88,23 @@ export const GetMe = async (): Promise<void | Customer> => {
     .execute()
     .then(({ body }) => body)
     .catch(console.error);
+};
+
+const getCustomerById = async (customerId: string): Promise<Customer> => {
+  const apiRoot = getApi();
+
+  const customer: Customer = await apiRoot
+    .customers()
+    .withId({ ID: customerId })
+    .get()
+    .execute()
+    .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+
+  return customer;
 };
 
 export const LogInCustomer = async (customerSignin: MyCustomerSignin): Promise<void | Customer> => {
@@ -57,24 +143,100 @@ export const signInCustomer = async (draft: MyCustomerDraft): Promise<void | Cus
   return result.customer;
 };
 
-export const setCustomerAddress = async (
+export const updateCustomerPersonalData = async (
   customerId: string,
-  addressType: 'Shipping' | 'Billing',
-  address: _BaseAddress,
-  setAsDefault: boolean = false,
-): Promise<void | Customer> => {
+  customerDraft: MyCustomerDraft,
+): Promise<Customer> => {
+  const customer: Customer = await getCustomerById(customerId);
+
   const apiRoot = getApi();
 
-  let customer: Customer = await apiRoot
+  const actions: CustomerUpdateAction[] = [];
+
+  if (customerDraft.firstName && customerDraft.firstName !== customer.firstName) {
+    actions.push({
+      action: 'setFirstName',
+      firstName: customerDraft.firstName,
+    });
+  }
+
+  if (customerDraft.lastName && customerDraft.lastName !== customer.lastName) {
+    actions.push({
+      action: 'setLastName',
+      lastName: customerDraft.lastName,
+    });
+  }
+
+  if (customerDraft.email && customerDraft.email !== customer.email) {
+    actions.push({
+      action: 'changeEmail',
+      email: customerDraft.email,
+    });
+  }
+
+  if (customerDraft.dateOfBirth && customerDraft.dateOfBirth !== customer.dateOfBirth) {
+    actions.push({
+      action: 'setDateOfBirth',
+      dateOfBirth: customerDraft.dateOfBirth,
+    });
+  }
+
+  if (!actions.length) {
+    return customer;
+  }
+
+  return apiRoot
     .customers()
     .withId({ ID: customerId })
-    .get()
+    .post({
+      body: {
+        version: customer.version,
+        actions,
+      },
+    })
     .execute()
     .then(({ body }) => body)
     .catch((err) => {
       console.error(err);
       throw err;
     });
+};
+
+export const changeCustomerPassword = async (
+  passwordForm: MyCustomerChangePassword,
+): Promise<Customer> => {
+  const customer = await GetMe();
+  if (!customer) {
+    throw new Error('customer not logged in');
+  }
+  const apiRoot = getApi();
+
+  return apiRoot
+    .me()
+    .password()
+    .post({
+      body: {
+        ...passwordForm,
+        version: customer.version,
+      },
+    })
+    .execute()
+    .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export const setCustomerAddress = async (
+  customerId: string,
+  addressType: 'Shipping' | 'Billing',
+  address: _BaseAddress,
+  setAsDefault: boolean = false,
+): Promise<void | Customer> => {
+  let customer: Customer = await getCustomerById(customerId);
+
+  const apiRoot = getApi();
 
   const existingAddress = customer.addresses.find(
     (a) =>
@@ -169,5 +331,130 @@ export const setCustomerAddress = async (
     })
     .execute()
     .then(({ body }) => body)
-    .catch(console.error);
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export type UpdateCustomerAddressPropertiesAction =
+  | 'addBillingAddressId'
+  | 'addShippingAddressId'
+  | 'removeBillingAddressId'
+  | 'removeShippingAddressId'
+  | 'setDefaultBillingAddress'
+  | 'setDefaultShippingAddress';
+
+export const updateCustomerAddressProperties = async (
+  customerId: string,
+  addressId: string,
+  action: UpdateCustomerAddressPropertiesAction,
+): Promise<Customer> => {
+  const customer: Customer = await getCustomerById(customerId);
+
+  return getApi()
+    .customers()
+    .withId({ ID: customerId })
+    .post({
+      body: {
+        version: customer.version,
+        actions: [
+          {
+            action,
+            addressId,
+          },
+        ],
+      },
+    })
+    .execute()
+    .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export const deleteCustomerAddress = async (
+  customerId: string,
+  addressId: string,
+): Promise<Customer> => {
+  const customer: Customer = await getCustomerById(customerId);
+
+  return getApi()
+    .customers()
+    .withId({ ID: customerId })
+    .post({
+      body: {
+        version: customer.version,
+        actions: [
+          {
+            action: 'removeAddress',
+            addressId,
+          },
+        ],
+      },
+    })
+    .execute()
+    .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export const addCustomerAddress = async (
+  customerId: string,
+  address: _BaseAddress,
+): Promise<Customer> => {
+  const customer: Customer = await getCustomerById(customerId);
+
+  return getApi()
+    .customers()
+    .withId({ ID: customerId })
+    .post({
+      body: {
+        version: customer.version,
+        actions: [
+          {
+            action: 'addAddress',
+            address,
+          },
+        ],
+      },
+    })
+    .execute()
+    .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export const changeCustomerAddress = async (
+  customerId: string,
+  address: _BaseAddress,
+): Promise<Customer> => {
+  const customer: Customer = await getCustomerById(customerId);
+
+  return getApi()
+    .customers()
+    .withId({ ID: customerId })
+    .post({
+      body: {
+        version: customer.version,
+        actions: [
+          {
+            action: 'changeAddress',
+            addressId: address.id,
+            address,
+          },
+        ],
+      },
+    })
+    .execute()
+    .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
 };

@@ -2,14 +2,14 @@ import { SwitchButton } from './CommonStyles';
 
 type Props = {
   label: string;
-  type: 'button';
+  type: string;
   disabled: boolean;
   onClick: (e: React.MouseEvent<HTMLElement>) => void;
 };
 
-const ShowButton = ({ label, type, disabled, onClick }: Props) => {
+const ShowButton = ({ label, disabled, onClick }: Props) => {
   return (
-    <SwitchButton type={type} disabled={disabled} onClick={onClick}>
+    <SwitchButton disabled={disabled} onClick={onClick}>
       {label}
     </SwitchButton>
   );

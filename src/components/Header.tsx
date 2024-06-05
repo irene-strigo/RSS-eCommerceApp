@@ -15,18 +15,20 @@ const Header = () => {
 
   const headerButtons: Button[] = authUser.hasAuth
     ? [
-        { id: 1, link: '/personal-information', label: 'Personal info' },
-        { id: 2, link: '/about-us', label: 'About Us' },
-        { id: 3, link: '/cart', label: 'Your cart' },
-        { id: 4, link: '/main', label: 'Main Page' },
-        { id: 5, link: '/logout', label: 'Logout' },
+        { id: 1, link: '/main', label: 'Main Page' },
+        { id: 2, link: '/catalog', label: 'Catalog' },
+        { id: 3, link: '/personal-information', label: 'Personal info' },
+        { id: 4, link: '/cart', label: 'Your cart' },
+        { id: 5, link: '/about-us', label: 'About Us' },
+        { id: 6, link: '/logout', label: 'Logout' },
       ]
     : [
         { id: 1, link: '/log-in-page', label: 'Log In' },
         { id: 2, link: '/sign-up-page', label: 'Sign Up' },
-        { id: 3, link: '/about-us', label: 'About Us' },
-        { id: 4, link: '/cart', label: 'Your cart' },
-        { id: 5, link: '/main', label: 'Main Page' },
+        { id: 3, link: '/main', label: 'Main Page' },
+        { id: 4, link: '/catalog', label: 'Catalog' },
+        { id: 5, link: '/cart', label: 'Your cart' },
+        { id: 6, link: '/about-us', label: 'About Us' },
       ];
 
   return (

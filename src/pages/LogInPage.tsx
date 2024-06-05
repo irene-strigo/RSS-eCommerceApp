@@ -2,7 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../components/common/AuthContext';
 import { Header, Footer, LogInData } from '../components';
-import { ButtonSubmit, Container, Form, PageWrapper } from '../components/common/CommonStyles';
+import {
+  ButtonSubmit,
+  Container,
+  ContentWrapper,
+  Form,
+  PageWrapper,
+} from '../components/common/CommonStyles';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { MyCustomerSignin } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/customer';
 import { LogInCustomer } from '../services/Client';
@@ -41,22 +47,24 @@ const LogInPage = () => {
     <>
       <PageWrapper>
         <Header />
-        <Container>
-          <Form
-            onSubmit={handleSubmit(onSubmit)}
-            onChange={() => {
-              setLogError('');
-            }}
-          >
-            <Container>
-              <LogInData register={register} errors={errors} />
-              <CommentsDiv error={logError}></CommentsDiv>
-            </Container>
-            <ButtonSubmit type={'submit'} disabled={isDirty && !isValid}>
-              Log in
-            </ButtonSubmit>
-          </Form>
-        </Container>
+        <ContentWrapper $alignItems={'flex-start'}>
+          <Container>
+            <Form
+              onSubmit={handleSubmit(onSubmit)}
+              onChange={() => {
+                setLogError('');
+              }}
+            >
+              <Container>
+                <LogInData register={register} errors={errors} />
+                <CommentsDiv error={logError}></CommentsDiv>
+              </Container>
+              <ButtonSubmit type={'submit'} disabled={isDirty && !isValid}>
+                Log in
+              </ButtonSubmit>
+            </Form>
+          </Container>
+        </ContentWrapper>
         <Footer />
       </PageWrapper>
     </>

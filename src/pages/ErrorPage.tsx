@@ -8,7 +8,7 @@ const ErrorPage = () => {
   return (
     <PageWrapper>
       <Header />
-      <ContentWrapper>
+      <ContentWrapper $alignItems={'center'}>
         <ErrorMessage>Oops! Something went wrong!</ErrorMessage>
       </ContentWrapper>
       <Footer />
