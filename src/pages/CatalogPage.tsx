@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
@@ -56,7 +56,7 @@ const defaultFilter: Filters = {
 const CatalogPage = () => {
   const [isModal, setIsModal] = useState(false);
 
-  const [products, setProducts] = useState<ProductProjection[]>();
+  const [products, setProducts] = useState<ProductProjection[]>([]);
   const navigate = useNavigate();
 
   const [filter, setFilter] = useState<Filters>(defaultFilter);
@@ -87,6 +87,24 @@ const CatalogPage = () => {
     filterPrice[priceRange] = value;
     setFilter({ ...filter, filterPrice });
   }
+
+  // const [divHeight, setDivHeight] = useState(0);
+  const [loadingTimes, setLoadingTimes] = useState(0);
+  const limit = 6;
+  const ref = useRef<HTMLDivElement>(null);
+
+  // useEffect(() => {
+  //   if (ref.current) setDivHeight(ref.current.clientHeight);
+  // });
+
+  // const windowHeight = window.innerHeight;
+
+  const handleScroll = (e: React.SyntheticEvent<HTMLDivElement, UIEvent>) => {
+    const scrollPosition = (e.target as HTMLDivElement).scrollTop;
+    console.log(scrollPosition);
+
+    if (scrollPosition > 298 * (loadingTimes + 1)) setLoadingTimes(loadingTimes + 1);
+  };
 
   useEffect(() => {
     const requestFilter: string[] = [];
@@ -119,6 +137,8 @@ const CatalogPage = () => {
     const params: GetProdcutsParams = {
       filter: requestFilter,
       sort: `${filter.sortField} ${filter.sortDirection}`,
+      limit,
+      offset: limit * loadingTimes,
     };
 
     if (filter.search) {
@@ -127,9 +147,9 @@ const CatalogPage = () => {
     }
 
     getProducts(params).then((data) => {
-      if (data) setProducts(data.results);
+      if (data) setProducts([...products, ...data.results]);
     });
-  }, [filter]);
+  }, [filter, loadingTimes]);
 
   const handleClick = (id: string) => {
     navigate(`/catalog/item/${id}`);
@@ -138,7 +158,7 @@ const CatalogPage = () => {
   return (
     <PageWrapper>
       <Header />
-      <ContentWrapper $alignItems={'center'}>
+      <ContentWrapper ref={ref} onScroll={handleScroll} $alignItems={'center'}>
         <FiltersDiv onClick={() => setIsModal(true)}>Filters</FiltersDiv>
         <Modal open={isModal} onClose={() => setIsModal(false)} center>
           <CatalogFilters
