@@ -7,12 +7,19 @@ import { router } from './router';
 import { AuthContextProvider } from './components/common';
 
 import './style.css';
+import { CreateCart } from './services/Client';
 
-const container = document.getElementById('app');
-const root = createRoot(container!);
+(async () => {
+  const container = document.getElementById('app');
+  const root = createRoot(container!);
 
-root.render(
-  <AuthContextProvider>
-    <RouterProvider router={router} />
-  </AuthContextProvider>,
-);
+  if (!localStorage.getItem('cartId')) {
+    await CreateCart();
+  }
+
+  root.render(
+    <AuthContextProvider>
+      <RouterProvider router={router} />
+    </AuthContextProvider>,
+  );
+})();

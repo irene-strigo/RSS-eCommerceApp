@@ -1,5 +1,5 @@
 import { getApi } from './ClientBuilder';
-import { _BaseAddress, Customer, CustomerSignInResult } from '@commercetools/platform-sdk';
+import { _BaseAddress, Cart, Customer, CustomerSignInResult } from '@commercetools/platform-sdk';
 import { MyCustomerDraft } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/me';
 import {
   CustomerUpdateAction,
@@ -8,7 +8,7 @@ import {
 } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/customer';
 import { QueryParam } from '@commercetools/platform-sdk/dist/declarations/src/generated/shared/utils/common-types';
 
-export type GetProdcutsParams = {
+export type GetProductsParams = {
   fuzzy?: boolean;
   fuzzyLevel?: number;
   markMatchingVariants?: boolean;
@@ -32,13 +32,13 @@ export type GetProdcutsParams = {
 };
 
 export type GetProductsMethodArgs = {
-  queryArgs?: GetProdcutsParams;
+  queryArgs?: GetProductsParams;
   headers?: {
     [key: string]: string | string[];
   };
 };
 
-export const getProducts = (params?: GetProdcutsParams) => {
+export const getProducts = (params?: GetProductsParams) => {
   const methodArgs: GetProductsMethodArgs = {};
   if (params) {
     methodArgs.queryArgs = params;
@@ -447,6 +447,68 @@ export const changeCustomerAddress = async (
             action: 'changeAddress',
             addressId: address.id,
             address,
+          },
+        ],
+      },
+    })
+    .execute()
+    .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export const CreateCart = async (): Promise<Cart> => {
+  return getApi()
+    .carts()
+    .post({
+      body: {
+        currency: 'EUR',
+      },
+    })
+    .execute()
+    .then(({ body }) => {
+      localStorage.setItem('cartId', body.id);
+      return body;
+    })
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export const GetCart = async (cartId: string): Promise<Cart> => {
+  return getApi()
+    .carts()
+    .withId({ ID: cartId })
+    .get()
+    .execute()
+    .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export const UpdateCart = async (
+  cartId: string,
+  productId: string,
+  quantity: number = 1,
+): Promise<Cart> => {
+  const currentCart = await GetCart(cartId);
+
+  return getApi()
+    .carts()
+    .withId({ ID: cartId })
+    .post({
+      body: {
+        version: currentCart.version,
+        actions: [
+          {
+            action: 'addLineItem',
+            productId: productId,
+            quantity,
           },
         ],
       },
