@@ -112,7 +112,11 @@ export const LogInCustomer = async (customerSignin: MyCustomerSignin): Promise<v
     .me()
     .login()
     .post({
-      body: customerSignin,
+      body: {
+        ...customerSignin,
+        // activeCartSignInMode: 'MergeWithExistingCustomerCart',
+        // updateProductData: true
+      },
     })
     .execute()
     .then(({ body }) => body)
@@ -509,6 +513,30 @@ export const UpdateCart = async (
             action: 'addLineItem',
             productId: productId,
             quantity,
+          },
+        ],
+      },
+    })
+    .execute()
+    .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export const DeleteProductInCart = async (cartId: string, lineItemId: string): Promise<Cart> => {
+  const currentCart = await GetCart(cartId);
+  return getApi()
+    .carts()
+    .withId({ ID: cartId })
+    .post({
+      body: {
+        version: currentCart.version,
+        actions: [
+          {
+            action: 'removeLineItem',
+            lineItemId: lineItemId,
           },
         ],
       },

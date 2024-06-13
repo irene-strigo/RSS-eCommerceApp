@@ -7,33 +7,15 @@ import {
   CounterDiv,
   CountersContainer,
   ProductDataContainer,
-  SwitchButton,
 } from './common/CommonStyles';
+import ShowButton from './common/SwitchButton';
 
 type Props = {
   lineItem: LineItem;
+  onClick: (e: React.MouseEvent<HTMLElement>) => void;
 };
 
-const CartProductRow = ({ lineItem }: Props) => {
-  /* const [firstName, setFirstName] = useState('');
-   const [firstPrice, setFirstPrice] = useState(0);
-   const [firstImg, setFirstImg] = useState('');
- 
- 
-   useEffect(() => {
-     getProductById("32c0240e-3686-4392-9649-f2bc234d8231")
-       .then((data) => {
-         setFirstName(data.name.en);
-         if (data.masterVariant.prices) {
-           setFirstPrice(data.masterVariant.prices[0].value.centAmount);
-         }
-         if (data.masterVariant.images) {
-           setFirstImg(data.masterVariant.images[0].url);
-         }
-       })
-   })
- 
-   console.log(firstName, firstPrice, firstImg)*/
+const CartProductRow = ({ lineItem, onClick }: Props) => {
   return (
     <CartRowWrapper>
       <ProductDataContainer>
@@ -44,12 +26,12 @@ const CartProductRow = ({ lineItem }: Props) => {
         <div>{lineItem.name.en}</div>
       </ProductDataContainer>
       <CountersContainer>
-        <CounterDiv>price for one: {lineItem.price.value.centAmount / 100}</CounterDiv>
+        <CounterDiv>price: {lineItem.price.value.centAmount / 100}</CounterDiv>
         <CartRowButton type="button">-</CartRowButton>
         <CounterDiv>quantity: {lineItem.quantity}</CounterDiv>
         <CartRowButton type="button">+</CartRowButton>
-        <CounterDiv> total price: {lineItem.totalPrice.centAmount / 100}</CounterDiv>
-        <SwitchButton type="button">delete</SwitchButton>
+        <CounterDiv> total: {lineItem.totalPrice.centAmount / 100}</CounterDiv>
+        <ShowButton type="button" label={'delete'} disabled={false} onClick={onClick} />
       </CountersContainer>
     </CartRowWrapper>
   );

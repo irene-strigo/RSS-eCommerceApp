@@ -357,6 +357,7 @@ export const ProductSearchInput = styled.input`
 export const CartRowWrapper = styled.div`
   width: 100%;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   padding: 5px;
   border: 1px solid black;
@@ -366,7 +367,7 @@ export const ProductDataContainer = styled.div`
   width: 50%;
   display: flex;
   align-items: center;
-  font-size: 1.5rem;
+  font-size: clamp(1rem, 1vw, 1.5rem);
   gap: 20px;
 `;
 

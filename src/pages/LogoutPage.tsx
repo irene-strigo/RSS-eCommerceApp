@@ -10,6 +10,8 @@ const LogoutPage = () => {
     if (!authUser.checkingAuth) {
       if (authUser.hasAuth) {
         await authUser.logOut();
+        // localStorage.removeItem('cartId');
+        // await CreateCart();
       }
       navigate('/main');
     }

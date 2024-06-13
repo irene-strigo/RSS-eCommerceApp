@@ -11,6 +11,8 @@ import { Modal } from 'react-responsive-modal';
 import { GetProductsParams, getProducts } from '../services/Client';
 
 import { Header, Footer, ProductCard } from '../components';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { ContentWrapper, PageWrapper } from '../components/common/CommonStyles';
 import { Grid } from '../components/common';
 import CatalogFilters from '../components/CatalogFilters';
@@ -182,6 +184,7 @@ const CatalogPage = () => {
             />
           ))}
         </Grid>
+        <ToastContainer />
       </ContentWrapper>
       <Footer />
     </PageWrapper>
