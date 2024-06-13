@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useUser } from '../components/common/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { CreateCart } from '../services/Client';
 
 const LogoutPage = () => {
   const authUser = useUser();
@@ -10,6 +11,7 @@ const LogoutPage = () => {
     if (!authUser.checkingAuth) {
       if (authUser.hasAuth) {
         await authUser.logOut();
+        await CreateCart();
       }
       navigate('/main');
     }

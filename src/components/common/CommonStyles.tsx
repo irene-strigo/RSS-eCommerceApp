@@ -354,3 +354,52 @@ export const ProductSearchInput = styled.input`
   min-width: 200px;
   margin: 10px 0 10px;
 `;
+export const CartRowWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 5px;
+  border: 1px solid black;
+`;
+
+export const ProductDataContainer = styled.div`
+  width: 50%;
+  display: flex;
+  align-items: center;
+  font-size: clamp(1rem, 1vw, 1.5rem);
+  gap: 20px;
+`;
+
+export const CountersContainer = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+`;
+
+export const CartRowButton = styled.button`
+background-color: #ada5f9;
+  border-radius: 3px;
+  border: 1px solid #ada5f9;
+  color: #511f31;
+  cursor: pointer;
+  padding: 0 10px;
+  font-size: clamp(1.5rem, 2vw, 1.5rem);
+  margin: 5px;
+
+  &:hover,
+  :focus {
+    background-color: #f7f9ff;
+    color: #2c5777;
+`;
+
+export const PromoContainer = styled.div``;
+
+export const CartPictureContainer = styled.img`
+  max-height: 100px;
+`;
+export const CounterDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+`;

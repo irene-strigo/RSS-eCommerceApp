@@ -1,5 +1,5 @@
 import { getApi } from './ClientBuilder';
-import { _BaseAddress, Customer, CustomerSignInResult } from '@commercetools/platform-sdk';
+import { _BaseAddress, Cart, Customer, CustomerSignInResult } from '@commercetools/platform-sdk';
 import { MyCustomerDraft } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/me';
 import {
   CustomerUpdateAction,
@@ -8,7 +8,7 @@ import {
 } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/customer';
 import { QueryParam } from '@commercetools/platform-sdk/dist/declarations/src/generated/shared/utils/common-types';
 
-export type GetProdcutsParams = {
+export type GetProductsParams = {
   fuzzy?: boolean;
   fuzzyLevel?: number;
   markMatchingVariants?: boolean;
@@ -32,13 +32,13 @@ export type GetProdcutsParams = {
 };
 
 export type GetProductsMethodArgs = {
-  queryArgs?: GetProdcutsParams;
+  queryArgs?: GetProductsParams;
   headers?: {
     [key: string]: string | string[];
   };
 };
 
-export const getProducts = (params?: GetProdcutsParams) => {
+export const getProducts = (params?: GetProductsParams) => {
   const methodArgs: GetProductsMethodArgs = {};
   if (params) {
     methodArgs.queryArgs = params;
@@ -108,14 +108,29 @@ const getCustomerById = async (customerId: string): Promise<Customer> => {
 };
 
 export const LogInCustomer = async (customerSignin: MyCustomerSignin): Promise<void | Customer> => {
+  const cartId = localStorage.getItem('cartId');
   const result = await getApi(customerSignin.email, customerSignin.password)
-    .me()
+    // .me()
     .login()
     .post({
-      body: customerSignin,
+      body: {
+        ...customerSignin,
+        anonymousCart: {
+          id: cartId || '',
+          typeId: 'cart',
+        },
+        anonymousCartSignInMode: 'MergeWithExistingCustomerCart',
+        // activeCartSignInMode: 'UseAsNewActiveCustomerCart',
+        updateProductData: false,
+      },
     })
     .execute()
-    .then(({ body }) => body)
+    .then(({ body }) => {
+      if (body.cart?.id) {
+        localStorage.setItem('cartId', body.cart.id);
+      }
+      return body;
+    })
     .catch((err) => {
       console.error(err);
       throw err;
@@ -453,6 +468,144 @@ export const changeCustomerAddress = async (
     })
     .execute()
     .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export const CreateCart = async (): Promise<Cart> => {
+  return getApi()
+    .me()
+    .carts()
+    .post({
+      body: {
+        currency: 'EUR',
+      },
+    })
+    .execute()
+    .then(({ body }) => {
+      localStorage.setItem('cartId', body.id);
+      return body;
+    })
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export const GetCart = async (cartId: string): Promise<Cart> => {
+  return getApi()
+    .me()
+    .carts()
+    .withId({ ID: cartId })
+    .get()
+    .execute()
+    .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export const UpdateCart = async (
+  cartId: string,
+  productId: string,
+  quantity: number = 1,
+): Promise<Cart> => {
+  const currentCart = await GetCart(cartId);
+
+  return getApi()
+    .me()
+    .carts()
+    .withId({ ID: cartId })
+    .post({
+      body: {
+        version: currentCart.version,
+        actions: [
+          {
+            action: 'addLineItem',
+            productId: productId,
+            quantity,
+          },
+        ],
+      },
+    })
+    .execute()
+    .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export const DeleteProductInCart = async (cartId: string, lineItemId: string): Promise<Cart> => {
+  const currentCart = await GetCart(cartId);
+  return getApi()
+    .me()
+    .carts()
+    .withId({ ID: cartId })
+    .post({
+      body: {
+        version: currentCart.version,
+        actions: [
+          {
+            action: 'removeLineItem',
+            lineItemId: lineItemId,
+          },
+        ],
+      },
+    })
+    .execute()
+    .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export const ChangeLineItemQuantity = async (
+  cartId: string,
+  lineItemId: string,
+  quantity: number = 1,
+): Promise<Cart> => {
+  const currentCart = await GetCart(cartId);
+  return getApi()
+    .me()
+    .carts()
+    .withId({ ID: cartId })
+    .post({
+      body: {
+        version: currentCart.version,
+        actions: [
+          {
+            action: 'changeLineItemQuantity',
+            lineItemId: lineItemId,
+            quantity,
+          },
+        ],
+      },
+    })
+    .execute()
+    .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export const DeleteCart = async (cartId: string): Promise<void> => {
+  const currentCart = await GetCart(cartId);
+  getApi()
+    .me()
+    .carts()
+    .withId({ ID: cartId })
+    .delete({
+      queryArgs: {
+        version: currentCart.version,
+      },
+    })
+    .execute()
     .catch((err) => {
       console.error(err);
       throw err;

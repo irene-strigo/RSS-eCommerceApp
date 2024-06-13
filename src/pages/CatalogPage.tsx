@@ -8,9 +8,11 @@ import { ProductProjection } from '@commercetools/platform-sdk';
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
 
-import { GetProdcutsParams, getProducts } from '../services/Client';
+import { GetProductsParams, getProducts } from '../services/Client';
 
 import { Header, Footer, ProductCard } from '../components';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { ContentWrapper, PageWrapper } from '../components/common/CommonStyles';
 import { Grid } from '../components/common';
 import CatalogFilters from '../components/CatalogFilters';
@@ -101,7 +103,7 @@ const CatalogPage = () => {
 
   const handleScroll = (e: React.SyntheticEvent<HTMLDivElement, UIEvent>) => {
     const scrollPosition = (e.target as HTMLDivElement).scrollTop;
-    console.log(scrollPosition);
+    //console.log(scrollPosition);
 
     if (scrollPosition > 298 * (loadingTimes + 1)) setLoadingTimes(loadingTimes + 1);
   };
@@ -134,7 +136,7 @@ const CatalogPage = () => {
       requestFilter.push(`variants.attributes.color.key:"${filter.color}"`);
     }
 
-    const params: GetProdcutsParams = {
+    const params: GetProductsParams = {
       filter: requestFilter,
       sort: `${filter.sortField} ${filter.sortDirection}`,
       limit,
@@ -182,6 +184,7 @@ const CatalogPage = () => {
             />
           ))}
         </Grid>
+        <ToastContainer />
       </ContentWrapper>
       <Footer />
     </PageWrapper>

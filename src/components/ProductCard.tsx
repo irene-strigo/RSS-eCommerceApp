@@ -1,8 +1,11 @@
 import React from 'react';
 
 import { ProductProjection } from '@commercetools/platform-sdk';
-
-import { Label, Prices, SubmitButton, Slider, ProductCardWrapper } from './common';
+import { Label, Prices, Slider, ProductCardWrapper } from './common';
+import { UpdateCart } from '../services/Client';
+import ShowButton from './common/SwitchButton';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 type Props = {
   setIsModal?: (isModal: boolean) => void;
@@ -12,6 +15,7 @@ type Props = {
 };
 
 const ProductCard = ({ setIsModal, isCatDisplay, productData, onClick }: Props) => {
+  const cartId = localStorage.getItem('cartId');
   const { name, masterVariant, metaDescription } = productData;
   const description = metaDescription?.en || '';
 
@@ -21,6 +25,12 @@ const ProductCard = ({ setIsModal, isCatDisplay, productData, onClick }: Props) 
   const currentAmount = pricesArray[pricesArray.length - 1].value.centAmount;
   const amountBefore = pricesArray[pricesArray.length - 2].value.centAmount;
   const currencyCode = pricesArray[pricesArray.length - 1].value.currencyCode;
+
+  const showToast = (message: string) => {
+    toast.success(message, {
+      position: 'top-center',
+    });
+  };
 
   return (
     <ProductCardWrapper onClick={onClick}>
@@ -42,7 +52,17 @@ const ProductCard = ({ setIsModal, isCatDisplay, productData, onClick }: Props) 
         amountBefore={amountBefore}
         currencyCode={currencyCode}
       />
-      <SubmitButton label={'Add to cart'} />
+      <ShowButton
+        label={'add to cart'}
+        type={'button'}
+        disabled={false}
+        onClick={(evt) => {
+          evt.stopPropagation();
+          UpdateCart(cartId ? cartId : '', productData.id);
+          showToast('item added to cart');
+        }}
+      />
+      <ToastContainer />
     </ProductCardWrapper>
   );
 };
