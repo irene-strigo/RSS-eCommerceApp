@@ -13,8 +13,9 @@ type Props = {
   productData: ProductProjection;
   onClick?: () => void;
 };
-const cartId = localStorage.getItem('cartId');
+
 const ProductCard = ({ setIsModal, isCatDisplay, productData, onClick }: Props) => {
+  const cartId = localStorage.getItem('cartId');
   const { name, masterVariant, metaDescription } = productData;
   const description = metaDescription?.en || '';
 
