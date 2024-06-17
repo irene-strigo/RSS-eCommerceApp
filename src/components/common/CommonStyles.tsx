@@ -24,7 +24,7 @@ export const ContentWrapper = styled.div<{
   align-items: ${({ $alignItems }) => $alignItems};
   background-color: #f7f9ff;
   width: 100%;
-  padding: 70px 0px;
+  padding: 40px 0px;
   height: 100%;
   overflow-x: auto;
   font-size: clamp(1rem, 2.5vw, 1.5rem);
@@ -402,4 +402,42 @@ export const CounterDiv = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
+`;
+export const Banner = styled.img`
+  max-height: 20em;
+`;
+export const BannerContainer = styled.div`
+  margin: 0 auto;
+  text-align: center;
+`;
+export const BannerHeading = styled.p`
+  font-size: clamp(2rem, 3vw, 5rem);
+  color: green;
+`;
+
+export const PromocodeName = styled.span`
+  color: #ed7412;
+  font-size: clamp(3rem, 7vw, 8rem);
+  font-weight: 600;
+  position: absolute;
+  top: 100px;
+  outline: 1px solid white;
+`;
+export const BannerDiv = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+`;
+
+export const PromoCodeAndPriceWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-size: clamp(1rem, 2vw, 5rem);
+`;
+export const CartPricesNames = styled.span`
+  color: #39739d;
+  font-weight: 500;
 `;
