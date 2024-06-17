@@ -1,4 +1,5 @@
 import { Header, Footer } from '../components';
+
 import {
   CartPricesNames,
   ErrorsText,
@@ -9,15 +10,17 @@ import {
   SwitchButton,
 } from '../components/common/CommonStyles';
 import { Cart } from '@commercetools/platform-sdk';
+
+
 import {
   AddDiscountCode,
   ChangeLineItemQuantity,
   CreateCart,
   DeleteCart,
   DeleteProductInCart,
-  GetCart,
 } from '../services/Client';
 import CartProductRow from '../components/CartProductRow';
+
 import { NavigationButton } from '../components/common';
 import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
@@ -27,8 +30,10 @@ const CartPage = () => {
   const [cart, setCart] = useState<Cart | null>(null);
   const [inputValue, setInputValue] = useState('');
 
-  useEffect(() => {
-    const cartId = localStorage.getItem('cartId');
+
+
+import { useCartItems } from '../components/common/CartItemsContext';
+
 
     if (cartId) {
       GetCart(cartId).then((c) => setCart(c));
@@ -52,6 +57,13 @@ const CartPage = () => {
   if (cart?.discountOnTotalPrice) {
     priceWithoutDiscounts = cart.discountOnTotalPrice?.discountedAmount.centAmount / 10;
   }
+
+const CartPage = () => {
+  const cartItems = useCartItems();
+  const cart = cartItems.cart;
+  const updateQuantity = cartItems.updateQuantity;
+
+
   return (
     <PageWrapper>
       <Header />
@@ -71,14 +83,14 @@ const CartPage = () => {
               evt.stopPropagation();
               if (cart.id) {
                 const newCart = await ChangeLineItemQuantity(cart.id, lineItem.id, qty);
-                setCart(newCart);
+                updateQuantity(newCart);
               }
             }}
             onDelete={async (evt) => {
               evt.stopPropagation();
               if (cart.id) {
                 const newCart = await DeleteProductInCart(cart.id, lineItem.id);
-                setCart(newCart);
+                updateQuantity(newCart);
               }
             }}
           ></CartProductRow>
@@ -128,7 +140,7 @@ const CartPage = () => {
               if (cart.id) {
                 await DeleteCart(cart.id);
                 const newCart = await CreateCart();
-                setCart(newCart);
+                cartItems.setCart(newCart);
               }
             }}
           >

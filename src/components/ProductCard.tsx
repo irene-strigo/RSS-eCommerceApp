@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { Label, Prices, Slider, ProductCardWrapper } from './common';
-import { UpdateCart } from '../services/Client';
+import { UpdateCart, DeleteProductInCart } from '../services/Client';
 import ShowButton from './common/SwitchButton';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useCartItems } from '../components/common/CartItemsContext';
 
 type Props = {
   setIsModal?: (isModal: boolean) => void;
@@ -32,6 +33,30 @@ const ProductCard = ({ setIsModal, isCatDisplay, productData, onClick }: Props) 
     });
   };
 
+  const [isItemInCart, setIsItemInCart] = useState(false);
+  const { cart, loadCart } = useCartItems();
+  const items = cart?.lineItems;
+
+  const handleClick = async (evt: React.MouseEvent) => {
+    evt.stopPropagation();
+
+    if (isItemInCart) {
+      showToast('item removed from cart');
+      const lineItemId =
+        cart?.lineItems.find((item) => item.productId === productData.id)?.id || '';
+      await DeleteProductInCart(cartId ? cartId : '', lineItemId);
+    } else {
+      showToast('item added to cart');
+      await UpdateCart(cartId ? cartId : '', productData.id);
+    }
+
+    await loadCart();
+  };
+
+  useEffect(() => {
+    setIsItemInCart(!!items?.find((item) => item.productId === productData.id));
+  }, [cart]);
+
   return (
     <ProductCardWrapper onClick={onClick}>
       {imagesArray.length === 1 ? (
@@ -53,14 +78,10 @@ const ProductCard = ({ setIsModal, isCatDisplay, productData, onClick }: Props) 
         currencyCode={currencyCode}
       />
       <ShowButton
-        label={'add to cart'}
+        label={isItemInCart ? 'remove' : 'add to cart'}
         type={'button'}
         disabled={false}
-        onClick={(evt) => {
-          evt.stopPropagation();
-          UpdateCart(cartId ? cartId : '', productData.id);
-          showToast('item added to cart');
-        }}
+        onClick={handleClick}
       />
     </ProductCardWrapper>
   );
