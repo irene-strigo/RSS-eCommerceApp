@@ -4,7 +4,7 @@ import { ProductProjection } from '@commercetools/platform-sdk';
 import { Label, Prices, Slider, ProductCardWrapper } from './common';
 import { UpdateCart } from '../services/Client';
 import ShowButton from './common/SwitchButton';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 type Props = {
@@ -62,7 +62,6 @@ const ProductCard = ({ setIsModal, isCatDisplay, productData, onClick }: Props) 
           showToast('item added to cart');
         }}
       />
-      <ToastContainer />
     </ProductCardWrapper>
   );
 };

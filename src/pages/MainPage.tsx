@@ -1,8 +1,6 @@
 import React from 'react';
 import { Header, Footer } from '../components';
 import { Container, ContentWrapper, PageWrapper } from '../components/common/CommonStyles';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const MainPage = () => {
   return (
@@ -10,7 +8,8 @@ const MainPage = () => {
       <Header />
       <ContentWrapper $alignItems={'flex-start'}>
         <Container>Main page</Container>
-        <ToastContainer />
+
+        <img src="/assets/images/SummerPicture.png" alt="" />
       </ContentWrapper>
       <Footer />
     </PageWrapper>
