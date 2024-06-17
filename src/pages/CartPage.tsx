@@ -15,6 +15,7 @@ import { useCartItems } from '../components/common/CartItemsContext';
 const CartPage = () => {
   const cartItems = useCartItems();
   const cart = cartItems.cart;
+  const updateQuantity = cartItems.updateQuantity;
 
   return (
     <PageWrapper>
@@ -35,14 +36,14 @@ const CartPage = () => {
               evt.stopPropagation();
               if (cart.id) {
                 const newCart = await ChangeLineItemQuantity(cart.id, lineItem.id, qty);
-                cartItems.setCart(newCart);
+                updateQuantity(newCart);
               }
             }}
             onDelete={async (evt) => {
               evt.stopPropagation();
               if (cart.id) {
                 const newCart = await DeleteProductInCart(cart.id, lineItem.id);
-                cartItems.setCart(newCart);
+                updateQuantity(newCart);
               }
             }}
           ></CartProductRow>
