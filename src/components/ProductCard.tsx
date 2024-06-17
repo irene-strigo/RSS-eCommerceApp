@@ -51,17 +51,9 @@ const ProductCard = ({ setIsModal, isCatDisplay, productData, onClick }: Props) 
     }
 
     await loadCart();
-
-    // const isItemInCar = !!items?.find((item) => item.productId === productData.id);
-    // console.log(items);
-    // console.log(productData.id);
-    // console.log(isItemInCar);
-
-    // setIsItemInCart(!isItemInCart);
   };
 
   useEffect(() => {
-    console.log(cart);
     setIsItemInCart(!!items?.find((item) => item.productId === productData.id));
   }, [cart]);
 
