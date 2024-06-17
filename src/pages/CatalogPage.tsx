@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect /*useRef*/ } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
@@ -90,24 +90,18 @@ const CatalogPage = () => {
     setFilter({ ...filter, filterPrice });
   }
 
-  // const [divHeight, setDivHeight] = useState(0);
-  const [loadingTimes, setLoadingTimes] = useState(0);
+  /*const [loadingTimes, setLoadingTimes] = useState(0);
   const limit = 6;
   const ref = useRef<HTMLDivElement>(null);
 
-  // useEffect(() => {
-  //   if (ref.current) setDivHeight(ref.current.clientHeight);
-  // });
 
-  // const windowHeight = window.innerHeight;
 
   const handleScroll = (e: React.SyntheticEvent<HTMLDivElement, UIEvent>) => {
     const scrollPosition = (e.target as HTMLDivElement).scrollTop;
-    //console.log(scrollPosition);
 
     if (scrollPosition > 298 * (loadingTimes + 1)) setLoadingTimes(loadingTimes + 1);
   };
-
+*/
   useEffect(() => {
     const requestFilter: string[] = [];
 
@@ -139,8 +133,8 @@ const CatalogPage = () => {
     const params: GetProductsParams = {
       filter: requestFilter,
       sort: `${filter.sortField} ${filter.sortDirection}`,
-      limit,
-      offset: limit * loadingTimes,
+      // limit,
+      // offset: limit * loadingTimes,
     };
 
     if (filter.search) {
@@ -149,9 +143,9 @@ const CatalogPage = () => {
     }
 
     getProducts(params).then((data) => {
-      if (data) setProducts([...products, ...data.results]);
+      if (data) setProducts(/*[...products, ...*/ data.results /*]*/);
     });
-  }, [filter, loadingTimes]);
+  }, [filter /* loadingTimes*/]);
 
   const handleClick = (id: string) => {
     navigate(`/catalog/item/${id}`);
@@ -160,7 +154,7 @@ const CatalogPage = () => {
   return (
     <PageWrapper>
       <Header />
-      <ContentWrapper ref={ref} onScroll={handleScroll} $alignItems={'center'}>
+      <ContentWrapper /*ref={ref} onScroll={handleScroll}*/ $alignItems={'center'}>
         <FiltersDiv onClick={() => setIsModal(true)}>Filters</FiltersDiv>
         <Modal open={isModal} onClose={() => setIsModal(false)} center>
           <CatalogFilters

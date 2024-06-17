@@ -611,3 +611,28 @@ export const DeleteCart = async (cartId: string): Promise<void> => {
       throw err;
     });
 };
+
+export const AddDiscountCode = async (cartId: string, code: string): Promise<Cart> => {
+  const currentCart = await GetCart(cartId);
+  return getApi()
+    .me()
+    .carts()
+    .withId({ ID: cartId })
+    .post({
+      body: {
+        version: currentCart.version,
+        actions: [
+          {
+            action: 'addDiscountCode',
+            code: code,
+          },
+        ],
+      },
+    })
+    .execute()
+    .then(({ body }) => body)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
