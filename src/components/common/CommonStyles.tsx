@@ -441,3 +441,22 @@ export const CartPricesNames = styled.span`
   color: #39739d;
   font-weight: 500;
 `;
+
+export const PortraitImg = styled.img`
+  max-height: 200px;
+`;
+
+export const LogoLink = styled.a`
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+  color: #974160;
+  font-size: clamp(1rem, 0.7vw, 1.5rem);
+
+  &:hover {
+    color: #69ddff;
+  }
+  @media screen and (max-width: 900px) {
+    font-size: clamp(0.7rem, 1vw, 1.5rem);
+  }
+`;

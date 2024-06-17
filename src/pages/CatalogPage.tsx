@@ -1,4 +1,4 @@
-import React, { useState, useEffect /*useRef*/ } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
@@ -38,6 +38,8 @@ export type Filters = {
   size: string;
   search: string;
   filterPrice: PriceFilter;
+  limit: number;
+  offset: number;
 };
 
 const defaultFilter: Filters = {
@@ -53,6 +55,8 @@ const defaultFilter: Filters = {
     '6000 to 10000': false,
     '10000 to *': false,
   },
+  limit: 6,
+  offset: 0,
 };
 
 const CatalogPage = () => {
@@ -71,37 +75,36 @@ const CatalogPage = () => {
     setFilter({ ...filter, sortField: field, sortDirection: direction });
   }
   function setFilterCategory(category: string) {
-    setFilter({ ...filter, filterCategory: category });
+    setFilter({ ...filter, filterCategory: category, offset: 0 });
   }
 
   function setSearch(search: string) {
-    setFilter({ ...filter, search });
+    setFilter({ ...filter, search, offset: 0 });
   }
   function setSize(size: string) {
-    setFilter({ ...filter, size: size === 'all' ? '' : size });
+    setFilter({ ...filter, size: size === 'all' ? '' : size, offset: 0 });
   }
   function setColor(color: string) {
-    setFilter({ ...filter, color: color === 'all' ? '' : color });
+    setFilter({ ...filter, color: color === 'all' ? '' : color, offset: 0 });
   }
 
   function setPrice(priceRange: keyof PriceFilter, value: boolean) {
     const filterPrice: PriceFilter = { ...filter.filterPrice };
     filterPrice[priceRange] = value;
-    setFilter({ ...filter, filterPrice });
+    setFilter({ ...filter, filterPrice, offset: 0 });
   }
 
-  /*const [loadingTimes, setLoadingTimes] = useState(0);
-  const limit = 6;
   const ref = useRef<HTMLDivElement>(null);
-
-
 
   const handleScroll = (e: React.SyntheticEvent<HTMLDivElement, UIEvent>) => {
     const scrollPosition = (e.target as HTMLDivElement).scrollTop;
+    const currentPage = filter.offset / filter.limit;
 
-    if (scrollPosition > 298 * (loadingTimes + 1)) setLoadingTimes(loadingTimes + 1);
+    if (scrollPosition > 580 * (currentPage + 1)) {
+      setFilter({ ...filter, offset: (currentPage + 1) * filter.limit });
+    }
   };
-*/
+
   useEffect(() => {
     const requestFilter: string[] = [];
 
@@ -133,8 +136,8 @@ const CatalogPage = () => {
     const params: GetProductsParams = {
       filter: requestFilter,
       sort: `${filter.sortField} ${filter.sortDirection}`,
-      // limit,
-      // offset: limit * loadingTimes,
+      limit: filter.limit,
+      offset: filter.offset,
     };
 
     if (filter.search) {
@@ -143,9 +146,15 @@ const CatalogPage = () => {
     }
 
     getProducts(params).then((data) => {
-      if (data) setProducts(/*[...products, ...*/ data.results /*]*/);
+      if (data) {
+        if (filter.offset) {
+          setProducts([...products, ...data.results]);
+        } else {
+          setProducts([...data.results]);
+        }
+      }
     });
-  }, [filter /* loadingTimes*/]);
+  }, [filter]);
 
   const handleClick = (id: string) => {
     navigate(`/catalog/item/${id}`);
@@ -154,7 +163,7 @@ const CatalogPage = () => {
   return (
     <PageWrapper>
       <Header />
-      <ContentWrapper /*ref={ref} onScroll={handleScroll}*/ $alignItems={'center'}>
+      <ContentWrapper ref={ref} onScroll={handleScroll} $alignItems={'center'}>
         <FiltersDiv onClick={() => setIsModal(true)}>Filters</FiltersDiv>
         <Modal open={isModal} onClose={() => setIsModal(false)} center>
           <CatalogFilters
