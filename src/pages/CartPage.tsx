@@ -1,31 +1,20 @@
 import { Header, Footer } from '../components';
 import { PageWrapper, PromoContainer, SwitchButton } from '../components/common/CommonStyles';
-import { Cart } from '@commercetools/platform-sdk';
+
 import {
   ChangeLineItemQuantity,
   CreateCart,
   DeleteCart,
   DeleteProductInCart,
-  GetCart,
 } from '../services/Client';
 import CartProductRow from '../components/CartProductRow';
 import { Input, NavigationButton } from '../components/common';
-import { useEffect, useState } from 'react';
+
+import { useCartItems } from '../components/common/CartItemsContext';
 
 const CartPage = () => {
-  const [cart, setCart] = useState<Cart | null>(null);
-
-  useEffect(() => {
-    const cartId = localStorage.getItem('cartId');
-
-    if (cartId) {
-      GetCart(cartId).then((c) => setCart(c));
-    } else {
-      CreateCart().then((crt) => {
-        GetCart(crt.id).then((c) => setCart(c));
-      });
-    }
-  }, []);
+  const cartItems = useCartItems();
+  const cart = cartItems.cart;
 
   return (
     <PageWrapper>
@@ -40,19 +29,20 @@ const CartPage = () => {
       {cart?.lineItems &&
         cart?.lineItems.map((lineItem) => (
           <CartProductRow
+            key={lineItem.id}
             lineItem={lineItem}
             onChangeQty={async (evt, qty: number) => {
               evt.stopPropagation();
               if (cart.id) {
                 const newCart = await ChangeLineItemQuantity(cart.id, lineItem.id, qty);
-                setCart(newCart);
+                cartItems.setCart(newCart);
               }
             }}
             onDelete={async (evt) => {
               evt.stopPropagation();
               if (cart.id) {
                 const newCart = await DeleteProductInCart(cart.id, lineItem.id);
-                setCart(newCart);
+                cartItems.setCart(newCart);
               }
             }}
           ></CartProductRow>
@@ -70,7 +60,7 @@ const CartPage = () => {
               if (cart.id) {
                 await DeleteCart(cart.id);
                 const newCart = await CreateCart();
-                setCart(newCart);
+                cartItems.setCart(newCart);
               }
             }}
           >

@@ -5,6 +5,7 @@ import { RouterProvider } from 'react-router-dom';
 import { router } from './router';
 
 import { AuthContextProvider } from './components/common';
+import { CartItemsContextProvider } from './components/common';
 
 import './style.css';
 import { CreateCart } from './services/Client';
@@ -19,7 +20,9 @@ import { CreateCart } from './services/Client';
 
   root.render(
     <AuthContextProvider>
-      <RouterProvider router={router} />
+      <CartItemsContextProvider>
+        <RouterProvider router={router} />
+      </CartItemsContextProvider>
     </AuthContextProvider>,
   );
 })();
