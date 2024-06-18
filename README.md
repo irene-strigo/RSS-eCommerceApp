@@ -10,7 +10,7 @@ It is an educational project designed to master the curriculum and develop teamw
 ### Setup
 
 The application uses React, Typescript, Webpack, ESLint, Prettier, Husky.
-Jest testing framework. Styled components library (npm install styled-components).
+Jest testing framework. Styled-components, react-hook form, react-responsive-modal, react-toastify librarys.
 To run the project you need to open it locally and install the dependencies (npm i)
 Also you need to make .env file with an access code for CommerceTools, which can be obtained from team members or in the Links channel on the Discord server of a team.
 
