@@ -13,6 +13,7 @@ type CartItemsContextProviderProps = {
   cart: Cart | null;
   setCart: (cart: Cart) => void;
   loadCart: () => Promise<void>;
+  recreateCart: () => Promise<void>;
   updateQuantity: (cartData: Cart) => void;
 };
 
@@ -22,6 +23,7 @@ const ItemsCount = createContext<CartItemsContextProviderProps>({
   cart: null,
   setCart: () => undefined,
   loadCart: () => Promise.reject(),
+  recreateCart: () => Promise.reject(),
   updateQuantity: () => undefined,
 });
 
@@ -53,12 +55,19 @@ const CartItemsContextProvider = ({ children }: Props) => {
     }
   };
 
+  const recreateCart = async () => {
+    localStorage.removeItem('cartId');
+    return loadCart();
+  };
+
   useEffect(() => {
     loadCart();
   }, []);
 
   return (
-    <ItemsCount.Provider value={{ items, setItems, cart, setCart, loadCart, updateQuantity }}>
+    <ItemsCount.Provider
+      value={{ items, setItems, cart, setCart, loadCart, updateQuantity, recreateCart }}
+    >
       {children}
     </ItemsCount.Provider>
   );

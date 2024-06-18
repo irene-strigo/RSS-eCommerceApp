@@ -2,6 +2,7 @@ import { getApi } from './ClientBuilder';
 import { _BaseAddress, Cart, Customer, CustomerSignInResult } from '@commercetools/platform-sdk';
 import { MyCustomerDraft } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/me';
 import {
+  CustomerSignin,
   CustomerUpdateAction,
   MyCustomerChangePassword,
   MyCustomerSignin,
@@ -107,14 +108,15 @@ const getCustomerById = async (customerId: string): Promise<Customer> => {
   return customer;
 };
 
-export const LogInCustomer = async (customerSignin: MyCustomerSignin): Promise<void | Customer> => {
+export const LogInCustomer = async (
+  customerSignin: MyCustomerSignin,
+  ignoreCart?: boolean,
+): Promise<void | Customer> => {
   const cartId = localStorage.getItem('cartId');
-  const result = await getApi(customerSignin.email, customerSignin.password)
-    // .me()
-    .login()
-    .post({
-      body: {
-        ...customerSignin,
+
+  const cartOptions: Partial<CustomerSignin> = ignoreCart
+    ? {}
+    : {
         anonymousCart: {
           id: cartId || '',
           typeId: 'cart',
@@ -122,10 +124,20 @@ export const LogInCustomer = async (customerSignin: MyCustomerSignin): Promise<v
         anonymousCartSignInMode: 'MergeWithExistingCustomerCart',
         // activeCartSignInMode: 'UseAsNewActiveCustomerCart',
         updateProductData: false,
+      };
+
+  const result = await getApi(customerSignin.email, customerSignin.password)
+    // .me()
+    .login()
+    .post({
+      body: {
+        ...customerSignin,
+        ...cartOptions,
       },
     })
     .execute()
     .then(({ body }) => {
+      localStorage.removeItem('AnonToken');
       if (body.cart?.id) {
         localStorage.setItem('cartId', body.cart.id);
       }
@@ -153,7 +165,7 @@ export const signInCustomer = async (draft: MyCustomerDraft): Promise<void | Cus
       throw err;
     });
 
-  await LogInCustomer(draft);
+  await LogInCustomer(draft, true);
 
   return result.customer;
 };

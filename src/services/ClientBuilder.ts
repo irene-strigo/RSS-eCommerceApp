@@ -15,24 +15,6 @@ import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
 const projectKey = `${process.env.CTP_PROJECT_KEY}`;
 const scopes = [`${process.env.CTP_SCOPES}`];
 
-// Configure authMiddlewareOptions
-const baseAuthMiddlewareOptions: AuthMiddlewareOptions = {
-  host: 'https://auth.eu-central-1.aws.commercetools.com',
-  projectKey: projectKey,
-  credentials: {
-    clientId: `${process.env.CTP_CLIENT_ID}`,
-    clientSecret: `${process.env.CTP_CLIENT_SECRET}`,
-  },
-  scopes,
-  fetch,
-};
-
-// Configure httpMiddlewareOptions
-const httpMiddlewareOptions: HttpMiddlewareOptions = {
-  host: 'https://api.eu-central-1.aws.commercetools.com',
-  fetch,
-};
-
 export default function store(key: string) {
   return {
     get: (): TokenStore => {
@@ -44,6 +26,27 @@ export default function store(key: string) {
     },
   };
 }
+
+const anonTokenStore = store('AnonToken');
+
+// Configure authMiddlewareOptions
+const baseAuthMiddlewareOptions: AuthMiddlewareOptions = {
+  host: 'https://auth.eu-central-1.aws.commercetools.com',
+  projectKey: projectKey,
+  credentials: {
+    clientId: `${process.env.CTP_CLIENT_ID}`,
+    clientSecret: `${process.env.CTP_CLIENT_SECRET}`,
+  },
+  scopes,
+  fetch,
+  tokenCache: anonTokenStore,
+};
+
+// Configure httpMiddlewareOptions
+const httpMiddlewareOptions: HttpMiddlewareOptions = {
+  host: 'https://api.eu-central-1.aws.commercetools.com',
+  fetch,
+};
 
 const defaultClient = new ClientBuilder()
   .withHttpMiddleware(httpMiddlewareOptions)

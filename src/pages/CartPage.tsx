@@ -8,35 +8,25 @@ import {
   PromoContainer,
   SwitchButton,
 } from '../components/common/CommonStyles';
-import { Cart } from '@commercetools/platform-sdk';
 import {
   AddDiscountCode,
   ChangeLineItemQuantity,
-  CreateCart,
   DeleteCart,
   DeleteProductInCart,
-  GetCart,
 } from '../services/Client';
 import CartProductRow from '../components/CartProductRow';
 import { NavigationButton } from '../components/common';
 import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useCartItems } from '../components/common/CartItemsContext';
 
 const CartPage = () => {
-  const [cart, setCart] = useState<Cart | null>(null);
   const [inputValue, setInputValue] = useState('');
+  const { cart, updateQuantity, loadCart, recreateCart } = useCartItems();
 
   useEffect(() => {
-    const cartId = localStorage.getItem('cartId');
-
-    if (cartId) {
-      GetCart(cartId).then((c) => setCart(c));
-    } else {
-      CreateCart().then((crt) => {
-        GetCart(crt.id).then((c) => setCart(c));
-      });
-    }
+    loadCart();
   }, []);
   const showToast = (message: string) => {
     toast.success(message, {
@@ -71,14 +61,14 @@ const CartPage = () => {
               evt.stopPropagation();
               if (cart.id) {
                 const newCart = await ChangeLineItemQuantity(cart.id, lineItem.id, qty);
-                setCart(newCart);
+                updateQuantity(newCart);
               }
             }}
             onDelete={async (evt) => {
               evt.stopPropagation();
               if (cart.id) {
                 const newCart = await DeleteProductInCart(cart.id, lineItem.id);
-                setCart(newCart);
+                updateQuantity(newCart);
               }
             }}
           ></CartProductRow>
@@ -98,7 +88,7 @@ const CartPage = () => {
                   try {
                     e.preventDefault();
                     const newCart = await AddDiscountCode(cart.id, inputValue);
-                    setCart(newCart);
+                    updateQuantity(newCart);
                     showToast('discount applied');
                   } catch (err) {
                     showToastError('wrong discount code!');
@@ -127,8 +117,7 @@ const CartPage = () => {
             onClick={async () => {
               if (cart.id) {
                 await DeleteCart(cart.id);
-                const newCart = await CreateCart();
-                setCart(newCart);
+                await recreateCart();
               }
             }}
           >
