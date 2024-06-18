@@ -1,0 +1,8 @@
+webpack.config.js
+dist/
+
+# Runtime data
+node_modules/
+package-lock.json
+
+assets/
