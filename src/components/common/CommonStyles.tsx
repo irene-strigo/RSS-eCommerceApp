@@ -24,7 +24,7 @@ export const ContentWrapper = styled.div<{
   align-items: ${({ $alignItems }) => $alignItems};
   background-color: #f7f9ff;
   width: 100%;
-  padding: 70px 0px;
+  padding: 40px 0px;
   height: 100%;
   overflow-x: auto;
   font-size: clamp(1rem, 2.5vw, 1.5rem);
@@ -353,4 +353,110 @@ export const ProductSearchInput = styled.input`
   min-height: 30px;
   min-width: 200px;
   margin: 10px 0 10px;
+`;
+export const CartRowWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 5px;
+  border: 1px solid black;
+`;
+
+export const ProductDataContainer = styled.div`
+  width: 50%;
+  display: flex;
+  align-items: center;
+  font-size: clamp(1rem, 1vw, 1.5rem);
+  gap: 20px;
+`;
+
+export const CountersContainer = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+`;
+
+export const CartRowButton = styled.button`
+background-color: #ada5f9;
+  border-radius: 3px;
+  border: 1px solid #ada5f9;
+  color: #511f31;
+  cursor: pointer;
+  padding: 0 10px;
+  font-size: clamp(1.5rem, 2vw, 1.5rem);
+  margin: 5px;
+
+  &:hover,
+  :focus {
+    background-color: #f7f9ff;
+    color: #2c5777;
+`;
+
+export const PromoContainer = styled.div``;
+
+export const CartPictureContainer = styled.img`
+  max-height: 100px;
+`;
+export const CounterDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+`;
+export const Banner = styled.img`
+  max-height: 20em;
+`;
+export const BannerContainer = styled.div`
+  margin: 0 auto;
+  text-align: center;
+`;
+export const BannerHeading = styled.p`
+  font-size: clamp(2rem, 3vw, 5rem);
+  color: green;
+`;
+
+export const PromocodeName = styled.span`
+  color: #ed7412;
+  font-size: clamp(3rem, 7vw, 8rem);
+  font-weight: 600;
+  position: absolute;
+  top: 100px;
+  outline: 1px solid white;
+`;
+export const BannerDiv = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+`;
+
+export const PromoCodeAndPriceWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-size: clamp(1rem, 2vw, 5rem);
+`;
+export const CartPricesNames = styled.span`
+  color: #39739d;
+  font-weight: 500;
+`;
+
+export const PortraitImg = styled.img`
+  max-height: 200px;
+`;
+
+export const LogoLink = styled.a`
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+  color: #974160;
+  font-size: clamp(1rem, 0.7vw, 1.5rem);
+
+  &:hover {
+    color: #69ddff;
+  }
+  @media screen and (max-width: 900px) {
+    font-size: clamp(0.7rem, 1vw, 1.5rem);
+  }
 `;
