@@ -7,5 +7,7 @@ export { default as Label } from './Label';
 export { default as Slider } from './Slider';
 export { default as Prices } from './Price';
 export { default as ModalSlider } from './ModalSlider';
+export { default as TeamMemberCard } from './TeamMemberCard';
+export { default as CartItemsContextProvider } from './CartItemsContext';
 export { Grid } from './Grid';
 export { ProductCardWrapper } from './ProductCardWrapper';

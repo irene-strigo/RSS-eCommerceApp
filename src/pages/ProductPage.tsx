@@ -11,6 +11,8 @@ import { Header, Footer } from '../components';
 import { ProductCard } from '../components';
 import { ContentWrapper, PageWrapper } from '../components/common/CommonStyles';
 import { ModalSlider } from '../components/common';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ProductPage = () => {
   const [product, setProduct] = useState<ProductProjection | null>(null);
@@ -35,6 +37,7 @@ const ProductPage = () => {
           <ProductCard isCatDisplay={false} productData={product} setIsModal={setIsModal} />
         )}
       </ContentWrapper>
+      <ToastContainer />
       {product && (
         <Modal open={isModal} onClose={onCloseModal} center>
           <ModalSlider productData={product} />

@@ -3,6 +3,7 @@ import React from 'react';
 import { NavigationButton } from '../components/common';
 import { HeaderWrapper, HeaderButtonsWrapper } from './common/CommonStyles';
 import { useUser } from './common/AuthContext';
+import { useCartItems } from './common/CartItemsContext';
 
 export type Button = {
   id: number;
@@ -12,13 +13,21 @@ export type Button = {
 
 const Header = () => {
   const authUser = useUser();
+  const cartItems = useCartItems();
+  const label = cartItems.items
+    ? `Your Cart ${cartItems.items === 0 ? '' : cartItems.items}`
+    : 'Your Cart';
 
   const headerButtons: Button[] = authUser.hasAuth
     ? [
         { id: 1, link: '/main', label: 'Main Page' },
         { id: 2, link: '/catalog', label: 'Catalog' },
         { id: 3, link: '/personal-information', label: 'Personal info' },
-        { id: 4, link: '/cart', label: 'Your cart' },
+        {
+          id: 4,
+          link: '/cart',
+          label,
+        },
         { id: 5, link: '/about-us', label: 'About Us' },
         { id: 6, link: '/logout', label: 'Logout' },
       ]
@@ -27,7 +36,7 @@ const Header = () => {
         { id: 2, link: '/sign-up-page', label: 'Sign Up' },
         { id: 3, link: '/main', label: 'Main Page' },
         { id: 4, link: '/catalog', label: 'Catalog' },
-        { id: 5, link: '/cart', label: 'Your cart' },
+        { id: 5, link: '/cart', label },
         { id: 6, link: '/about-us', label: 'About Us' },
       ];
 

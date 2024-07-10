@@ -13,11 +13,14 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { MyCustomerSignin } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/customer';
 import { LogInCustomer } from '../services/Client';
 import CommentsDiv from '../components/common/CommentsDiv';
+import { useCartItems } from '../components/common/CartItemsContext';
 
 const LogInPage = () => {
   const navigate = useNavigate();
   const authUser = useUser();
   const [logError, setLogError] = useState('');
+  const { loadCart } = useCartItems();
+
   useEffect(() => {
     if (!authUser.checkingAuth && authUser.hasAuth) navigate('/main');
   });
@@ -32,7 +35,7 @@ const LogInPage = () => {
     try {
       const customer = await LogInCustomer(data);
       if (customer && customer.id) {
-        await authUser.refresh();
+        await Promise.all([loadCart(), authUser.refresh()]);
         navigate('/');
       }
     } catch (err) {

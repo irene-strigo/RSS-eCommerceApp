@@ -33,9 +33,9 @@ const config = {
     new DefinePlugin({
       'process.env': JSON.stringify(process.env),
     }),
-    // new CopyPlugin({
-    //  patterns: [{ from: 'assets', to: 'assets' }],
-    //  }),
+    new CopyPlugin({
+      patterns: [{ from: 'assets', to: 'assets' }],
+    }),
 
     // Add your plugins here
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/

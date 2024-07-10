@@ -1,16 +1,27 @@
 import React from 'react';
 import { Header, Footer } from '../components';
-import { Container, ContentWrapper, PageWrapper } from '../components/common/CommonStyles';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import {
+  Banner,
+  BannerContainer,
+  BannerDiv,
+  BannerHeading,
+  ContentWrapper,
+  PageWrapper,
+  PromocodeName,
+} from '../components/common/CommonStyles';
 
 const MainPage = () => {
   return (
     <PageWrapper>
       <Header />
       <ContentWrapper $alignItems={'flex-start'}>
-        <Container>Main page</Container>
-        <ToastContainer />
+        <BannerContainer>
+          <BannerHeading>Discount 10% by promocode </BannerHeading>
+          <BannerDiv>
+            <Banner src="/assets/images/SummerPicture.png" alt="banner-picture" />
+            <PromocodeName>SUMMER</PromocodeName>
+          </BannerDiv>
+        </BannerContainer>
       </ContentWrapper>
       <Footer />
     </PageWrapper>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
@@ -8,9 +8,11 @@ import { ProductProjection } from '@commercetools/platform-sdk';
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
 
-import { GetProdcutsParams, getProducts } from '../services/Client';
+import { GetProductsParams, getProducts } from '../services/Client';
 
 import { Header, Footer, ProductCard } from '../components';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { ContentWrapper, PageWrapper } from '../components/common/CommonStyles';
 import { Grid } from '../components/common';
 import CatalogFilters from '../components/CatalogFilters';
@@ -36,6 +38,8 @@ export type Filters = {
   size: string;
   search: string;
   filterPrice: PriceFilter;
+  limit: number;
+  offset: number;
 };
 
 const defaultFilter: Filters = {
@@ -51,12 +55,14 @@ const defaultFilter: Filters = {
     '6000 to 10000': false,
     '10000 to *': false,
   },
+  limit: 6,
+  offset: 0,
 };
 
 const CatalogPage = () => {
   const [isModal, setIsModal] = useState(false);
 
-  const [products, setProducts] = useState<ProductProjection[]>();
+  const [products, setProducts] = useState<ProductProjection[]>([]);
   const navigate = useNavigate();
 
   const [filter, setFilter] = useState<Filters>(defaultFilter);
@@ -69,24 +75,35 @@ const CatalogPage = () => {
     setFilter({ ...filter, sortField: field, sortDirection: direction });
   }
   function setFilterCategory(category: string) {
-    setFilter({ ...filter, filterCategory: category });
+    setFilter({ ...filter, filterCategory: category, offset: 0 });
   }
 
   function setSearch(search: string) {
-    setFilter({ ...filter, search });
+    setFilter({ ...filter, search, offset: 0 });
   }
   function setSize(size: string) {
-    setFilter({ ...filter, size: size === 'all' ? '' : size });
+    setFilter({ ...filter, size: size === 'all' ? '' : size, offset: 0 });
   }
   function setColor(color: string) {
-    setFilter({ ...filter, color: color === 'all' ? '' : color });
+    setFilter({ ...filter, color: color === 'all' ? '' : color, offset: 0 });
   }
 
   function setPrice(priceRange: keyof PriceFilter, value: boolean) {
     const filterPrice: PriceFilter = { ...filter.filterPrice };
     filterPrice[priceRange] = value;
-    setFilter({ ...filter, filterPrice });
+    setFilter({ ...filter, filterPrice, offset: 0 });
   }
+
+  const ref = useRef<HTMLDivElement>(null);
+
+  const handleScroll = (e: React.SyntheticEvent<HTMLDivElement, UIEvent>) => {
+    const scrollPosition = (e.target as HTMLDivElement).scrollTop;
+    const currentPage = filter.offset / filter.limit;
+
+    if (scrollPosition > 580 * (currentPage + 1)) {
+      setFilter({ ...filter, offset: (currentPage + 1) * filter.limit });
+    }
+  };
 
   useEffect(() => {
     const requestFilter: string[] = [];
@@ -116,9 +133,11 @@ const CatalogPage = () => {
       requestFilter.push(`variants.attributes.color.key:"${filter.color}"`);
     }
 
-    const params: GetProdcutsParams = {
+    const params: GetProductsParams = {
       filter: requestFilter,
       sort: `${filter.sortField} ${filter.sortDirection}`,
+      limit: filter.limit,
+      offset: filter.offset,
     };
 
     if (filter.search) {
@@ -127,7 +146,13 @@ const CatalogPage = () => {
     }
 
     getProducts(params).then((data) => {
-      if (data) setProducts(data.results);
+      if (data) {
+        if (filter.offset) {
+          setProducts([...products, ...data.results]);
+        } else {
+          setProducts([...data.results]);
+        }
+      }
     });
   }, [filter]);
 
@@ -138,7 +163,7 @@ const CatalogPage = () => {
   return (
     <PageWrapper>
       <Header />
-      <ContentWrapper $alignItems={'center'}>
+      <ContentWrapper ref={ref} onScroll={handleScroll} $alignItems={'center'}>
         <FiltersDiv onClick={() => setIsModal(true)}>Filters</FiltersDiv>
         <Modal open={isModal} onClose={() => setIsModal(false)} center>
           <CatalogFilters
@@ -162,6 +187,7 @@ const CatalogPage = () => {
             />
           ))}
         </Grid>
+        <ToastContainer />
       </ContentWrapper>
       <Footer />
     </PageWrapper>
