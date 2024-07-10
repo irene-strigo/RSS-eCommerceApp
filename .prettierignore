@@ -1,0 +1,10 @@
+# Ignore modules
+node_modules
+
+# Ignore husky
+.husky
+
+# Ignore artefacts:
+dist
+
+assets
